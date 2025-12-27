@@ -7,8 +7,8 @@ const categories = [
     tagline: 'Tap once. Share everything.',
     href: '/shop/nfc-cards',
     cta: 'Explore',
-    bgColor: 'bg-violet-500',
-    image: 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?q=80&w=500&auto=format&fit=crop',
+    bgColor: 'bg-violet-600',
+    image: '/card1.png',
   },
   {
     id: 2,
@@ -17,7 +17,7 @@ const categories = [
     href: '/ai-review-card',
     cta: 'Explore AI Review',
     bgColor: 'bg-orange-500',
-    image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=500&auto=format&fit=crop',
+    image: '/card2.png',
   },
   {
     id: 3,
@@ -26,7 +26,8 @@ const categories = [
     href: '/shop/standees',
     cta: 'Explore Standees',
     bgColor: 'bg-amber-400',
-    image: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=500&auto=format&fit=crop',
+    image: '/card3.png',
+    textDark: true,
   },
   {
     id: 4,
@@ -35,7 +36,7 @@ const categories = [
     href: '/shop/keychains',
     cta: 'Shop Display Products',
     bgColor: 'bg-teal-500',
-    image: 'https://images.unsplash.com/photo-1586105251261-72a756497a11?q=80&w=500&auto=format&fit=crop',
+    image: '/card4.png',
   },
 ]
 
@@ -49,21 +50,21 @@ export function CategoryBlocks() {
             {/* NFC Cards - Larger */}
             <Link
               href={categories[0].href}
-              className={`group relative flex min-h-[280px] overflow-hidden rounded-xl sm:min-h-[375px] ${categories[0].bgColor} md:col-span-3`}
+              className={`group relative flex flex-col sm:flex-row min-h-[320px] sm:min-h-[420px] md:min-h-[480px] overflow-hidden rounded-[10px] ${categories[0].bgColor} md:col-span-3`}
             >
-              <div className="relative hidden w-1/2 sm:block">
+              <div className="relative h-48 sm:h-auto sm:w-1/2">
                 <div
-                  className="absolute inset-0 bg-contain bg-center bg-no-repeat"
+                  className="absolute inset-0 bg-contain bg-center bg-no-repeat transition-transform duration-300 group-hover:scale-105"
                   style={{ backgroundImage: `url('${categories[0].image}')` }}
                 />
               </div>
-              <div className="flex w-full flex-col justify-center p-4 sm:w-1/2 sm:p-6">
-                <p className="text-sm text-white/90">{categories[0].tagline}</p>
-                <h3 className="mt-2 whitespace-pre-line text-2xl font-bold leading-tight text-white sm:text-3xl">
+              <div className="flex flex-1 sm:w-1/2 flex-col justify-center p-5 sm:p-6">
+                <p className="text-xs sm:text-sm text-white/80">{categories[0].tagline}</p>
+                <h3 className="mt-1.5 sm:mt-2 whitespace-pre-line text-xl font-bold leading-tight text-white sm:text-2xl md:text-3xl">
                   {categories[0].name}
                 </h3>
-                <div className="mt-4">
-                  <span className="inline-block rounded-lg bg-white px-4 py-2 text-sm font-semibold text-zinc-900 sm:px-5 sm:py-2.5">
+                <div className="mt-3 sm:mt-4">
+                  <span className="inline-block rounded-lg bg-zinc-900 px-4 py-2 sm:px-5 sm:py-2.5 text-sm font-semibold text-white transition-colors group-hover:bg-zinc-800">
                     {categories[0].cta}
                   </span>
                 </div>
@@ -73,21 +74,21 @@ export function CategoryBlocks() {
             {/* AI Review - Smaller */}
             <Link
               href={categories[1].href}
-              className={`group relative flex min-h-[280px] overflow-hidden rounded-xl sm:min-h-[375px] ${categories[1].bgColor} md:col-span-2`}
+              className={`group relative flex flex-col sm:flex-row min-h-[320px] sm:min-h-[420px] md:min-h-[480px] overflow-hidden rounded-[10px] ${categories[1].bgColor} md:col-span-2`}
             >
-              <div className="relative hidden w-1/2 sm:block">
+              <div className="relative h-48 sm:h-auto sm:w-1/2">
                 <div
-                  className="absolute inset-0 bg-contain bg-center bg-no-repeat"
+                  className="absolute inset-0 bg-contain bg-center bg-no-repeat transition-transform duration-300 group-hover:scale-105"
                   style={{ backgroundImage: `url('${categories[1].image}')` }}
                 />
               </div>
-              <div className="flex w-full flex-col justify-center p-4 sm:w-1/2 sm:p-6">
-                <p className="text-sm text-white/90">{categories[1].tagline}</p>
-                <h3 className="mt-2 whitespace-pre-line text-xl font-bold leading-tight text-white sm:text-2xl">
+              <div className="flex flex-1 sm:w-1/2 flex-col justify-center p-5 sm:p-6">
+                <p className="text-xs sm:text-sm text-white/80">{categories[1].tagline}</p>
+                <h3 className="mt-1.5 sm:mt-2 whitespace-pre-line text-xl font-bold leading-tight text-white sm:text-2xl">
                   {categories[1].name}
                 </h3>
-                <div className="mt-4">
-                  <span className="inline-block rounded-lg bg-white px-4 py-2 text-sm font-semibold text-zinc-900 sm:px-5 sm:py-2.5">
+                <div className="mt-3 sm:mt-4">
+                  <span className="inline-block rounded-lg bg-zinc-900 px-4 py-2 sm:px-5 sm:py-2.5 text-sm font-semibold text-white transition-colors group-hover:bg-zinc-800">
                     {categories[1].cta}
                   </span>
                 </div>
@@ -100,21 +101,21 @@ export function CategoryBlocks() {
             {/* Standees - Smaller */}
             <Link
               href={categories[2].href}
-              className={`group relative flex min-h-[280px] overflow-hidden rounded-xl sm:min-h-[375px] ${categories[2].bgColor} md:col-span-2`}
+              className={`group relative flex flex-col sm:flex-row min-h-[320px] sm:min-h-[420px] md:min-h-[480px] overflow-hidden rounded-[10px] ${categories[2].bgColor} md:col-span-2`}
             >
-              <div className="relative hidden w-1/2 sm:block">
+              <div className="relative h-48 sm:h-auto sm:w-1/2">
                 <div
-                  className="absolute inset-0 bg-contain bg-center bg-no-repeat"
+                  className="absolute inset-0 bg-contain bg-center bg-no-repeat transition-transform duration-300 group-hover:scale-105"
                   style={{ backgroundImage: `url('${categories[2].image}')` }}
                 />
               </div>
-              <div className="flex w-full flex-col justify-center p-4 sm:w-1/2 sm:p-6">
-                <p className="text-sm text-white/90">{categories[2].tagline}</p>
-                <h3 className="mt-2 whitespace-pre-line text-xl font-bold leading-tight text-white sm:text-2xl">
+              <div className="flex flex-1 sm:w-1/2 flex-col justify-center p-5 sm:p-6">
+                <p className="text-xs sm:text-sm text-zinc-800/70">{categories[2].tagline}</p>
+                <h3 className="mt-1.5 sm:mt-2 whitespace-pre-line text-xl font-bold leading-tight text-zinc-900 sm:text-2xl">
                   {categories[2].name}
                 </h3>
-                <div className="mt-4">
-                  <span className="inline-block rounded-lg bg-white px-4 py-2 text-sm font-semibold text-zinc-900 sm:px-5 sm:py-2.5">
+                <div className="mt-3 sm:mt-4">
+                  <span className="inline-block rounded-lg bg-zinc-900 px-4 py-2 sm:px-5 sm:py-2.5 text-sm font-semibold text-white transition-colors group-hover:bg-zinc-800">
                     {categories[2].cta}
                   </span>
                 </div>
@@ -124,21 +125,21 @@ export function CategoryBlocks() {
             {/* Keychains - Larger */}
             <Link
               href={categories[3].href}
-              className={`group relative flex min-h-[280px] overflow-hidden rounded-xl sm:min-h-[375px] ${categories[3].bgColor} md:col-span-3`}
+              className={`group relative flex flex-col sm:flex-row min-h-[320px] sm:min-h-[420px] md:min-h-[480px] overflow-hidden rounded-[10px] ${categories[3].bgColor} md:col-span-3`}
             >
-              <div className="relative hidden w-1/2 sm:block">
+              <div className="relative h-48 sm:h-auto sm:w-1/2">
                 <div
-                  className="absolute inset-0 bg-contain bg-center bg-no-repeat"
+                  className="absolute inset-0 bg-contain bg-center bg-no-repeat transition-transform duration-300 group-hover:scale-105"
                   style={{ backgroundImage: `url('${categories[3].image}')` }}
                 />
               </div>
-              <div className="flex w-full flex-col justify-center p-4 sm:w-1/2 sm:p-6">
-                <p className="text-sm text-white/90">{categories[3].tagline}</p>
-                <h3 className="mt-2 whitespace-pre-line text-2xl font-bold leading-tight text-white sm:text-3xl">
+              <div className="flex flex-1 sm:w-1/2 flex-col justify-center p-5 sm:p-6">
+                <p className="text-xs sm:text-sm text-white/80">{categories[3].tagline}</p>
+                <h3 className="mt-1.5 sm:mt-2 whitespace-pre-line text-xl font-bold leading-tight text-white sm:text-2xl md:text-3xl">
                   {categories[3].name}
                 </h3>
-                <div className="mt-4">
-                  <span className="inline-block rounded-lg bg-white px-4 py-2 text-sm font-semibold text-zinc-900 sm:px-5 sm:py-2.5">
+                <div className="mt-3 sm:mt-4">
+                  <span className="inline-block rounded-lg bg-zinc-900 px-4 py-2 sm:px-5 sm:py-2.5 text-sm font-semibold text-white transition-colors group-hover:bg-zinc-800">
                     {categories[3].cta}
                   </span>
                 </div>

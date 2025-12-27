@@ -72,13 +72,13 @@ export function CartDrawer() {
           {items.length > 0 && (
             <div className="mt-4">
               {subtotal >= FREE_SHIPPING_THRESHOLD ? (
-                <div className="flex items-center gap-2 rounded-xl bg-teal-50 px-4 py-3">
-                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-500">
+                <div className="flex items-center gap-2 rounded-xl bg-violet-50 px-4 py-3">
+                  <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-violet-500">
                     <Truck className="h-4 w-4 text-white" />
                   </div>
                   <div>
-                    <p className="text-sm font-medium text-teal-700">Free shipping unlocked!</p>
-                    <p className="text-xs text-teal-600">Your order qualifies for free delivery</p>
+                    <p className="text-sm font-medium text-violet-700">Free shipping unlocked!</p>
+                    <p className="text-xs text-violet-600">Your order qualifies for free delivery</p>
                   </div>
                 </div>
               ) : (
@@ -89,7 +89,7 @@ export function CartDrawer() {
                   </div>
                   <div className="mt-2 h-2 overflow-hidden rounded-full bg-zinc-200">
                     <div
-                      className="h-full rounded-full bg-gradient-to-r from-teal-400 to-teal-500 transition-all duration-500"
+                      className="h-full rounded-full bg-gradient-to-r from-violet-400 to-violet-500 transition-all duration-500"
                       style={{ width: `${shippingProgress}%` }}
                     />
                   </div>
@@ -152,7 +152,7 @@ export function CartDrawer() {
                         </Link>
                         <button
                           onClick={() => removeItem(item.productId)}
-                          className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg text-zinc-400 transition-colors hover:bg-red-50 hover:text-red-500"
+                          className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg text-zinc-400 transition-colors hover:bg-violet-50 hover:text-violet-500"
                         >
                           <Trash2 className="h-4 w-4" />
                         </button>
@@ -215,7 +215,7 @@ export function CartDrawer() {
               </div>
               <div className="flex items-center justify-between text-sm">
                 <span className="text-zinc-500">Shipping</span>
-                <span className={subtotal >= FREE_SHIPPING_THRESHOLD ? 'font-medium text-teal-600' : 'text-zinc-900'}>
+                <span className={subtotal >= FREE_SHIPPING_THRESHOLD ? 'font-medium text-violet-600' : 'text-zinc-900'}>
                   {subtotal >= FREE_SHIPPING_THRESHOLD ? 'FREE' : 'Calculated at checkout'}
                 </span>
               </div>

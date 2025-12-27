@@ -3,17 +3,38 @@
 import { useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import Image from 'next/image'
 import { Search, ShoppingCart, Menu, X, ChevronDown, Sparkles } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { useCart } from '@/contexts/cart-context'
 import { SearchModal } from './search-modal'
 
 const categories = [
-  { name: 'NFC Cards', slug: 'nfc-cards' },
-  { name: 'QR Cards', slug: 'qr-cards' },
-  { name: 'Standees', slug: 'standees' },
-  { name: 'KeyChains', slug: 'keychains' },
-  { name: 'Table Tents', slug: 'table-tents' },
+  {
+    name: 'Cards',
+    slug: 'nfc-cards',
+    image: 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?q=80&w=400&auto=format&fit=crop',
+    description: 'View the collection'
+  },
+  {
+    name: 'Stands',
+    slug: 'standees',
+    image: 'https://images.unsplash.com/photo-1586953208448-b95a79798f07?q=80&w=400&auto=format&fit=crop',
+    description: 'View the collection'
+  },
+  {
+    name: 'Custom Products',
+    slug: 'review-cards',
+    image: 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?q=80&w=400&auto=format&fit=crop',
+    description: 'View the collection'
+  },
+  {
+    name: 'All Products',
+    slug: '',
+    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=400&auto=format&fit=crop',
+    description: 'Browse everything',
+    isAllProducts: true
+  },
 ]
 
 const navLinks = [
@@ -28,30 +49,21 @@ export function Header() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isShopDropdownOpen, setIsShopDropdownOpen] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
-  const isHomePage = pathname === '/'
 
   return (
-    <header className={cn(
-      "z-50 w-full",
-      isHomePage ? "absolute top-0 left-0 right-0" : "sticky top-0 bg-white shadow-sm"
-    )}>
-      <div className={cn(
-        "mx-auto",
-        isHomePage ? "max-w-6xl px-4 pt-6" : "max-w-7xl px-4 sm:px-6 lg:px-8"
-      )}>
-        <div className={cn(
-          "flex h-14 items-center justify-between",
-          isHomePage && "rounded-xl bg-white px-4 shadow-md"
-        )}>
+    <header className="absolute top-0 left-0 right-0 z-50 w-full">
+      <div className="mx-auto w-[95%] sm:w-auto sm:max-w-3xl px-0 sm:px-4 pt-3 sm:pt-4">
+        <div className="flex h-12 items-center justify-between rounded-xl bg-white px-4 shadow-md">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2.5">
-            <div className="flex h-8 w-8 items-center justify-center rounded-full border-2 border-zinc-800">
-              <span className="text-[10px] font-bold text-zinc-800">IC</span>
-            </div>
-            <div className="hidden flex-col sm:flex">
-              <span className="text-sm font-bold leading-none text-zinc-900">Instant</span>
-              <span className="text-sm font-bold leading-none text-zinc-900">Connect</span>
-            </div>
+          <Link href="/" className="flex items-center">
+            <Image
+              src="/logo.svg"
+              alt="Instant Connect"
+              width={120}
+              height={42}
+              className="h-8 w-auto sm:h-9"
+              priority
+            />
           </Link>
 
           {/* Desktop Navigation */}
@@ -69,7 +81,7 @@ export function Header() {
                     : 'text-zinc-600 hover:text-zinc-900'
                 )}
               >
-                {link.featured && <Sparkles className="h-4 w-4 text-amber-500" />}
+                {link.featured && <Sparkles className="h-4 w-4 text-violet-600" />}
                 {link.name}
               </Link>
             ))}
@@ -82,8 +94,10 @@ export function Header() {
             >
               <button
                 className={cn(
-                  'flex items-center gap-1 px-4 py-2 text-sm font-medium transition-colors',
-                  pathname.startsWith('/shop')
+                  'flex items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors',
+                  isShopDropdownOpen
+                    ? 'bg-zinc-100 text-zinc-900'
+                    : pathname.startsWith('/shop')
                     ? 'text-zinc-900'
                     : 'text-zinc-600 hover:text-zinc-900'
                 )}
@@ -91,26 +105,8 @@ export function Header() {
                 Shop
                 <ChevronDown className={cn('h-4 w-4 transition-transform', isShopDropdownOpen && 'rotate-180')} />
               </button>
-
-              {/* Dropdown Menu */}
-              <div
-                className={cn(
-                  'absolute left-0 top-full z-50 w-48 rounded-xl border border-zinc-200 bg-white p-2 shadow-lg transition-all',
-                  isShopDropdownOpen
-                    ? 'visible opacity-100 translate-y-1'
-                    : 'invisible opacity-0 translate-y-3'
-                )}
-              >
-                {categories.map((category) => (
-                  <Link
-                    key={category.slug}
-                    href={`/shop/${category.slug}`}
-                    className="block rounded-lg px-3 py-2 text-sm text-zinc-700 hover:bg-zinc-100"
-                  >
-                    {category.name}
-                  </Link>
-                ))}
-              </div>
+              {/* Invisible bridge to connect button and dropdown */}
+              <div className="absolute left-0 right-0 h-4 top-full" />
             </div>
           </nav>
 
@@ -119,82 +115,128 @@ export function Header() {
             {/* Search */}
             <button
               onClick={() => setIsSearchOpen(true)}
-              className="flex h-10 w-10 items-center justify-center rounded-full text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
+              className="flex h-9 w-9 items-center justify-center rounded-full text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
             >
-              <Search className="h-5 w-5" />
+              <Search className="h-4 w-4" />
             </button>
 
             {/* Cart */}
             <button
-              className="relative flex h-10 w-10 items-center justify-center rounded-full text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
+              className="relative flex h-9 w-9 items-center justify-center rounded-full text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
               onClick={openCart}
             >
-              <ShoppingCart className="h-5 w-5" />
-              <span className="absolute -right-0.5 -top-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-red-500 text-[10px] font-bold text-white">
+              <ShoppingCart className="h-4 w-4" />
+              <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-violet-600 text-[9px] font-bold text-white">
                 {itemCount}
               </span>
             </button>
 
             {/* Mobile Menu Button */}
             <button
-              className="flex h-10 w-10 items-center justify-center rounded-full text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 lg:hidden"
+              className="flex h-9 w-9 items-center justify-center rounded-full text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 lg:hidden"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
               {isMobileMenuOpen ? (
-                <X className="h-5 w-5" />
+                <X className="h-4 w-4" />
               ) : (
-                <Menu className="h-5 w-5" />
+                <Menu className="h-4 w-4" />
               )}
             </button>
           </div>
         </div>
 
-        {/* Mobile Navigation */}
-        {isMobileMenuOpen && (
-          <div className={cn(
-            'mt-2 rounded-xl bg-white p-4 shadow-lg lg:hidden',
-            isHomePage ? '' : 'border border-zinc-200'
-          )}>
-            <nav className="flex flex-col gap-1">
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className={cn(
-                    'flex items-center gap-2 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors',
-                    link.featured
-                      ? 'text-zinc-700'
-                      : pathname === link.href
-                      ? 'bg-zinc-100 text-zinc-900'
-                      : 'text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900'
-                  )}
-                >
-                  {link.featured && <Sparkles className="h-4 w-4 text-amber-500" />}
-                  {link.name}
-                </Link>
-              ))}
+        {/* Mega Menu Dropdown - Full width below navbar */}
+        <div
+          onMouseEnter={() => setIsShopDropdownOpen(true)}
+          onMouseLeave={() => setIsShopDropdownOpen(false)}
+          className={cn(
+            'relative rounded-xl border border-zinc-200 bg-white p-5 shadow-xl transition-all duration-200',
+            isShopDropdownOpen
+              ? 'visible opacity-100 mt-1'
+              : 'invisible opacity-0 -mt-2 pointer-events-none'
+          )}
+        >
+          {/* Invisible bridge at top to connect with navbar */}
+          <div className="absolute -top-3 left-0 right-0 h-4" />
+          <div className="flex items-start gap-4">
+            {/* Category Cards */}
+            {categories.map((category) => (
+              <Link
+                key={category.slug || 'all'}
+                href={category.slug ? `/shop/${category.slug}` : '/shop'}
+                className="group flex-1"
+              >
+                <div className="overflow-hidden rounded-lg bg-zinc-100">
+                  <div
+                    className="aspect-square bg-cover bg-center transition-transform duration-300 group-hover:scale-105"
+                    style={{ backgroundImage: `url('${category.image}')` }}
+                  />
+                </div>
+                <div className="mt-2 flex items-center gap-1">
+                  <h3 className={cn(
+                    "text-sm font-semibold",
+                    (category as { isAllProducts?: boolean }).isAllProducts ? "text-violet-600" : "text-zinc-900"
+                  )}>{category.name}</h3>
+                  <ChevronDown className={cn(
+                    "h-3 w-3 -rotate-90 transition-transform group-hover:translate-x-0.5",
+                    (category as { isAllProducts?: boolean }).isAllProducts ? "text-violet-600" : "text-zinc-400"
+                  )} />
+                </div>
+                <p className="text-xs text-zinc-500">{category.description}</p>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </div>
 
-              {/* Mobile Shop Links */}
-              <div className="mt-2 border-t border-zinc-200 pt-2">
-                <p className="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-zinc-400">
-                  Shop
-                </p>
+      {/* Mobile Navigation */}
+      {isMobileMenuOpen && (
+        <div className="mx-auto mt-2 w-[95%] sm:max-w-3xl rounded-xl bg-white p-4 shadow-lg lg:hidden">
+          <nav className="flex flex-col gap-1">
+            {navLinks.map((link) => (
+              <Link
+                key={link.href}
+                href={link.href}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className={cn(
+                  'flex items-center gap-2 rounded-lg px-3 py-3 text-base font-medium transition-colors',
+                  link.featured
+                    ? 'text-zinc-700'
+                    : pathname === link.href
+                    ? 'bg-zinc-100 text-zinc-900'
+                    : 'text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900'
+                )}
+              >
+                {link.featured && <Sparkles className="h-4 w-4 text-violet-600" />}
+                {link.name}
+              </Link>
+            ))}
+
+            {/* Mobile Shop Links */}
+            <div className="mt-2 border-t border-zinc-200 pt-2">
+              <p className="px-3 py-2 text-xs font-semibold uppercase tracking-wider text-zinc-400">
+                Shop
+              </p>
+              <div className="grid grid-cols-2 gap-2">
                 {categories.map((category) => (
                   <Link
-                    key={category.slug}
-                    href={`/shop/${category.slug}`}
+                    key={category.slug || 'all'}
+                    href={category.slug ? `/shop/${category.slug}` : '/shop'}
                     onClick={() => setIsMobileMenuOpen(false)}
-                    className="block rounded-lg px-3 py-2.5 text-sm text-zinc-600 hover:bg-zinc-50 hover:text-zinc-900"
+                    className="flex flex-col items-center rounded-lg bg-zinc-50 p-3 text-center hover:bg-zinc-100"
                   >
-                    {category.name}
+                    <div
+                      className="h-16 w-16 rounded-lg bg-cover bg-center"
+                      style={{ backgroundImage: `url('${category.image}')` }}
+                    />
+                    <span className="mt-2 text-sm font-medium text-zinc-900">{category.name}</span>
                   </Link>
                 ))}
               </div>
-            </nav>
-          </div>
-        )}
-      </div>
+            </div>
+          </nav>
+        </div>
+      )}
 
       {/* Search Modal */}
       <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />

@@ -1,63 +1,17 @@
 import { Metadata } from 'next'
-import Image from 'next/image'
 import Link from 'next/link'
-import { Star, Zap, TrendingUp, Shield, ArrowRight, Check, MessageSquare } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import { Check, X } from 'lucide-react'
 import { Accordion } from '@/components/ui/accordion'
 import { createClient } from '@/utils/supabase/server'
 import { ProductGrid } from '@/components/products/product-grid'
+import { HowItWorks } from '@/components/home/how-it-works'
+import { BookDemoCTA } from '@/components/home/book-demo-cta'
 
 export const metadata: Metadata = {
   title: 'AI Review Card',
   description:
     'Boost your Google reviews with our AI-powered NFC Review Cards. Make it easy for customers to leave positive reviews.',
 }
-
-const benefits = [
-  {
-    icon: Star,
-    title: 'Instant Google Reviews',
-    description:
-      'Customers tap and instantly land on your Google review page. No searching, no typing - just tap and review.',
-  },
-  {
-    icon: Zap,
-    title: 'Boost Review Rate by 300%',
-    description:
-      'Businesses using our AI Review Cards see an average 300% increase in review collection.',
-  },
-  {
-    icon: TrendingUp,
-    title: 'Improve Local SEO',
-    description:
-      'More reviews mean better search rankings. Stand out in local searches and attract more customers.',
-  },
-  {
-    icon: Shield,
-    title: 'Smart Review Filtering',
-    description:
-      'Our AI helps route unhappy customers to private feedback, protecting your public reputation.',
-  },
-]
-
-const problemSolutions = [
-  {
-    problem: 'Customers forget to leave reviews',
-    solution: 'Instant tap-to-review makes it effortless in the moment',
-  },
-  {
-    problem: 'Low review collection rate',
-    solution: 'QR + NFC dual technology ensures maximum compatibility',
-  },
-  {
-    problem: 'Negative reviews hurting business',
-    solution: 'AI-powered routing sends unhappy customers to private feedback',
-  },
-  {
-    problem: 'Competitors have more reviews',
-    solution: 'Systematic review collection at every customer touchpoint',
-  },
-]
 
 const faqs = [
   {
@@ -110,199 +64,179 @@ export default async function AIReviewCardPage() {
   }
 
   return (
-    <>
+    <div className="overflow-x-hidden" style={{ backgroundColor: '#F4F4F4' }}>
       {/* Hero */}
-      <section className="relative overflow-hidden bg-gradient-to-br from-zinc-900 via-zinc-800 to-zinc-900 py-12 text-white sm:py-20">
-        <div className="absolute inset-0 bg-[url('/grid-pattern.svg')] opacity-10" />
-        <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid gap-8 lg:grid-cols-2 lg:items-center lg:gap-12">
+      <section className="pt-[6px] px-[6px] pb-0">
+        {/* Hero Content */}
+        <div className="relative h-[60vh] sm:h-[70vh] md:h-[80vh] lg:h-[90vh] overflow-hidden rounded-[10px]">
+          {/* Background Image */}
+          <div
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: `url('/aireviewhero.png')` }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+
+          {/* Content */}
+          <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 sm:px-6">
+            {/* Tagline */}
+            <p className="text-center text-xs sm:text-sm md:text-base text-white/70 max-w-xs sm:max-w-md md:max-w-2xl">
+              AI-powered review cards that help businesses collect better reviews, understand feedback, and grow trust — instantly.
+            </p>
+
+            {/* Heading */}
+            <h1 className="mt-3 sm:mt-4 text-center text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-white max-w-xs sm:max-w-lg md:max-w-2xl">
+              Turn customer visits into powerful reviews.
+            </h1>
+
+            {/* CTA Button */}
+            <Link
+              href="#products"
+              className="mt-5 sm:mt-6 md:mt-8 rounded-lg bg-white px-5 py-2.5 sm:px-6 sm:py-3 text-xs sm:text-sm font-semibold text-zinc-900 hover:bg-zinc-100"
+            >
+              See How It Works
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Designed for Real Interactions */}
+      <section className="pt-10 pb-12 sm:pt-12 sm:pb-16 lg:pt-16 lg:pb-20">
+        <div className="mx-auto w-[95%]">
+          {/* Section Header */}
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 pb-5 sm:pb-6">
             <div>
-              <div className="inline-flex items-center gap-2 rounded-full bg-yellow-500/20 px-4 py-1 text-sm text-yellow-400">
-                <Star className="h-4 w-4 fill-yellow-400" />
-                Boost Your Google Reviews
-              </div>
-              <h1 className="mt-6 text-3xl font-bold sm:text-4xl md:text-5xl lg:text-6xl">
-                AI-Powered
-                <span className="text-yellow-400"> Review Cards</span>
-              </h1>
-              <p className="mt-4 text-base text-zinc-300 sm:mt-6 sm:text-lg md:text-xl">
-                Turn every customer into a 5-star reviewer. Our smart NFC cards make collecting
-                Google reviews effortless.
+              <p className="text-xs sm:text-sm text-zinc-500">
+                One tap opens an AI-written review—ready to publish on Google.
               </p>
-              <div className="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:gap-4">
-                <Button asChild size="lg" className="w-full bg-yellow-500 text-black hover:bg-yellow-400 sm:w-auto">
-                  <Link href="#products">
-                    Get Your Cards
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Link>
-                </Button>
-                <Button asChild variant="outline" size="lg" className="w-full border-zinc-700 text-white sm:w-auto">
-                  <Link href="/book-demo">Book a Demo</Link>
-                </Button>
-              </div>
-              <div className="mt-6 flex flex-col gap-2 text-sm text-zinc-400 sm:mt-8 sm:flex-row sm:items-center sm:gap-6">
-                <div className="flex items-center gap-1">
-                  {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="h-4 w-4 fill-yellow-400 text-yellow-400" />
-                  ))}
-                  <span className="ml-2">4.9/5 rating</span>
-                </div>
-                <span>10,000+ cards delivered</span>
-              </div>
+              <h2 className="mt-1 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-zinc-900">
+                Designed for real interactions
+              </h2>
             </div>
-            <div className="relative">
-              <div className="relative aspect-square overflow-hidden rounded-2xl bg-gradient-to-br from-yellow-400/20 to-transparent p-4 sm:p-8">
-                <Image
-                  src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=600"
-                  alt="AI Review Card"
-                  fill
-                  className="object-cover"
-                />
-              </div>
-            </div>
+            <Link
+              href="/shop"
+              className="inline-block rounded-lg bg-zinc-900 px-4 py-2 sm:px-5 sm:py-2.5 text-xs sm:text-sm font-semibold text-white hover:bg-zinc-800 whitespace-nowrap w-fit"
+            >
+              Try Instant Connect
+            </Link>
           </div>
-        </div>
-      </section>
 
-      {/* Problem/Solution */}
-      <section className="py-12 sm:py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="text-2xl font-bold text-zinc-900 sm:text-3xl">
-              The Review Collection Problem
-            </h2>
-            <p className="mt-4 text-zinc-600">
-              And how AI Review Cards solve it
-            </p>
-          </div>
-          <div className="mt-8 grid gap-4 sm:mt-12 sm:gap-6 md:grid-cols-2">
-            {problemSolutions.map((item, index) => (
-              <div
-                key={index}
-                className="rounded-xl border border-zinc-200 bg-white p-4 sm:p-6"
-              >
-                <div className="flex items-start gap-4">
-                  <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-red-100 text-sm font-bold text-red-600">
-                    X
-                  </div>
-                  <div>
-                    <p className="font-medium text-zinc-900">{item.problem}</p>
-                    <div className="mt-3 flex items-start gap-2">
-                      <div className="flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full bg-green-100">
-                        <Check className="h-3 w-3 text-green-600" />
-                      </div>
-                      <p className="text-sm text-zinc-600">{item.solution}</p>
+          {/* Content */}
+          <div className="flex flex-col lg:flex-row gap-3 sm:gap-4 lg:gap-6">
+            {/* Left - Yellow Section (40%) */}
+            <div className="w-full lg:w-[40%] p-4 sm:p-6 lg:p-8 rounded-[10px]" style={{ backgroundColor: '#F5A623' }}>
+              {/* The problem */}
+              <div>
+                <h3 className="text-base sm:text-lg font-semibold text-black">The problem with reviews today</h3>
+                <div className="mt-3 sm:mt-4 space-y-2 sm:space-y-3">
+                  <div className="flex items-center gap-2 sm:gap-3 rounded-full bg-white/40 px-3 sm:px-4 py-2 sm:py-2.5">
+                    <div className="flex h-5 w-5 sm:h-6 sm:w-6 flex-shrink-0 items-center justify-center rounded-full border-2 border-black/60">
+                      <X className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-black/60" />
                     </div>
+                    <span className="text-xs sm:text-sm text-black">Customers forget to leave reviews</span>
+                  </div>
+                  <div className="flex items-center gap-2 sm:gap-3 rounded-full bg-white/40 px-3 sm:px-4 py-2 sm:py-2.5">
+                    <div className="flex h-5 w-5 sm:h-6 sm:w-6 flex-shrink-0 items-center justify-center rounded-full border-2 border-black/60">
+                      <X className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-black/60" />
+                    </div>
+                    <span className="text-xs sm:text-sm text-black">Review links are ignored</span>
+                  </div>
+                  <div className="flex items-center gap-2 sm:gap-3 rounded-full bg-white/40 px-3 sm:px-4 py-2 sm:py-2.5">
+                    <div className="flex h-5 w-5 sm:h-6 sm:w-6 flex-shrink-0 items-center justify-center rounded-full border-2 border-black/60">
+                      <X className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-black/60" />
+                    </div>
+                    <span className="text-xs sm:text-sm text-black">Feedback is short or low quality</span>
                   </div>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      {/* Benefits */}
-      <section className="bg-zinc-50 py-12 sm:py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="text-2xl font-bold text-zinc-900 sm:text-3xl">
-              Why Businesses Love AI Review Cards
-            </h2>
-          </div>
-          <div className="mt-8 grid gap-6 sm:mt-12 sm:grid-cols-2 lg:grid-cols-4">
-            {benefits.map((benefit) => (
-              <div key={benefit.title} className="text-center">
-                <div className="mx-auto flex h-14 w-14 items-center justify-center rounded-xl bg-yellow-100">
-                  <benefit.icon className="h-7 w-7 text-yellow-600" />
+              {/* The solution */}
+              <div className="mt-5 sm:mt-6 lg:mt-8">
+                <h3 className="text-base sm:text-lg font-semibold text-black">The AI Review Card fixes this</h3>
+                <div className="mt-3 sm:mt-4 space-y-2 sm:space-y-3">
+                  <div className="flex items-center gap-2 sm:gap-3 rounded-full bg-white/40 px-3 sm:px-4 py-2 sm:py-2.5">
+                    <div className="flex h-5 w-5 sm:h-6 sm:w-6 flex-shrink-0 items-center justify-center rounded-full border-2 border-black/60">
+                      <Check className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-black/60" />
+                    </div>
+                    <span className="text-xs sm:text-sm text-black">One tap → instant AI review</span>
+                  </div>
+                  <div className="flex items-center gap-2 sm:gap-3 rounded-full bg-white/40 px-3 sm:px-4 py-2 sm:py-2.5">
+                    <div className="flex h-5 w-5 sm:h-6 sm:w-6 flex-shrink-0 items-center justify-center rounded-full border-2 border-black/60">
+                      <Check className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-black/60" />
+                    </div>
+                    <span className="text-xs sm:text-sm text-black">Smart feedback beyond stars</span>
+                  </div>
+                  <div className="flex items-center gap-2 sm:gap-3 rounded-full bg-white/40 px-3 sm:px-4 py-2 sm:py-2.5">
+                    <div className="flex h-5 w-5 sm:h-6 sm:w-6 flex-shrink-0 items-center justify-center rounded-full border-2 border-black/60">
+                      <Check className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-black/60" />
+                    </div>
+                    <span className="text-xs sm:text-sm text-black">Actionable business insights</span>
+                  </div>
                 </div>
-                <h3 className="mt-4 font-semibold text-zinc-900">{benefit.title}</h3>
-                <p className="mt-2 text-sm text-zinc-600">{benefit.description}</p>
               </div>
-            ))}
+            </div>
+
+            {/* Right Image (60%) */}
+            <div className="w-full lg:w-[60%] relative min-h-[250px] sm:min-h-[350px] lg:min-h-[500px] rounded-[10px] overflow-hidden">
+              <div
+                className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                style={{ backgroundImage: `url('/aireviewsection.png')` }}
+              />
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Products */}
-      <section id="products" className="py-12 sm:py-20">
-        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="text-center">
-            <h2 className="text-2xl font-bold text-zinc-900 sm:text-3xl">
-              Choose Your AI Review Card
-            </h2>
-            <p className="mt-4 text-zinc-600">
-              Premium quality cards with lifetime NFC functionality
-            </p>
+      {/* Designed for Your Shop */}
+      <section id="products" className="pt-10 pb-6 sm:pt-12 sm:pb-8 lg:pt-16 lg:pb-10">
+        <div className="mx-auto w-[95%]">
+          {/* Section Header */}
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 sm:gap-4 pb-5 sm:pb-6 lg:pb-8">
+            <div>
+              <p className="text-xs sm:text-sm text-zinc-500">
+                Collect reviews while the experience is fresh.
+              </p>
+              <h2 className="mt-1 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-zinc-900">
+                Designed for your shop
+              </h2>
+            </div>
+            <Link
+              href="/shop/nfc-cards"
+              className="inline-block rounded-lg bg-zinc-900 px-4 py-2 sm:px-5 sm:py-2.5 text-xs sm:text-sm font-semibold text-white hover:bg-zinc-800 whitespace-nowrap w-fit"
+            >
+              Explore products
+            </Link>
           </div>
-          <div className="mt-12">
-            <ProductGrid products={products} categorySlug="nfc-cards" columns={4} />
-          </div>
-          <div className="mt-8 text-center">
-            <Button asChild variant="outline" size="lg">
-              <Link href="/shop/nfc-cards">
-                View All Products
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-          </div>
+
+          {/* Products Grid */}
+          <ProductGrid products={products} categorySlug="nfc-cards" columns={4} />
         </div>
       </section>
 
-      {/* Testimonial */}
-      <section className="bg-zinc-900 py-16 text-white">
-        <div className="mx-auto max-w-4xl px-4 text-center sm:px-6 lg:px-8">
-          <MessageSquare className="mx-auto h-10 w-10 text-yellow-400" />
-          <blockquote className="mt-6 text-2xl font-medium">
-            &quot;Our Google reviews went from 50 to 200+ in just 3 months after implementing AI
-            Review Cards. The ROI has been incredible.&quot;
-          </blockquote>
-          <div className="mt-6">
-            <p className="font-semibold">Rahul Sharma</p>
-            <p className="text-sm text-zinc-400">Owner, Mumbai Restaurant Chain</p>
-          </div>
-        </div>
-      </section>
+      {/* How It Works */}
+      <div className="pt-8 sm:pt-12 lg:pt-16">
+        <HowItWorks />
+      </div>
 
       {/* FAQs */}
-      <section className="py-12 sm:py-20">
-        <div className="mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
+      <section className="py-8 sm:py-12 lg:py-16">
+        <div className="mx-auto w-[95%] max-w-3xl">
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-zinc-900 sm:text-3xl">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-zinc-900">
               Frequently Asked Questions
             </h2>
           </div>
-          <div className="mt-8 space-y-4 sm:mt-12">
+          <div className="mt-6 sm:mt-8 lg:mt-12 space-y-3 sm:space-y-4">
             {faqs.map((faq, index) => (
               <Accordion key={index} title={faq.question}>
-                <p className="text-zinc-600">{faq.answer}</p>
+                <p className="text-sm sm:text-base text-zinc-600">{faq.answer}</p>
               </Accordion>
             ))}
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="border-t border-zinc-200 bg-zinc-50 py-12 sm:py-16">
-        <div className="mx-auto max-w-7xl px-4 text-center sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-zinc-900 sm:text-3xl">
-            Ready to Boost Your Reviews?
-          </h2>
-          <p className="mt-4 text-zinc-600">
-            Join 1000+ businesses using AI Review Cards to grow their online reputation.
-          </p>
-          <div className="mt-8 flex flex-col items-center justify-center gap-4 sm:flex-row">
-            <Button asChild size="lg" className="w-full bg-yellow-500 text-black hover:bg-yellow-400 sm:w-auto">
-              <Link href="/shop/nfc-cards">
-                Get Started Now
-                <ArrowRight className="ml-2 h-4 w-4" />
-              </Link>
-            </Button>
-            <Button asChild variant="outline" size="lg" className="w-full sm:w-auto">
-              <Link href="/contact">Talk to Sales</Link>
-            </Button>
-          </div>
-        </div>
-      </section>
-    </>
+      {/* Footer CTA */}
+      <BookDemoCTA />
+    </div>
   )
 }

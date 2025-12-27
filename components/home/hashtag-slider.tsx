@@ -54,8 +54,8 @@ export function HashtagSlider() {
   )
 
   return (
-    <div className="relative z-10 flex justify-center" style={{ marginTop: '-6rem' }}>
-      <div className="w-[95%] overflow-hidden rounded-xl bg-red-500 py-3 sm:py-4">
+    <div className="relative z-30 flex justify-center" style={{ marginTop: '-14rem', marginBottom: '7rem' }}>
+      <div className="w-[95%] overflow-hidden rounded-xl bg-violet-600 py-7 shadow-lg">
         <div ref={scrollRef} className="flex items-center whitespace-nowrap">
           {renderContent()}
           {renderContent()}

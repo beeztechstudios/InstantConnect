@@ -19,8 +19,9 @@ export async function FeaturedProducts() {
   }
 
   return (
-    <div className="flex justify-center">
-      <section className="relative z-20 mt-6 w-[95%] rounded-t-xl bg-zinc-100 p-6">
+    <div className="bg-zinc-100" style={{ marginTop: '-6rem' }}>
+      <div className="flex justify-center">
+        <section className="relative z-10 w-[95%] rounded-t-[10px] bg-zinc-100 p-6 pb-8">
         {/* Header */}
         <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
@@ -47,8 +48,8 @@ export async function FeaturedProducts() {
           ))}
 
           {/* Promo Banner Card */}
-          <Link href="/shop/qr-cards" className="group">
-            <div className="relative aspect-[4/5] overflow-hidden rounded-xl">
+          <Link href="/shop/qr-cards" className="group h-full">
+            <div className="relative h-full overflow-hidden rounded-[10px]">
               <div
                 className="absolute inset-0 bg-cover bg-center"
                 style={{
@@ -69,7 +70,8 @@ export async function FeaturedProducts() {
             </div>
           </Link>
         </div>
-      </section>
+        </section>
+      </div>
     </div>
   )
 }

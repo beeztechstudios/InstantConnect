@@ -1,21 +1,21 @@
-import { Wifi, Link2, Sparkles } from 'lucide-react'
+import { Smartphone, Globe, CheckCircle } from 'lucide-react'
 
 const steps = [
   {
     step: 'STEP 1',
-    icon: Wifi,
+    icon: Smartphone,
     title: 'Tap or Scan',
     description: 'Tap your phone on the card or scan the QR to get started.',
   },
   {
     step: 'STEP 2',
-    icon: Link2,
+    icon: Globe,
     title: 'Open Instantly',
     description: 'Your digital profile or review page opens in seconds.',
   },
   {
     step: 'STEP 3',
-    icon: Sparkles,
+    icon: CheckCircle,
     title: 'Connect & Grow',
     description: 'Share details, collect reviews, and build trust effortlessly.',
   },
@@ -23,44 +23,46 @@ const steps = [
 
 export function HowItWorks() {
   return (
-    <section className="flex justify-center bg-zinc-100 py-8">
-      <div className="w-[95%] overflow-hidden rounded-xl bg-violet-500">
-        {/* Header */}
-        <div className="px-4 pt-8 text-center sm:px-8 sm:pt-12">
-          <p className="text-sm text-white/80">
-            Connect, share, and collect—instantly.
-          </p>
-          <h2 className="mt-2 text-3xl font-bold text-white sm:text-4xl md:text-5xl">
-            How it works
-          </h2>
-        </div>
+    <section className="flex justify-center bg-zinc-100 py-6 sm:py-8">
+      <div className="w-[95%] overflow-hidden rounded-[10px]">
+        <div className="flex flex-col md:flex-row" style={{ backgroundColor: '#685BC7' }}>
+          {/* Left Side - Content */}
+          <div className="w-full md:w-[40%] p-6 sm:p-8 md:p-12 lg:p-16">
+            <p className="text-xs sm:text-sm text-white/70">
+              Collect, share, and collect—instantly.
+            </p>
+            <h2 className="mt-2 sm:mt-3 text-2xl font-bold text-white sm:text-3xl md:text-4xl lg:text-5xl">
+              How it works
+            </h2>
 
-        {/* Steps */}
-        <div className="grid gap-6 px-4 py-8 sm:gap-8 sm:px-8 sm:py-10 md:grid-cols-3">
-          {steps.map((step, index) => (
-            <div key={index}>
-              <p className="text-sm font-medium text-white/60">{step.step}</p>
-              <div className="mt-3 flex items-start gap-3">
-                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-amber-300">
-                  <step.icon className="h-5 w-5 text-violet-700" />
+            {/* Steps */}
+            <div className="mt-6 sm:mt-10 space-y-5 sm:space-y-8">
+              {steps.map((step, index) => (
+                <div key={index}>
+                  <p className="text-[10px] sm:text-xs font-medium text-white/50">{step.step}</p>
+                  <div className="mt-1.5 sm:mt-2 flex items-start gap-3 sm:gap-4">
+                    <div className="flex h-9 w-9 sm:h-11 sm:w-11 flex-shrink-0 items-center justify-center rounded-lg bg-white/20">
+                      <step.icon className="h-4 w-4 sm:h-5 sm:w-5 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="text-sm sm:text-base font-semibold text-white">{step.title}</h3>
+                      <p className="mt-0.5 sm:mt-1 text-xs sm:text-sm text-white/70">{step.description}</p>
+                    </div>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="font-semibold text-white">{step.title}</h3>
-                  <p className="mt-1 text-sm text-white/80">{step.description}</p>
-                </div>
-              </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </div>
 
-        {/* Image */}
-        <div className="px-4 pb-4">
-          <div
-            className="h-[250px] w-full rounded-xl bg-cover bg-center sm:h-[350px] md:h-[500px]"
-            style={{
-              backgroundImage: `url('https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=2070&auto=format&fit=crop')`,
-            }}
-          />
+          {/* Right Side - Image */}
+          <div className="w-full md:w-[60%] min-h-[250px] sm:min-h-[350px] md:min-h-[700px] p-2 md:pl-0">
+            <div
+              className="h-full w-full rounded-[10px] bg-cover bg-center"
+              style={{
+                backgroundImage: `url('https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=2070&auto=format&fit=crop')`,
+              }}
+            />
+          </div>
         </div>
       </div>
     </section>

@@ -39,8 +39,8 @@ export default function HomePage() {
       <CategoryBlocks />
       <HeroBanner />
       <JustDropped />
-      <TestimonialsSection />
       <HowItWorks />
+      <TestimonialsSection />
       <BookDemoCTA />
     </>
   )
