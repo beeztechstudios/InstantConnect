@@ -1,161 +1,238 @@
-import { Metadata } from 'next'
-import Link from 'next/link'
-import { ChevronRight } from 'lucide-react'
-import { createClient } from '@/utils/supabase/server'
-import { ProductCard } from '@/components/products/product-card'
-import { SortDropdown } from '@/components/shop/sort-dropdown'
+'use client'
 
-export const metadata: Metadata = {
-  title: 'Shop All Products',
-  description: 'Browse our complete collection of NFC cards, QR cards, standees, keychains and more.',
+import { useState, useEffect, Suspense } from 'react'
+import { useSearchParams } from 'next/navigation'
+import { ChevronDown } from 'lucide-react'
+import { createClient } from '@/utils/supabase/client'
+import { ShopProductCard } from '@/components/products/shop-product-card'
+
+interface Product {
+  id: string
+  name: string
+  slug: string
+  price: number
+  compare_at_price: number | null
+  images: string[]
+  is_featured: boolean
+  is_active: boolean
+  category_id: string
+  created_at: string
 }
 
-export default async function ShopPage({
-  searchParams,
-}: {
-  searchParams: Promise<{ category?: string; sort?: string }>
-}) {
-  const { category, sort } = await searchParams
-  const supabase = await createClient()
+interface Category {
+  id: string
+  name: string
+  slug: string
+  is_active: boolean
+  display_order: number
+}
 
-  // Fetch all categories
-  const { data: categories } = await supabase
-    .from('categories')
-    .select('*')
-    .eq('is_active', true)
-    .order('display_order', { ascending: true })
+function ShopContent() {
+  const searchParams = useSearchParams()
+  const initialCategory = searchParams.get('category')
 
-  // Build products query
-  let query = supabase
-    .from('products')
-    .select('*')
-    .eq('is_active', true)
+  const [products, setProducts] = useState<Product[]>([])
+  const [categories, setCategories] = useState<Category[]>([])
+  const [selectedCategorySlug, setSelectedCategorySlug] = useState<string | null>(initialCategory)
+  const [sortBy, setSortBy] = useState<string>('newest')
+  const [showSortDropdown, setShowSortDropdown] = useState(false)
+  const [loading, setLoading] = useState(true)
 
-  // Filter by category if selected
-  if (category && categories) {
-    const selectedCategory = categories.find(c => c.slug === category)
-    if (selectedCategory) {
-      query = query.eq('category_id', selectedCategory.id)
+  useEffect(() => {
+    async function fetchData() {
+      const supabase = createClient()
+
+      const { data: categoriesData } = await supabase
+        .from('categories')
+        .select('*')
+        .eq('is_active', true)
+        .order('display_order', { ascending: true })
+
+      if (categoriesData) {
+        setCategories(categoriesData)
+      }
+
+      const { data: productsData } = await supabase
+        .from('products')
+        .select('*')
+        .eq('is_active', true)
+
+      if (productsData) {
+        setProducts(productsData)
+      }
+
+      setLoading(false)
     }
-  }
 
-  // Apply sorting
-  switch (sort) {
-    case 'price-low':
-      query = query.order('price', { ascending: true })
-      break
-    case 'price-high':
-      query = query.order('price', { ascending: false })
-      break
-    case 'newest':
-      query = query.order('created_at', { ascending: false })
-      break
-    case 'featured':
-      query = query.order('is_featured', { ascending: false })
-      break
-    default:
-      query = query.order('created_at', { ascending: false })
-  }
+    fetchData()
+  }, [])
 
-  const { data: products } = await query
+  // Get selected category from slug
+  const selectedCategory = categories.find(c => c.slug === selectedCategorySlug)
+
+  const filteredProducts = products
+    .filter(product => !selectedCategory || product.category_id === selectedCategory.id)
+    .sort((a, b) => {
+      switch (sortBy) {
+        case 'price-low':
+          return a.price - b.price
+        case 'price-high':
+          return b.price - a.price
+        case 'newest':
+          return new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        default:
+          return 0
+      }
+    })
+
+  const sortOptions = [
+    { value: 'newest', label: 'Newest' },
+    { value: 'price-low', label: 'Price: Low to High' },
+    { value: 'price-high', label: 'Price: High to Low' },
+  ]
+
+  const currentSort = sortOptions.find(o => o.value === sortBy)?.label || 'Newest'
 
   return (
-    <div className="min-h-screen bg-zinc-100">
-      {/* Breadcrumb */}
-      <div className="flex justify-center bg-zinc-100 pt-6">
-        <div className="w-[95%]">
-          <nav className="flex items-center gap-2 text-sm">
-            <Link href="/" className="text-zinc-500 hover:text-zinc-700">
-              Home
-            </Link>
-            <ChevronRight className="h-4 w-4 text-zinc-400" />
-            <span className="font-medium text-zinc-900">Shop</span>
-          </nav>
-        </div>
-      </div>
+    <div className="overflow-x-hidden min-h-screen" style={{ backgroundColor: '#F4F4F4' }}>
+      {/* Header + Filters */}
+      <section className="pt-28 sm:pt-32 lg:pt-36">
+        <div className="mx-auto w-[95%]">
+          {/* Title */}
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-zinc-900">
+            {selectedCategory ? selectedCategory.name : 'Shop'}
+          </h1>
 
-      {/* Hero Banner */}
-      <section className="flex justify-center bg-zinc-100 py-6">
-        <div className="relative w-[95%] overflow-hidden rounded-xl bg-gradient-to-r from-zinc-900 to-zinc-700 px-8 py-12 md:py-16">
-          <div className="relative z-10">
-            <p className="text-sm font-medium text-zinc-400">
-              Browse our complete collection
-            </p>
-            <h1 className="mt-2 text-3xl font-bold text-white md:text-4xl">
-              Shop All Products
-            </h1>
-            <p className="mt-3 max-w-xl text-zinc-300">
-              Discover NFC cards, QR cards, smart standees, keychains and more.
-              Everything you need for modern networking.
-            </p>
-          </div>
-          {/* Decorative elements */}
-          <div className="absolute right-0 top-0 h-full w-1/3 bg-gradient-to-l from-white/5 to-transparent" />
-        </div>
-      </section>
-
-      {/* Filter Bar */}
-      <section className="flex justify-center bg-zinc-100 pb-4">
-        <div className="w-[95%]">
-          <div className="flex flex-col gap-4 rounded-xl bg-white p-4 md:flex-row md:items-center md:justify-between">
-            {/* Category Chips */}
-            <div className="flex flex-wrap items-center gap-2">
-              <Link
-                href="/shop"
-                className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-                  !category
+          {/* Filters Row */}
+          <div className="flex items-center justify-between gap-4 mt-6 sm:mt-8 pb-4 sm:pb-5 border-b border-zinc-300">
+            {/* Category Tabs */}
+            <div className="flex items-center gap-1 sm:gap-2 overflow-x-auto no-scrollbar">
+              <button
+                type="button"
+                onClick={() => setSelectedCategorySlug(null)}
+                className={`flex-shrink-0 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium transition-colors cursor-pointer ${
+                  !selectedCategorySlug
                     ? 'bg-zinc-900 text-white'
-                    : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200'
+                    : 'text-zinc-600 hover:bg-zinc-200'
                 }`}
               >
                 All
-              </Link>
-              {categories?.map((cat) => (
-                <Link
+              </button>
+              {categories.map((cat) => (
+                <button
+                  type="button"
                   key={cat.id}
-                  href={`/shop?category=${cat.slug}${sort ? `&sort=${sort}` : ''}`}
-                  className={`rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
-                    category === cat.slug
+                  onClick={() => setSelectedCategorySlug(cat.slug)}
+                  className={`flex-shrink-0 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium transition-colors cursor-pointer ${
+                    selectedCategorySlug === cat.slug
                       ? 'bg-zinc-900 text-white'
-                      : 'bg-zinc-100 text-zinc-700 hover:bg-zinc-200'
+                      : 'text-zinc-600 hover:bg-zinc-200'
                   }`}
                 >
                   {cat.name}
-                </Link>
+                </button>
               ))}
             </div>
 
             {/* Sort Dropdown */}
-            <div className="flex items-center gap-3">
-              <span className="text-sm text-zinc-500">{products?.length || 0} products</span>
-              <SortDropdown />
+            <div className="relative flex-shrink-0">
+              <button
+                onClick={() => setShowSortDropdown(!showSortDropdown)}
+                className="flex items-center gap-1.5 text-xs sm:text-sm text-zinc-500 hover:text-zinc-900"
+              >
+                {currentSort}
+                <ChevronDown className={`h-4 w-4 transition-transform ${showSortDropdown ? 'rotate-180' : ''}`} />
+              </button>
+
+              {showSortDropdown && (
+                <>
+                  <div
+                    className="fixed inset-0 z-10"
+                    onClick={() => setShowSortDropdown(false)}
+                  />
+                  <div className="absolute right-0 top-full mt-2 z-20 w-44 rounded-[10px] bg-white shadow-lg border border-zinc-200 py-1">
+                    {sortOptions.map((option) => (
+                      <button
+                        key={option.value}
+                        onClick={() => {
+                          setSortBy(option.value)
+                          setShowSortDropdown(false)
+                        }}
+                        className={`w-full text-left px-4 py-2 text-sm ${
+                          sortBy === option.value
+                            ? 'bg-zinc-100 text-zinc-900 font-medium'
+                            : 'text-zinc-600 hover:bg-zinc-50'
+                        }`}
+                      >
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
       </section>
 
       {/* Products Grid */}
-      <section className="flex justify-center bg-zinc-100 pb-8">
-        <div className="w-[95%]">
-          {products && products.length > 0 ? (
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {products.map((product) => (
-                <ProductCard key={product.id} product={product} />
+      <section className="pt-6 sm:pt-8 pb-12 sm:pb-16 lg:pb-20">
+        <div className="mx-auto w-[95%]">
+          {loading ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
+              {[...Array(8)].map((_, i) => (
+                <div key={i} className="animate-pulse">
+                  <div className="aspect-square rounded-[10px] bg-zinc-200" />
+                  <div className="mt-3 h-4 bg-zinc-200 rounded w-3/4" />
+                  <div className="mt-2 h-4 bg-zinc-200 rounded w-1/3" />
+                </div>
+              ))}
+            </div>
+          ) : filteredProducts.length > 0 ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
+              {filteredProducts.map((product) => (
+                <ShopProductCard key={product.id} product={product} />
               ))}
             </div>
           ) : (
-            <div className="rounded-xl bg-white py-16 text-center">
+            <div className="py-16 sm:py-24 text-center">
               <p className="text-zinc-500">No products found</p>
-              <Link
-                href="/shop"
-                className="mt-4 inline-block text-sm font-medium text-teal-600 hover:text-teal-700"
+              <button
+                onClick={() => {
+                  setSelectedCategorySlug(null)
+                  setSortBy('newest')
+                }}
+                className="mt-3 text-sm font-medium text-zinc-900 underline underline-offset-4 hover:text-zinc-600"
               >
                 Clear filters
-              </Link>
+              </button>
             </div>
           )}
         </div>
       </section>
     </div>
+  )
+}
+
+export default function ShopPage() {
+  return (
+    <Suspense fallback={
+      <div className="overflow-x-hidden min-h-screen pt-28 sm:pt-32 lg:pt-36" style={{ backgroundColor: '#F4F4F4' }}>
+        <div className="mx-auto w-[95%]">
+          <div className="h-12 w-32 bg-zinc-200 rounded animate-pulse" />
+          <div className="mt-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
+            {[...Array(8)].map((_, i) => (
+              <div key={i} className="animate-pulse">
+                <div className="aspect-square rounded-[10px] bg-zinc-200" />
+                <div className="mt-3 h-4 bg-zinc-200 rounded w-3/4" />
+                <div className="mt-2 h-4 bg-zinc-200 rounded w-1/3" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    }>
+      <ShopContent />
+    </Suspense>
   )
 }

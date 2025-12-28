@@ -48,7 +48,7 @@ export async function FeaturedProducts() {
           ))}
 
           {/* Promo Banner Card */}
-          <Link href="/shop/qr-cards" className="group h-full">
+          <Link href="/shop?category=qr-cards" className="group h-full">
             <div className="relative h-full overflow-hidden rounded-[10px]">
               <div
                 className="absolute inset-0 bg-cover bg-center"

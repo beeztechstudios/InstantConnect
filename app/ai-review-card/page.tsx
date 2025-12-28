@@ -200,7 +200,7 @@ export default async function AIReviewCardPage() {
               </h2>
             </div>
             <Link
-              href="/shop/nfc-cards"
+              href="/shop?category=review-cards"
               className="inline-block rounded-lg bg-zinc-900 px-4 py-2 sm:px-5 sm:py-2.5 text-xs sm:text-sm font-semibold text-white hover:bg-zinc-800 whitespace-nowrap w-fit"
             >
               Explore products

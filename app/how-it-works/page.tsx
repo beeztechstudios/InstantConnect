@@ -1,7 +1,8 @@
 import { Metadata } from 'next'
-import Image from 'next/image'
 import Link from 'next/link'
-import { ChevronRight, Smartphone, CreditCard, Share2, Check, Zap, Users, BarChart3, Leaf, Play, ChevronDown } from 'lucide-react'
+import { Smartphone, Globe, CheckCircle, Zap, Users, BarChart3, Leaf, Shield, CreditCard } from 'lucide-react'
+import { Accordion } from '@/components/ui/accordion'
+import { BookDemoCTA } from '@/components/home/book-demo-cta'
 
 export const metadata: Metadata = {
   title: 'How It Works',
@@ -10,25 +11,22 @@ export const metadata: Metadata = {
 
 const steps = [
   {
-    number: '01',
+    step: 'STEP 1',
     icon: CreditCard,
     title: 'Choose Your Product',
-    description: 'Select from our range of NFC cards, QR codes, standees, keychains, or table tents. Customize the design to match your brand.',
-    color: 'bg-violet-500',
+    description: 'Select from our range of NFC cards, QR codes, standees, keychains, or table tents.',
   },
   {
-    number: '02',
+    step: 'STEP 2',
     icon: Smartphone,
     title: 'Set Up Your Profile',
-    description: 'After receiving your product, set up your digital profile with contact details, social links, portfolio, and more.',
-    color: 'bg-teal-500',
+    description: 'Create your digital profile with contact details, social links, portfolio, and more.',
   },
   {
-    number: '03',
-    icon: Share2,
+    step: 'STEP 3',
+    icon: Globe,
     title: 'Share Instantly',
-    description: 'Tap your NFC product against any smartphone to instantly share your profile. No app needed - it just works!',
-    color: 'bg-orange-500',
+    description: 'Tap your NFC product against any smartphone to instantly share your profile.',
   },
 ]
 
@@ -59,9 +57,9 @@ const features = [
     description: 'Replace hundreds of paper cards with one NFC card.',
   },
   {
-    icon: Check,
-    title: 'Always Updated',
-    description: 'Update your profile anytime without reprinting.',
+    icon: Shield,
+    title: 'Secure & Private',
+    description: 'Your data is encrypted and you control what\'s shared.',
   },
 ]
 
@@ -94,208 +92,35 @@ const faqs = [
 
 export default function HowItWorksPage() {
   return (
-    <div className="min-h-screen bg-zinc-100">
-      {/* Breadcrumb */}
-      <div className="flex justify-center bg-zinc-100 pt-6">
-        <div className="w-[95%]">
-          <nav className="flex items-center gap-2 text-sm">
-            <Link href="/" className="text-zinc-500 hover:text-zinc-700">
-              Home
-            </Link>
-            <ChevronRight className="h-4 w-4 text-zinc-400" />
-            <span className="font-medium text-zinc-900">How It Works</span>
-          </nav>
-        </div>
-      </div>
+    <div className="overflow-x-hidden" style={{ backgroundColor: '#F4F4F4' }}>
+      {/* Hero */}
+      <section className="pt-[6px] px-[6px] pb-0">
+        <div className="relative h-[50vh] sm:h-[60vh] md:h-[70vh] overflow-hidden rounded-[10px]">
+          {/* Background Image */}
+          <div
+            className="absolute inset-0 bg-cover bg-center"
+            style={{ backgroundImage: `url('https://images.unsplash.com/photo-1556745757-8d76bdb6984b?q=80&w=2070&auto=format&fit=crop')` }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
 
-      {/* Hero Section */}
-      <section className="flex justify-center bg-zinc-100 py-6">
-        <div className="w-[95%]">
-          <div className="relative overflow-hidden rounded-xl bg-gradient-to-br from-violet-600 to-violet-700 px-8 py-16 md:py-24">
-            <div className="relative z-10 mx-auto max-w-3xl text-center">
-              <span className="inline-block rounded-full bg-white/20 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm">
-                Simple & Effective
-              </span>
-              <h1 className="mt-6 text-4xl font-bold text-white md:text-5xl">
-                Networking Made
-                <span className="block text-violet-200">Effortless</span>
-              </h1>
-              <p className="mt-6 text-lg text-violet-100">
-                Say goodbye to paper business cards. With Instant Connect, sharing your
-                professional identity takes just one tap. Here&apos;s how it works.
-              </p>
-              <div className="mt-8 flex flex-wrap justify-center gap-4">
-                <Link
-                  href="/shop"
-                  className="rounded-lg bg-white px-6 py-3 text-sm font-semibold text-violet-600 hover:bg-violet-50"
-                >
-                  Shop Now
-                </Link>
-                <Link
-                  href="/book-demo"
-                  className="rounded-lg border border-white/30 bg-white/10 px-6 py-3 text-sm font-semibold text-white backdrop-blur-sm hover:bg-white/20"
-                >
-                  Book a Demo
-                </Link>
-              </div>
-            </div>
-            {/* Decorative elements */}
-            <div className="absolute -left-20 -top-20 h-60 w-60 rounded-full bg-violet-500/30 blur-3xl" />
-            <div className="absolute -bottom-20 -right-20 h-60 w-60 rounded-full bg-violet-400/30 blur-3xl" />
-          </div>
-        </div>
-      </section>
-
-      {/* Steps Section */}
-      <section className="flex justify-center bg-zinc-100 py-8">
-        <div className="w-[95%]">
-          <div className="rounded-xl bg-white p-8 md:p-12">
-            <div className="text-center">
-              <span className="text-sm font-semibold uppercase tracking-wider text-violet-600">
-                Getting Started
-              </span>
-              <h2 className="mt-2 text-3xl font-bold text-zinc-900">
-                Three Simple Steps
-              </h2>
-              <p className="mt-2 text-zinc-500">
-                Getting started with Instant Connect is quick and easy
-              </p>
-            </div>
-
-            <div className="mt-12 grid gap-8 md:grid-cols-3">
-              {steps.map((step, index) => (
-                <div key={step.number} className="relative">
-                  {/* Connector line */}
-                  {index < steps.length - 1 && (
-                    <div className="absolute left-1/2 top-12 hidden h-0.5 w-full bg-zinc-200 md:block" />
-                  )}
-                  <div className="relative text-center">
-                    {/* Step number badge */}
-                    <div className={`mx-auto flex h-24 w-24 items-center justify-center rounded-2xl ${step.color}`}>
-                      <step.icon className="h-10 w-10 text-white" />
-                    </div>
-                    <div className="absolute -right-2 -top-2 flex h-8 w-8 items-center justify-center rounded-full bg-zinc-900 text-sm font-bold text-white">
-                      {step.number}
-                    </div>
-                    <h3 className="mt-6 text-xl font-bold text-zinc-900">
-                      {step.title}
-                    </h3>
-                    <p className="mt-2 text-zinc-500">
-                      {step.description}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Video/Demo Section */}
-      <section className="flex justify-center bg-zinc-100 py-8">
-        <div className="w-[95%]">
-          <div className="grid gap-6 lg:grid-cols-2">
-            {/* Video */}
-            <div className="relative aspect-video overflow-hidden rounded-xl bg-zinc-900">
-              <Image
-                src="https://images.unsplash.com/photo-1556745757-8d76bdb6984b?w=800"
-                alt="NFC card demonstration"
-                fill
-                className="object-cover opacity-80"
-              />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <button className="group flex h-20 w-20 items-center justify-center rounded-full bg-white/90 shadow-xl transition-transform hover:scale-110">
-                  <Play className="h-8 w-8 text-zinc-900 transition-transform group-hover:scale-110" />
-                </button>
-              </div>
-              <div className="absolute bottom-6 left-6 right-6">
-                <p className="text-lg font-semibold text-white">Watch the Demo</p>
-                <p className="text-sm text-white/70">See how easy it is to share your profile</p>
-              </div>
-            </div>
-
-            {/* Features Grid */}
-            <div className="grid grid-cols-2 gap-4">
-              {features.map((feature) => (
-                <div
-                  key={feature.title}
-                  className="rounded-xl bg-white p-5"
-                >
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-violet-100">
-                    <feature.icon className="h-5 w-5 text-violet-600" />
-                  </div>
-                  <h3 className="mt-3 font-semibold text-zinc-900">
-                    {feature.title}
-                  </h3>
-                  <p className="mt-1 text-sm text-zinc-500">
-                    {feature.description}
-                  </p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ Section */}
-      <section className="flex justify-center bg-zinc-100 py-8">
-        <div className="w-[95%]">
-          <div className="rounded-xl bg-white p-8 md:p-12">
-            <div className="mx-auto max-w-3xl">
-              <div className="text-center">
-                <span className="text-sm font-semibold uppercase tracking-wider text-teal-600">
-                  FAQ
-                </span>
-                <h2 className="mt-2 text-3xl font-bold text-zinc-900">
-                  Frequently Asked Questions
-                </h2>
-                <p className="mt-2 text-zinc-500">
-                  Everything you need to know about Instant Connect
-                </p>
-              </div>
-
-              <div className="mt-10 space-y-4">
-                {faqs.map((faq, index) => (
-                  <details
-                    key={index}
-                    className="group rounded-xl border border-zinc-200 bg-zinc-50"
-                  >
-                    <summary className="flex cursor-pointer items-center justify-between p-5">
-                      <span className="font-semibold text-zinc-900">{faq.question}</span>
-                      <ChevronDown className="h-5 w-5 text-zinc-400 transition-transform group-open:rotate-180" />
-                    </summary>
-                    <div className="border-t border-zinc-200 p-5">
-                      <p className="text-zinc-600">{faq.answer}</p>
-                    </div>
-                  </details>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="flex justify-center bg-zinc-100 pb-8">
-        <div className="w-[95%]">
-          <div className="overflow-hidden rounded-xl bg-zinc-900 px-8 py-16 text-center md:py-20">
-            <h2 className="text-3xl font-bold text-white md:text-4xl">
-              Ready to Go Digital?
-            </h2>
-            <p className="mx-auto mt-4 max-w-xl text-zinc-400">
-              Join thousands of professionals who have already upgraded their networking game.
-              Get your Instant Connect card today.
+          {/* Content */}
+          <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 sm:px-6">
+            <p className="text-center text-xs sm:text-sm md:text-base text-white/70 max-w-xs sm:max-w-md md:max-w-2xl">
+              Say goodbye to paper business cards. Share your professional identity with just one tap.
             </p>
-            <div className="mt-8 flex flex-wrap justify-center gap-4">
+            <h1 className="mt-3 sm:mt-4 text-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white max-w-xs sm:max-w-lg md:max-w-3xl">
+              Networking Made Effortless
+            </h1>
+            <div className="mt-5 sm:mt-6 md:mt-8 flex flex-col sm:flex-row gap-3">
               <Link
                 href="/shop"
-                className="rounded-lg bg-white px-8 py-3 text-sm font-semibold text-zinc-900 hover:bg-zinc-100"
+                className="rounded-lg bg-white px-5 py-2.5 sm:px-6 sm:py-3 text-xs sm:text-sm font-semibold text-zinc-900 hover:bg-zinc-100"
               >
                 Shop Now
               </Link>
               <Link
                 href="/book-demo"
-                className="rounded-lg border border-zinc-700 px-8 py-3 text-sm font-semibold text-white hover:bg-zinc-800"
+                className="rounded-lg bg-white/20 backdrop-blur-sm px-5 py-2.5 sm:px-6 sm:py-3 text-xs sm:text-sm font-semibold text-white hover:bg-white/30"
               >
                 Book a Demo
               </Link>
@@ -303,6 +128,177 @@ export default function HowItWorksPage() {
           </div>
         </div>
       </section>
+
+      {/* How It Works Steps */}
+      <section className="pt-10 pb-8 sm:pt-14 sm:pb-10 lg:pt-20 lg:pb-12">
+        <div className="mx-auto w-[95%]">
+          {/* Section Header */}
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 sm:gap-4 pb-6 sm:pb-8">
+            <div>
+              <p className="text-xs sm:text-sm text-zinc-500">
+                Getting started is quick and easy
+              </p>
+              <h2 className="mt-1 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-zinc-900">
+                Three Simple Steps
+              </h2>
+            </div>
+            <Link
+              href="/shop"
+              className="inline-block rounded-lg bg-zinc-900 px-4 py-2 sm:px-5 sm:py-2.5 text-xs sm:text-sm font-semibold text-white hover:bg-zinc-800 whitespace-nowrap w-fit"
+            >
+              Get Started
+            </Link>
+          </div>
+
+          {/* Steps Grid */}
+          <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
+            {/* Left - Purple Section */}
+            <div className="w-full lg:w-[45%] p-5 sm:p-8 lg:p-10 rounded-[10px]" style={{ backgroundColor: '#685BC7' }}>
+              <div className="space-y-6 sm:space-y-8">
+                {steps.map((step, index) => (
+                  <div key={index}>
+                    <p className="text-[10px] sm:text-xs font-medium text-white/50">{step.step}</p>
+                    <div className="mt-2 flex items-start gap-3 sm:gap-4">
+                      <div className="flex h-10 w-10 sm:h-12 sm:w-12 flex-shrink-0 items-center justify-center rounded-lg bg-white/20">
+                        <step.icon className="h-5 w-5 sm:h-6 sm:w-6 text-white" />
+                      </div>
+                      <div>
+                        <h3 className="text-base sm:text-lg font-semibold text-white">{step.title}</h3>
+                        <p className="mt-1 text-xs sm:text-sm text-white/70">{step.description}</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* Right - Image */}
+            <div className="w-full lg:w-[55%] relative min-h-[280px] sm:min-h-[350px] lg:min-h-[450px] rounded-[10px] overflow-hidden">
+              <div
+                className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                style={{ backgroundImage: `url('https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=2070&auto=format&fit=crop')` }}
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Features Section */}
+      <section className="py-8 sm:py-12 lg:py-16">
+        <div className="mx-auto w-[95%]">
+          {/* Section Header */}
+          <div className="text-center pb-6 sm:pb-8 lg:pb-10">
+            <p className="text-xs sm:text-sm text-zinc-500">
+              Everything you need for modern networking
+            </p>
+            <h2 className="mt-1 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-zinc-900">
+              Why Choose Instant Connect?
+            </h2>
+          </div>
+
+          {/* Features Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
+            {features.map((feature) => (
+              <div
+                key={feature.title}
+                className="rounded-[10px] bg-white p-5 sm:p-6"
+              >
+                <div className="flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-lg bg-violet-100">
+                  <feature.icon className="h-5 w-5 sm:h-6 sm:w-6 text-violet-600" />
+                </div>
+                <h3 className="mt-4 text-base sm:text-lg font-semibold text-zinc-900">
+                  {feature.title}
+                </h3>
+                <p className="mt-1.5 text-xs sm:text-sm text-zinc-500">
+                  {feature.description}
+                </p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Comparison Section */}
+      <section className="py-8 sm:py-12 lg:py-16">
+        <div className="mx-auto w-[95%]">
+          <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
+            {/* Traditional Cards */}
+            <div className="w-full lg:w-1/2 p-5 sm:p-8 rounded-[10px] bg-zinc-200">
+              <h3 className="text-lg sm:text-xl font-bold text-zinc-900">Traditional Business Cards</h3>
+              <div className="mt-4 sm:mt-6 space-y-3">
+                <div className="flex items-center gap-3 text-sm text-zinc-600">
+                  <div className="h-2 w-2 rounded-full bg-red-500" />
+                  Get lost or thrown away
+                </div>
+                <div className="flex items-center gap-3 text-sm text-zinc-600">
+                  <div className="h-2 w-2 rounded-full bg-red-500" />
+                  Can&apos;t be updated once printed
+                </div>
+                <div className="flex items-center gap-3 text-sm text-zinc-600">
+                  <div className="h-2 w-2 rounded-full bg-red-500" />
+                  Wasteful and not eco-friendly
+                </div>
+                <div className="flex items-center gap-3 text-sm text-zinc-600">
+                  <div className="h-2 w-2 rounded-full bg-red-500" />
+                  Limited information space
+                </div>
+                <div className="flex items-center gap-3 text-sm text-zinc-600">
+                  <div className="h-2 w-2 rounded-full bg-red-500" />
+                  No analytics or tracking
+                </div>
+              </div>
+            </div>
+
+            {/* Instant Connect */}
+            <div className="w-full lg:w-1/2 p-5 sm:p-8 rounded-[10px]" style={{ backgroundColor: '#F5A623' }}>
+              <h3 className="text-lg sm:text-xl font-bold text-black">Instant Connect Cards</h3>
+              <div className="mt-4 sm:mt-6 space-y-3">
+                <div className="flex items-center gap-3 text-sm text-black/80">
+                  <CheckCircle className="h-4 w-4 text-black" />
+                  Always with you, never lost
+                </div>
+                <div className="flex items-center gap-3 text-sm text-black/80">
+                  <CheckCircle className="h-4 w-4 text-black" />
+                  Update anytime, instantly reflected
+                </div>
+                <div className="flex items-center gap-3 text-sm text-black/80">
+                  <CheckCircle className="h-4 w-4 text-black" />
+                  Eco-friendly, one card forever
+                </div>
+                <div className="flex items-center gap-3 text-sm text-black/80">
+                  <CheckCircle className="h-4 w-4 text-black" />
+                  Unlimited info: links, portfolio, videos
+                </div>
+                <div className="flex items-center gap-3 text-sm text-black/80">
+                  <CheckCircle className="h-4 w-4 text-black" />
+                  Full analytics and insights
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-8 sm:py-12 lg:py-16">
+        <div className="mx-auto w-[95%] max-w-3xl">
+          <div className="text-center">
+            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-zinc-900">
+              Frequently Asked Questions
+            </h2>
+          </div>
+          <div className="mt-6 sm:mt-8 lg:mt-10 space-y-3 sm:space-y-4">
+            {faqs.map((faq, index) => (
+              <Accordion key={index} title={faq.question}>
+                <p className="text-sm sm:text-base text-zinc-600">{faq.answer}</p>
+              </Accordion>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Footer CTA */}
+      <BookDemoCTA />
     </div>
   )
 }

@@ -6,11 +6,11 @@ import { MapPin, Truck, ShieldCheck, Gift, Star } from 'lucide-react'
 import { useState } from 'react'
 
 const productLinks = [
-  { name: 'NFC Cards', href: '/shop/nfc-cards' },
-  { name: 'QR Cards', href: '/shop/qr-cards', highlight: true },
-  { name: 'Standees', href: '/shop/standees' },
-  { name: 'Key Chain', href: '/shop/keychains' },
-  { name: 'Table Tents', href: '/shop/table-tents' },
+  { name: 'NFC Cards', href: '/shop?category=nfc-cards' },
+  { name: 'QR Cards', href: '/shop?category=qr-cards', highlight: true },
+  { name: 'Standees', href: '/shop?category=standees' },
+  { name: 'Key Chain', href: '/shop?category=keychains' },
+  { name: 'Table Tents', href: '/shop?category=table-tents' },
 ]
 
 const exploreLinks = [
@@ -101,8 +101,8 @@ export function Footer() {
                     href={link.href}
                     className="inline-flex items-center gap-1 text-xs sm:text-sm text-zinc-900 hover:underline"
                   >
+                    {link.featured && <Star className="h-2.5 w-2.5 sm:h-3 sm:w-3 fill-violet-500 text-violet-500" />}
                     {link.name}
-                    {link.featured && <Star className="h-2.5 w-2.5 sm:h-3 sm:w-3 fill-amber-400 text-amber-400" />}
                   </Link>
                 </li>
               ))}
