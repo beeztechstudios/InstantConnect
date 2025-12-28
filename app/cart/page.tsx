@@ -81,8 +81,8 @@ export default function CartPage() {
         </div>
       </div>
 
-      {/* Cart Content */}
-      <div className="pb-32 sm:pb-8">
+      {/* Cart Content - extra padding on mobile for sticky footer */}
+      <div className="pb-36 sm:pb-8">
         <div className="mx-auto w-[95%]">
           <div className="grid gap-4 sm:gap-6 lg:grid-cols-3">
             {/* Cart Items */}
@@ -255,8 +255,11 @@ export default function CartPage() {
         </div>
       </div>
 
+      {/* Mobile spacer for sticky footer - ensures footer content isn't hidden */}
+      <div className="h-32 sm:hidden" aria-hidden="true" />
+
       {/* Mobile Sticky Checkout Bar */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-zinc-200 p-4 sm:hidden safe-area-bottom">
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-zinc-200 p-4 sm:hidden shadow-[0_-4px_20px_rgba(0,0,0,0.1)]">
         <div className="flex items-center justify-between mb-3">
           <div>
             <p className="text-xs text-zinc-500">Total ({items.length} items)</p>

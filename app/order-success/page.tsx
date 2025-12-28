@@ -70,20 +70,20 @@ function OrderSuccessContent() {
 
   if (!orderNumber) {
     return (
-      <div className="min-h-screen bg-zinc-100">
+      <div className="min-h-screen bg-zinc-100 pt-20 sm:pt-28 lg:pt-32">
         <div className="flex min-h-[60vh] flex-col items-center justify-center px-4 text-center">
-          <div className="flex h-20 w-20 items-center justify-center rounded-full bg-zinc-200">
-            <Package className="h-10 w-10 text-zinc-400" />
+          <div className="flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-full bg-zinc-200">
+            <Package className="h-8 w-8 sm:h-10 sm:w-10 text-zinc-400" />
           </div>
-          <h1 className="mt-6 text-2xl font-bold text-zinc-900">
+          <h1 className="mt-5 sm:mt-6 text-xl sm:text-2xl font-bold text-zinc-900">
             No order found
           </h1>
-          <p className="mt-2 text-zinc-500">
+          <p className="mt-2 text-sm sm:text-base text-zinc-500">
             Please check your order confirmation email.
           </p>
           <Link
             href="/"
-            className="mt-6 rounded-lg bg-zinc-900 px-6 py-3 text-sm font-semibold text-white hover:bg-zinc-800"
+            className="mt-5 sm:mt-6 rounded-full bg-zinc-900 px-6 py-3 text-sm font-semibold text-white hover:bg-zinc-800 active:opacity-90"
           >
             Go to Homepage
           </Link>
@@ -120,48 +120,48 @@ function OrderSuccessContent() {
   ]
 
   return (
-    <div className="min-h-screen bg-zinc-100">
+    <div className="min-h-screen bg-zinc-100 pt-20 sm:pt-28 lg:pt-32">
       {/* Breadcrumb */}
-      <div className="flex justify-center bg-zinc-100 pt-6">
+      <div className="flex justify-center bg-zinc-100 pt-4 sm:pt-6">
         <div className="w-[95%]">
-          <nav className="flex items-center gap-2 text-sm">
+          <nav className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm">
             <Link href="/" className="text-zinc-500 hover:text-zinc-700">
               Home
             </Link>
-            <ChevronRight className="h-4 w-4 text-zinc-400" />
+            <ChevronRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-zinc-400" />
             <span className="font-medium text-zinc-900">Order Confirmed</span>
           </nav>
         </div>
       </div>
 
       {/* Success Header */}
-      <div className="flex justify-center bg-zinc-100 py-8">
+      <div className="flex justify-center bg-zinc-100 py-4 sm:py-6 lg:py-8">
         <div className="w-[95%]">
-          <div className="rounded-xl bg-gradient-to-br from-teal-500 to-teal-600 p-8 text-center md:p-12">
+          <div className="rounded-2xl bg-gradient-to-br from-teal-500 to-teal-600 p-5 sm:p-8 md:p-12 text-center">
             {/* Animated Checkmark */}
-            <div className="mx-auto flex h-20 w-20 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">
-              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-white">
-                <CheckCircle className="h-8 w-8 text-teal-500" />
+            <div className="mx-auto flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">
+              <div className="flex h-11 w-11 sm:h-14 sm:w-14 items-center justify-center rounded-full bg-white">
+                <CheckCircle className="h-6 w-6 sm:h-8 sm:w-8 text-teal-500" />
               </div>
             </div>
-            <h1 className="mt-6 text-3xl font-bold text-white md:text-4xl">
+            <h1 className="mt-4 sm:mt-6 text-2xl sm:text-3xl md:text-4xl font-bold text-white">
               Order Confirmed!
             </h1>
-            <p className="mt-2 text-teal-100">
+            <p className="mt-2 text-sm sm:text-base text-teal-100 max-w-md mx-auto">
               Thank you for your order. We&apos;ll send you a confirmation email shortly.
             </p>
 
             {/* Order Number */}
-            <div className="mx-auto mt-6 inline-flex items-center gap-3 rounded-lg bg-white/10 px-6 py-3 backdrop-blur-sm">
+            <div className="mx-auto mt-5 sm:mt-6 inline-flex items-center gap-2 sm:gap-3 rounded-xl bg-white/10 px-4 sm:px-6 py-3 backdrop-blur-sm">
               <div className="text-left">
-                <p className="text-xs text-teal-100">Order Number</p>
-                <p className="font-mono text-lg font-bold text-white">{orderNumber}</p>
+                <p className="text-[10px] sm:text-xs text-teal-100">Order Number</p>
+                <p className="font-mono text-sm sm:text-lg font-bold text-white">{orderNumber}</p>
               </div>
               <button
                 onClick={copyOrderNumber}
-                className="flex h-10 w-10 items-center justify-center rounded-lg bg-white/20 text-white hover:bg-white/30"
+                className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-lg bg-white/20 text-white hover:bg-white/30 active:bg-white/40"
               >
-                {copied ? <Check className="h-5 w-5" /> : <Copy className="h-5 w-5" />}
+                {copied ? <Check className="h-4 w-4 sm:h-5 sm:w-5" /> : <Copy className="h-4 w-4 sm:h-5 sm:w-5" />}
               </button>
             </div>
           </div>
@@ -170,30 +170,30 @@ function OrderSuccessContent() {
 
       <div className="flex justify-center bg-zinc-100 pb-8">
         <div className="w-[95%]">
-          <div className="grid gap-6 lg:grid-cols-3">
+          <div className="grid gap-4 sm:gap-6 lg:grid-cols-3">
             {/* Left Column - Form & Timeline */}
-            <div className="space-y-6 lg:col-span-2">
+            <div className="space-y-4 sm:space-y-6 lg:col-span-2">
               {/* Post-Payment Form - Now First */}
               {!submitted ? (
-                <div className="rounded-xl bg-white p-6">
-                  <div className="flex items-start gap-4">
-                    <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-violet-100">
-                      <User className="h-5 w-5 text-violet-600" />
+                <div className="rounded-xl bg-white p-4 sm:p-6">
+                  <div className="flex items-start gap-3 sm:gap-4">
+                    <div className="flex h-9 w-9 sm:h-10 sm:w-10 flex-shrink-0 items-center justify-center rounded-lg bg-violet-100">
+                      <User className="h-4 w-4 sm:h-5 sm:w-5 text-violet-600" />
                     </div>
-                    <div>
-                      <h2 className="text-lg font-bold text-zinc-900">
+                    <div className="min-w-0">
+                      <h2 className="text-base sm:text-lg font-bold text-zinc-900">
                         Card/Product Details
                       </h2>
-                      <p className="text-sm text-zinc-500">
+                      <p className="text-xs sm:text-sm text-zinc-500">
                         Please provide the details you want printed on your NFC card or product.
                       </p>
                     </div>
                   </div>
 
-                  <form onSubmit={handleSubmit} className="mt-6 space-y-4">
-                    <div className="grid gap-4 sm:grid-cols-2">
+                  <form onSubmit={handleSubmit} className="mt-5 sm:mt-6 space-y-3 sm:space-y-4">
+                    <div className="grid gap-3 sm:gap-4 sm:grid-cols-2">
                       <div>
-                        <label className="mb-1.5 block text-sm font-medium text-zinc-700">
+                        <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
                           Full Name *
                         </label>
                         <div className="relative">
@@ -204,12 +204,12 @@ function OrderSuccessContent() {
                             value={formData.name}
                             onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                             required
-                            className="w-full rounded-lg border border-zinc-200 py-2.5 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none"
+                            className="w-full rounded-xl border border-zinc-200 py-3 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none"
                           />
                         </div>
                       </div>
                       <div>
-                        <label className="mb-1.5 block text-sm font-medium text-zinc-700">
+                        <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
                           Designation/Title
                         </label>
                         <input
@@ -217,14 +217,14 @@ function OrderSuccessContent() {
                           placeholder="Marketing Manager"
                           value={formData.designation}
                           onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
-                          className="w-full rounded-lg border border-zinc-200 px-4 py-2.5 text-sm focus:border-zinc-400 focus:outline-none"
+                          className="w-full rounded-xl border border-zinc-200 px-4 py-3 text-sm focus:border-zinc-400 focus:outline-none"
                         />
                       </div>
                     </div>
 
-                    <div className="grid gap-4 sm:grid-cols-2">
+                    <div className="grid gap-3 sm:gap-4 sm:grid-cols-2">
                       <div>
-                        <label className="mb-1.5 block text-sm font-medium text-zinc-700">
+                        <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
                           Company Name
                         </label>
                         <div className="relative">
@@ -234,12 +234,12 @@ function OrderSuccessContent() {
                             placeholder="Acme Inc."
                             value={formData.companyName}
                             onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
-                            className="w-full rounded-lg border border-zinc-200 py-2.5 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none"
+                            className="w-full rounded-xl border border-zinc-200 py-3 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none"
                           />
                         </div>
                       </div>
                       <div>
-                        <label className="mb-1.5 block text-sm font-medium text-zinc-700">
+                        <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
                           Phone Number
                         </label>
                         <div className="relative">
@@ -249,15 +249,15 @@ function OrderSuccessContent() {
                             placeholder="+91 98765 43210"
                             value={formData.phone}
                             onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                            className="w-full rounded-lg border border-zinc-200 py-2.5 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none"
+                            className="w-full rounded-xl border border-zinc-200 py-3 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none"
                           />
                         </div>
                       </div>
                     </div>
 
-                    <div className="grid gap-4 sm:grid-cols-2">
+                    <div className="grid gap-3 sm:gap-4 sm:grid-cols-2">
                       <div>
-                        <label className="mb-1.5 block text-sm font-medium text-zinc-700">
+                        <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
                           Email Address
                         </label>
                         <div className="relative">
@@ -267,12 +267,12 @@ function OrderSuccessContent() {
                             placeholder="john@example.com"
                             value={formData.email}
                             onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                            className="w-full rounded-lg border border-zinc-200 py-2.5 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none"
+                            className="w-full rounded-xl border border-zinc-200 py-3 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none"
                           />
                         </div>
                       </div>
                       <div>
-                        <label className="mb-1.5 block text-sm font-medium text-zinc-700">
+                        <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
                           Website URL
                         </label>
                         <div className="relative">
@@ -282,14 +282,14 @@ function OrderSuccessContent() {
                             placeholder="https://yourwebsite.com"
                             value={formData.website}
                             onChange={(e) => setFormData({ ...formData, website: e.target.value })}
-                            className="w-full rounded-lg border border-zinc-200 py-2.5 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none"
+                            className="w-full rounded-xl border border-zinc-200 py-3 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none"
                           />
                         </div>
                       </div>
                     </div>
 
                     <div>
-                      <label className="mb-1.5 block text-sm font-medium text-zinc-700">
+                      <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
                         Social Media Links
                       </label>
                       <textarea
@@ -297,12 +297,12 @@ function OrderSuccessContent() {
                         value={formData.socialLinks}
                         onChange={(e) => setFormData({ ...formData, socialLinks: e.target.value })}
                         rows={3}
-                        className="w-full rounded-lg border border-zinc-200 px-4 py-2.5 text-sm focus:border-zinc-400 focus:outline-none"
+                        className="w-full rounded-xl border border-zinc-200 px-4 py-3 text-sm focus:border-zinc-400 focus:outline-none resize-none"
                       />
                     </div>
 
                     <div>
-                      <label className="mb-1.5 block text-sm font-medium text-zinc-700">
+                      <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
                         Additional Notes
                       </label>
                       <div className="relative">
@@ -312,7 +312,7 @@ function OrderSuccessContent() {
                           value={formData.additionalNotes}
                           onChange={(e) => setFormData({ ...formData, additionalNotes: e.target.value })}
                           rows={2}
-                          className="w-full rounded-lg border border-zinc-200 py-2.5 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none"
+                          className="w-full rounded-xl border border-zinc-200 py-3 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none resize-none"
                         />
                       </div>
                     </div>
@@ -320,21 +320,21 @@ function OrderSuccessContent() {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="w-full rounded-lg bg-zinc-900 py-3 text-sm font-semibold text-white hover:bg-zinc-800 disabled:opacity-50"
+                      className="w-full rounded-full bg-zinc-900 py-3.5 text-sm font-semibold text-white hover:bg-zinc-800 active:opacity-90 disabled:opacity-50"
                     >
                       {isSubmitting ? 'Submitting...' : 'Submit Details'}
                     </button>
                   </form>
                 </div>
               ) : (
-                <div className="rounded-xl border-2 border-teal-200 bg-teal-50 p-6">
-                  <div className="flex items-center gap-4">
-                    <div className="flex h-12 w-12 items-center justify-center rounded-full bg-teal-100">
-                      <CheckCircle className="h-6 w-6 text-teal-600" />
+                <div className="rounded-xl border-2 border-teal-200 bg-teal-50 p-4 sm:p-6">
+                  <div className="flex items-center gap-3 sm:gap-4">
+                    <div className="flex h-10 w-10 sm:h-12 sm:w-12 flex-shrink-0 items-center justify-center rounded-full bg-teal-100">
+                      <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 text-teal-600" />
                     </div>
                     <div>
-                      <h3 className="font-bold text-teal-800">Details Submitted Successfully</h3>
-                      <p className="text-sm text-teal-600">
+                      <h3 className="text-sm sm:text-base font-bold text-teal-800">Details Submitted Successfully</h3>
+                      <p className="text-xs sm:text-sm text-teal-600">
                         We&apos;ll use these details to personalize your order.
                       </p>
                     </div>
@@ -343,21 +343,21 @@ function OrderSuccessContent() {
               )}
 
               {/* What's Next Timeline */}
-              <div className="rounded-xl bg-white p-6">
-                <h2 className="text-lg font-bold text-zinc-900">What&apos;s Next?</h2>
-                <div className="mt-6 space-y-0">
+              <div className="rounded-xl bg-white p-4 sm:p-6">
+                <h2 className="text-base sm:text-lg font-bold text-zinc-900">What&apos;s Next?</h2>
+                <div className="mt-4 sm:mt-6 space-y-0">
                   {timelineSteps.map((step, index) => {
                     const Icon = step.icon
                     const isLast = index === timelineSteps.length - 1
                     return (
-                      <div key={step.title} className="relative flex gap-4">
+                      <div key={step.title} className="relative flex gap-3 sm:gap-4">
                         {/* Line */}
                         {!isLast && (
-                          <div className="absolute left-5 top-10 h-full w-0.5 bg-zinc-200" />
+                          <div className="absolute left-[18px] sm:left-5 top-9 sm:top-10 h-full w-0.5 bg-zinc-200" />
                         )}
                         {/* Icon */}
                         <div
-                          className={`relative z-10 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full ${
+                          className={`relative z-10 flex h-9 w-9 sm:h-10 sm:w-10 flex-shrink-0 items-center justify-center rounded-full ${
                             step.status === 'completed'
                               ? 'bg-teal-500 text-white'
                               : step.status === 'current'
@@ -365,12 +365,12 @@ function OrderSuccessContent() {
                               : 'bg-zinc-100 text-zinc-400'
                           }`}
                         >
-                          <Icon className="h-5 w-5" />
+                          <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
                         </div>
                         {/* Content */}
-                        <div className={`pb-8 ${isLast ? 'pb-0' : ''}`}>
+                        <div className={`pb-6 sm:pb-8 ${isLast ? 'pb-0' : ''}`}>
                           <h3
-                            className={`font-semibold ${
+                            className={`text-sm sm:text-base font-semibold ${
                               step.status === 'completed' || step.status === 'current'
                                 ? 'text-zinc-900'
                                 : 'text-zinc-400'
@@ -378,7 +378,7 @@ function OrderSuccessContent() {
                           >
                             {step.title}
                           </h3>
-                          <p className="text-sm text-zinc-500">{step.description}</p>
+                          <p className="text-xs sm:text-sm text-zinc-500">{step.description}</p>
                         </div>
                       </div>
                     )
@@ -389,21 +389,21 @@ function OrderSuccessContent() {
 
             {/* Right Column - Actions */}
             <div className="lg:col-span-1">
-              <div className="sticky top-24 space-y-4">
+              <div className="lg:sticky lg:top-28 space-y-3 sm:space-y-4">
                 {/* Quick Actions */}
-                <div className="rounded-xl bg-white p-6">
-                  <h3 className="font-bold text-zinc-900">Quick Actions</h3>
-                  <div className="mt-4 space-y-3">
+                <div className="rounded-xl bg-white p-4 sm:p-6">
+                  <h3 className="text-sm sm:text-base font-bold text-zinc-900">Quick Actions</h3>
+                  <div className="mt-3 sm:mt-4 space-y-2 sm:space-y-3">
                     <Link
                       href={`/track-order?order=${orderNumber}`}
-                      className="flex w-full items-center justify-between rounded-lg bg-zinc-900 px-4 py-3 text-sm font-semibold text-white hover:bg-zinc-800"
+                      className="flex w-full items-center justify-between rounded-xl bg-zinc-900 px-4 py-3 sm:py-3.5 text-sm font-semibold text-white hover:bg-zinc-800 active:opacity-90"
                     >
                       Track Order
                       <ArrowRight className="h-4 w-4" />
                     </Link>
                     <Link
                       href="/shop"
-                      className="flex w-full items-center justify-center rounded-lg border border-zinc-200 px-4 py-3 text-sm font-medium text-zinc-700 hover:bg-zinc-50"
+                      className="flex w-full items-center justify-center rounded-xl border border-zinc-200 px-4 py-3 sm:py-3.5 text-sm font-medium text-zinc-700 hover:bg-zinc-50 active:bg-zinc-100"
                     >
                       Continue Shopping
                     </Link>
@@ -411,42 +411,42 @@ function OrderSuccessContent() {
                 </div>
 
                 {/* Need Help */}
-                <div className="rounded-xl bg-white p-6">
-                  <h3 className="font-bold text-zinc-900">Need Help?</h3>
-                  <p className="mt-2 text-sm text-zinc-500">
+                <div className="rounded-xl bg-white p-4 sm:p-6">
+                  <h3 className="text-sm sm:text-base font-bold text-zinc-900">Need Help?</h3>
+                  <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-zinc-500">
                     Our support team is here to assist you with any questions.
                   </p>
-                  <div className="mt-4 space-y-3">
+                  <div className="mt-3 sm:mt-4 space-y-2.5 sm:space-y-3">
                     <a
                       href="mailto:support@instantconnect.com"
-                      className="flex items-center gap-3 text-sm text-zinc-600 hover:text-zinc-900"
+                      className="flex items-center gap-2.5 sm:gap-3 text-xs sm:text-sm text-zinc-600 hover:text-zinc-900"
                     >
-                      <Mail className="h-4 w-4" />
-                      support@instantconnect.com
+                      <Mail className="h-4 w-4 flex-shrink-0" />
+                      <span className="truncate">support@instantconnect.com</span>
                     </a>
                     <a
                       href="tel:+919876543210"
-                      className="flex items-center gap-3 text-sm text-zinc-600 hover:text-zinc-900"
+                      className="flex items-center gap-2.5 sm:gap-3 text-xs sm:text-sm text-zinc-600 hover:text-zinc-900"
                     >
-                      <Phone className="h-4 w-4" />
+                      <Phone className="h-4 w-4 flex-shrink-0" />
                       +91 98765 43210
                     </a>
                   </div>
                   <Link
                     href="/contact"
-                    className="mt-4 inline-block text-sm font-medium text-teal-600 hover:text-teal-700"
+                    className="mt-3 sm:mt-4 inline-block text-xs sm:text-sm font-medium text-teal-600 hover:text-teal-700"
                   >
                     Contact Support →
                   </Link>
                 </div>
 
                 {/* Share */}
-                <div className="rounded-xl bg-gradient-to-br from-violet-500 to-violet-600 p-6 text-white">
-                  <h3 className="font-bold">Love Instant Connect?</h3>
-                  <p className="mt-2 text-sm text-violet-100">
+                <div className="rounded-xl bg-gradient-to-br from-violet-500 to-violet-600 p-4 sm:p-6 text-white">
+                  <h3 className="text-sm sm:text-base font-bold">Love Instant Connect?</h3>
+                  <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-violet-100">
                     Share your experience with friends and get 10% off on your next order!
                   </p>
-                  <button className="mt-4 w-full rounded-lg bg-white/20 px-4 py-2.5 text-sm font-semibold backdrop-blur-sm hover:bg-white/30">
+                  <button className="mt-3 sm:mt-4 w-full rounded-xl bg-white/20 px-4 py-2.5 sm:py-3 text-sm font-semibold backdrop-blur-sm hover:bg-white/30 active:bg-white/40">
                     Share & Earn
                   </button>
                 </div>

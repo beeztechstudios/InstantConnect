@@ -355,9 +355,9 @@ export default function CheckoutPage() {
           <div className="flex items-center justify-center">
             {steps.map((step, index) => (
               <div key={step.id} className="flex items-center">
-                <div className={`flex items-center gap-1.5 sm:gap-2 ${currentStep >= step.id ? 'text-zinc-900' : 'text-zinc-400'}`}>
+                <div className={`flex flex-col sm:flex-row items-center gap-1 sm:gap-2 ${currentStep >= step.id ? 'text-zinc-900' : 'text-zinc-400'}`}>
                   <div
-                    className={`flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full text-xs sm:text-sm font-medium ${
+                    className={`flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full text-xs sm:text-sm font-medium ${
                       currentStep > step.id
                         ? 'text-white'
                         : currentStep === step.id
@@ -368,13 +368,13 @@ export default function CheckoutPage() {
                       backgroundColor: currentStep > step.id ? '#10B981' : currentStep === step.id ? '#685BC7' : undefined
                     }}
                   >
-                    {currentStep > step.id ? <Check className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> : step.id}
+                    {currentStep > step.id ? <Check className="h-4 w-4" /> : step.id}
                   </div>
-                  <span className="hidden sm:inline text-sm font-medium">{step.name}</span>
+                  <span className={`text-[10px] sm:text-sm font-medium ${currentStep >= step.id ? 'text-zinc-900' : 'text-zinc-400'}`}>{step.name}</span>
                 </div>
                 {index < steps.length - 1 && (
                   <div
-                    className={`mx-2 sm:mx-4 h-px w-8 sm:w-16 lg:w-24 ${currentStep > step.id ? 'bg-emerald-500' : 'bg-zinc-200'}`}
+                    className={`mx-2 sm:mx-4 h-px w-6 sm:w-12 lg:w-20 ${currentStep > step.id ? 'bg-emerald-500' : 'bg-zinc-200'}`}
                   />
                 )}
               </div>
@@ -388,23 +388,28 @@ export default function CheckoutPage() {
         <button
           type="button"
           onClick={() => setShowOrderSummary(!showOrderSummary)}
-          className="w-full flex items-center justify-between rounded-[10px] bg-white px-4 py-3"
+          className="w-full rounded-xl bg-white px-4 py-3"
         >
-          <div className="flex items-center gap-2">
-            <ShoppingBag className="h-5 w-5 text-zinc-500" />
-            <span className="font-medium text-zinc-900">Order Summary</span>
-            <span className="text-xs text-zinc-500">({items.length} items)</span>
-            {appliedCoupon && (
-              <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: 'rgba(104, 91, 199, 0.1)', color: '#685BC7' }}>
-                <Tag className="h-3 w-3" />
-                {appliedCoupon.code}
-              </span>
-            )}
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <ShoppingBag className="h-5 w-5 text-zinc-500 flex-shrink-0" />
+              <div className="text-left">
+                <span className="font-semibold text-zinc-900">Order Summary</span>
+                <span className="text-xs text-zinc-500 ml-1">({items.length} {items.length === 1 ? 'item' : 'items'})</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-2">
+              <span className="font-bold text-zinc-900">{formatPrice(total)}</span>
+              {showOrderSummary ? <ChevronUp className="h-4 w-4 text-zinc-400" /> : <ChevronDown className="h-4 w-4 text-zinc-400" />}
+            </div>
           </div>
-          <div className="flex items-center gap-2">
-            <span className="font-bold text-zinc-900">{formatPrice(total)}</span>
-            {showOrderSummary ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-          </div>
+          {appliedCoupon && (
+            <div className="flex items-center gap-2 mt-2 pt-2 border-t border-zinc-100">
+              <Tag className="h-3.5 w-3.5 flex-shrink-0" style={{ color: '#685BC7' }} />
+              <span className="text-xs font-medium" style={{ color: '#685BC7' }}>{appliedCoupon.code} applied</span>
+              <span className="text-xs text-zinc-400">• Save {formatPrice(discountAmount)}</span>
+            </div>
+          )}
         </button>
 
         {/* Collapsible Order Summary */}
@@ -478,7 +483,7 @@ export default function CheckoutPage() {
       </div>
 
       {/* Checkout Content */}
-      <form onSubmit={handleSubmit}>
+      <form id="checkout-form" onSubmit={handleSubmit}>
         <div className="pb-8">
           <div className="mx-auto w-[95%]">
             <div className="grid gap-4 sm:gap-6 lg:grid-cols-3">
@@ -519,7 +524,13 @@ export default function CheckoutPage() {
                       <div className="sm:col-span-2">
                         <button
                           type="button"
-                          onClick={() => setCurrentStep(2)}
+                          onClick={() => {
+                            if (!formData.email || !formData.phone) {
+                              toast.error('Please fill in all contact details')
+                              return
+                            }
+                            setCurrentStep(2)
+                          }}
                           className="w-full rounded-full py-3 sm:py-3.5 text-sm font-semibold text-white"
                           style={{ backgroundColor: '#685BC7' }}
                         >
@@ -528,7 +539,9 @@ export default function CheckoutPage() {
                       </div>
                     </div>
                   ) : (
-                    <p className="mt-2 text-xs sm:text-sm text-zinc-500">{formData.email} • {formData.phone}</p>
+                    <p className="mt-2 text-xs sm:text-sm text-zinc-500">
+                      {formData.email || 'No email'} • {formData.phone || 'No phone'}
+                    </p>
                   )}
                 </div>
 
@@ -624,7 +637,13 @@ export default function CheckoutPage() {
                         <div className="sm:col-span-2">
                           <button
                             type="button"
-                            onClick={() => setCurrentStep(3)}
+                            onClick={() => {
+                              if (!formData.firstName || !formData.lastName || !formData.address || !formData.city || !formData.state || !formData.pincode) {
+                                toast.error('Please fill in all shipping details')
+                                return
+                              }
+                              setCurrentStep(3)
+                            }}
                             className="w-full rounded-full py-3 sm:py-3.5 text-sm font-semibold text-white"
                             style={{ backgroundColor: '#685BC7' }}
                           >
@@ -633,7 +652,11 @@ export default function CheckoutPage() {
                         </div>
                       </div>
                     ) : (
-                      <p className="mt-2 text-xs sm:text-sm text-zinc-500">{formData.firstName} {formData.lastName}, {formData.address}, {formData.city}, {formData.state} - {formData.pincode}</p>
+                      <p className="mt-2 text-xs sm:text-sm text-zinc-500">
+                        {formData.firstName || formData.lastName
+                          ? `${formData.firstName} ${formData.lastName}`.trim()
+                          : 'No name'}, {formData.address || 'No address'}, {formData.city || 'No city'}, {formData.state || 'No state'} - {formData.pincode || 'N/A'}
+                      </p>
                     )}
                   </div>
                 )}
@@ -643,41 +666,41 @@ export default function CheckoutPage() {
                   <div className="rounded-[10px] bg-white p-4 sm:p-6">
                     <h2 className="text-base sm:text-lg font-bold text-zinc-900">Payment Method</h2>
                     <p className="mt-2 text-xs sm:text-sm text-zinc-500">Choose your preferred payment method</p>
-                    <div className="mt-4 grid grid-cols-2 gap-2 sm:gap-3">
+                    <div className="mt-4 grid grid-cols-2 gap-3">
                       <button
                         type="button"
                         onClick={() => setPaymentMethod('online')}
-                        className={`flex flex-col items-center gap-1.5 sm:gap-2 rounded-[10px] border-2 p-3 sm:p-4 transition-all ${
+                        className={`flex flex-col items-center justify-center gap-2 rounded-xl border-2 p-4 sm:p-5 transition-all min-h-[100px] ${
                           paymentMethod === 'online'
                             ? ''
-                            : 'border-zinc-200 hover:border-zinc-300'
+                            : 'border-zinc-200 hover:border-zinc-300 active:bg-zinc-50'
                         }`}
                         style={paymentMethod === 'online' ? { borderColor: '#685BC7', backgroundColor: 'rgba(104, 91, 199, 0.05)' } : {}}
                       >
                         <div className="flex items-center gap-2">
-                          <CreditCard className="h-5 w-5 sm:h-6 sm:w-6" style={{ color: paymentMethod === 'online' ? '#685BC7' : '#71717a' }} />
-                          <Smartphone className="h-5 w-5 sm:h-6 sm:w-6" style={{ color: paymentMethod === 'online' ? '#685BC7' : '#71717a' }} />
+                          <CreditCard className="h-6 w-6 sm:h-7 sm:w-7" style={{ color: paymentMethod === 'online' ? '#685BC7' : '#71717a' }} />
+                          <Smartphone className="h-6 w-6 sm:h-7 sm:w-7" style={{ color: paymentMethod === 'online' ? '#685BC7' : '#71717a' }} />
                         </div>
-                        <span className={`text-[10px] sm:text-xs font-medium ${paymentMethod === 'online' ? '' : 'text-zinc-500'}`} style={paymentMethod === 'online' ? { color: '#685BC7' } : {}}>
+                        <span className={`text-xs sm:text-sm font-semibold ${paymentMethod === 'online' ? '' : 'text-zinc-600'}`} style={paymentMethod === 'online' ? { color: '#685BC7' } : {}}>
                           Pay Online
                         </span>
-                        <span className="text-[9px] sm:text-[10px] text-zinc-400">UPI / Card / Netbanking</span>
+                        <span className="text-[10px] sm:text-xs text-zinc-400">UPI / Card / Netbanking</span>
                       </button>
                       <button
                         type="button"
                         onClick={() => setPaymentMethod('cod')}
-                        className={`flex flex-col items-center gap-1.5 sm:gap-2 rounded-[10px] border-2 p-3 sm:p-4 transition-all ${
+                        className={`flex flex-col items-center justify-center gap-2 rounded-xl border-2 p-4 sm:p-5 transition-all min-h-[100px] ${
                           paymentMethod === 'cod'
                             ? ''
-                            : 'border-zinc-200 hover:border-zinc-300'
+                            : 'border-zinc-200 hover:border-zinc-300 active:bg-zinc-50'
                         }`}
                         style={paymentMethod === 'cod' ? { borderColor: '#685BC7', backgroundColor: 'rgba(104, 91, 199, 0.05)' } : {}}
                       >
-                        <Building className="h-5 w-5 sm:h-6 sm:w-6" style={{ color: paymentMethod === 'cod' ? '#685BC7' : '#71717a' }} />
-                        <span className={`text-[10px] sm:text-xs font-medium ${paymentMethod === 'cod' ? '' : 'text-zinc-500'}`} style={paymentMethod === 'cod' ? { color: '#685BC7' } : {}}>
+                        <Building className="h-6 w-6 sm:h-7 sm:w-7" style={{ color: paymentMethod === 'cod' ? '#685BC7' : '#71717a' }} />
+                        <span className={`text-xs sm:text-sm font-semibold ${paymentMethod === 'cod' ? '' : 'text-zinc-600'}`} style={paymentMethod === 'cod' ? { color: '#685BC7' } : {}}>
                           Cash on Delivery
                         </span>
-                        <span className="text-[9px] sm:text-[10px] text-zinc-400">Pay when delivered</span>
+                        <span className="text-[10px] sm:text-xs text-zinc-400">Pay when delivered</span>
                       </button>
                     </div>
                     <div className="mt-4">
@@ -691,16 +714,6 @@ export default function CheckoutPage() {
                       />
                     </div>
 
-                    {/* Mobile Place Order Button */}
-                    <button
-                      type="submit"
-                      disabled={isLoading || (paymentMethod === 'online' && !razorpayLoaded)}
-                      className="lg:hidden mt-4 flex w-full items-center justify-center gap-2 rounded-full py-3.5 text-sm font-semibold text-white disabled:opacity-50"
-                      style={{ backgroundColor: '#685BC7' }}
-                    >
-                      <Lock className="h-4 w-4" />
-                      {isLoading ? 'Processing...' : paymentMethod === 'online' ? `Pay Now • ${formatPrice(total)}` : `Place Order (COD) • ${formatPrice(total)}`}
-                    </button>
                   </div>
                 )}
               </div>
@@ -794,6 +807,38 @@ export default function CheckoutPage() {
           </div>
         </div>
       </form>
+
+      {/* Mobile spacer for sticky footer */}
+      {currentStep === 3 && <div className="h-32 lg:hidden" aria-hidden="true" />}
+
+      {/* Mobile Sticky Footer */}
+      {currentStep === 3 && (
+        <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 border-t border-zinc-200 bg-white p-4 shadow-[0_-4px_20px_rgba(0,0,0,0.1)]">
+          <div className="flex items-center justify-between mb-3">
+            <div>
+              <p className="text-xs text-zinc-500">Total Amount</p>
+              <p className="text-lg font-bold text-zinc-900">{formatPrice(total)}</p>
+            </div>
+            {appliedCoupon && (
+              <span className="flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium" style={{ backgroundColor: 'rgba(104, 91, 199, 0.1)', color: '#685BC7' }}>
+                <Tag className="h-3 w-3" />
+                {appliedCoupon.code} applied
+              </span>
+            )}
+          </div>
+          <button
+            type="submit"
+            form="checkout-form"
+            disabled={isLoading || (paymentMethod === 'online' && !razorpayLoaded)}
+            className="flex w-full items-center justify-center gap-2 rounded-full py-4 text-sm font-semibold text-white disabled:opacity-50 active:opacity-90"
+            style={{ backgroundColor: '#685BC7' }}
+            onClick={handleSubmit}
+          >
+            <Lock className="h-4 w-4" />
+            {isLoading ? 'Processing...' : paymentMethod === 'online' ? 'Pay Now' : 'Place Order (COD)'}
+          </button>
+        </div>
+      )}
     </div>
     </>
   )
