@@ -133,19 +133,57 @@ export default function ProductPage({ params }: PageProps) {
         <div className="mx-auto w-[95%]">
           <div className="grid lg:grid-cols-2 gap-4 sm:gap-8 lg:gap-12 xl:gap-16">
             {/* Left: Image Gallery */}
-            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-              {/* Vertical Thumbnails (Desktop/Tablet) */}
+            <div>
+              <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                {/* Vertical Thumbnails (Desktop/Tablet) */}
+                {images.length > 1 && (
+                  <div className="hidden sm:flex flex-col gap-2 lg:gap-3 order-first">
+                    {images.map((image, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setSelectedImage(index)}
+                        className={`relative w-14 h-14 lg:w-20 lg:h-20 rounded-xl overflow-hidden border-2 transition-all flex-shrink-0 ${
+                          selectedImage === index
+                            ? 'border-zinc-900'
+                            : 'border-transparent hover:border-zinc-300'
+                        }`}
+                      >
+                        <Image
+                          src={image}
+                          alt={`${product.name} ${index + 1}`}
+                          fill
+                          className="object-cover"
+                        />
+                      </button>
+                    ))}
+                  </div>
+                )}
+
+                {/* Main Image */}
+                <div className="relative flex-1 aspect-square rounded-xl overflow-hidden bg-white">
+                  <Image
+                    src={images[selectedImage]}
+                    alt={product.name}
+                    fill
+                    className="object-contain p-4 sm:p-6 lg:p-10"
+                    priority
+                  />
+                </div>
+              </div>
+
+              {/* Mobile Thumbnails (Horizontal scroll) */}
               {images.length > 1 && (
-                <div className="hidden sm:flex flex-col gap-2 lg:gap-3 order-first">
+                <div className="flex sm:hidden gap-2.5 overflow-x-auto no-scrollbar mt-3 pb-1">
                   {images.map((image, index) => (
                     <button
                       key={index}
                       onClick={() => setSelectedImage(index)}
-                      className={`relative w-14 h-14 lg:w-20 lg:h-20 rounded-[10px] overflow-hidden border-2 transition-all flex-shrink-0 ${
+                      className={`relative rounded-xl overflow-hidden border-2 transition-all flex-shrink-0 ${
                         selectedImage === index
-                          ? 'border-zinc-900'
-                          : 'border-transparent hover:border-zinc-300'
+                          ? 'border-zinc-900 ring-2 ring-zinc-900/20'
+                          : 'border-zinc-200 active:border-zinc-400'
                       }`}
+                      style={{ width: '72px', height: '72px' }}
                     >
                       <Image
                         src={image}
@@ -157,57 +195,7 @@ export default function ProductPage({ params }: PageProps) {
                   ))}
                 </div>
               )}
-
-              {/* Main Image */}
-              <div className="relative flex-1 aspect-square rounded-[10px] overflow-hidden bg-white">
-                <Image
-                  src={images[selectedImage]}
-                  alt={product.name}
-                  fill
-                  className="object-contain p-4 sm:p-6 lg:p-10"
-                  priority
-                />
-
-                {/* Mobile Image Dots */}
-                {images.length > 1 && (
-                  <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 sm:hidden">
-                    {images.map((_, index) => (
-                      <button
-                        key={index}
-                        onClick={() => setSelectedImage(index)}
-                        className={`w-2 h-2 rounded-full transition-colors ${
-                          selectedImage === index ? 'bg-zinc-900' : 'bg-zinc-300'
-                        }`}
-                      />
-                    ))}
-                  </div>
-                )}
-              </div>
             </div>
-
-            {/* Mobile Thumbnails (Horizontal scroll) */}
-            {images.length > 1 && (
-              <div className="flex sm:hidden gap-2 overflow-x-auto no-scrollbar -mt-2 pb-1">
-                {images.map((image, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setSelectedImage(index)}
-                    className={`relative w-16 h-16 rounded-[10px] overflow-hidden border-2 transition-all flex-shrink-0 ${
-                      selectedImage === index
-                        ? 'border-zinc-900'
-                        : 'border-zinc-200'
-                    }`}
-                  >
-                    <Image
-                      src={image}
-                      alt={`${product.name} ${index + 1}`}
-                      fill
-                      className="object-cover"
-                    />
-                  </button>
-                ))}
-              </div>
-            )}
 
             {/* Right: Product Info */}
             <div className="mt-2 sm:mt-0 lg:pt-4">
@@ -411,20 +399,20 @@ export default function ProductPage({ params }: PageProps) {
       </section>
 
       {/* Sticky Add to Cart Bar (Mobile) */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-zinc-200 p-3 sm:hidden safe-area-bottom">
+      <div className="fixed bottom-0 left-0 right-0 z-50 bg-white border-t border-zinc-200 p-4 sm:hidden shadow-[0_-4px_20px_rgba(0,0,0,0.1)]">
         <div className="flex items-center gap-3">
           {/* Quantity Selector */}
-          <div className="flex items-center border border-zinc-200 rounded-full">
+          <div className="flex items-center border border-zinc-200 rounded-full bg-zinc-50">
             <button
               onClick={() => setQuantity(Math.max(1, quantity - 1))}
-              className="h-10 w-10 flex items-center justify-center text-zinc-500 active:bg-zinc-100"
+              className="h-11 w-11 flex items-center justify-center text-zinc-600 active:bg-zinc-200 rounded-l-full transition-colors"
             >
               <Minus className="h-4 w-4" />
             </button>
-            <span className="w-6 text-center font-medium text-zinc-900 text-sm">{quantity}</span>
+            <span className="w-8 text-center font-semibold text-zinc-900">{quantity}</span>
             <button
               onClick={() => setQuantity(quantity + 1)}
-              className="h-10 w-10 flex items-center justify-center text-zinc-500 active:bg-zinc-100"
+              className="h-11 w-11 flex items-center justify-center text-zinc-600 active:bg-zinc-200 rounded-r-full transition-colors"
             >
               <Plus className="h-4 w-4" />
             </button>
@@ -433,16 +421,16 @@ export default function ProductPage({ params }: PageProps) {
           {/* Add to Cart Button */}
           <button
             onClick={handleAddToCart}
-            className="flex-1 h-10 rounded-full text-white font-semibold text-sm active:opacity-90"
+            className="flex-1 h-11 rounded-full text-white font-semibold text-sm active:opacity-90 transition-opacity"
             style={{ backgroundColor: '#685BC7' }}
           >
-            Add to cart • {formatPrice(product.price)}
+            Add to cart • {formatPrice(product.price * quantity)}
           </button>
         </div>
       </div>
 
       {/* Spacer for mobile sticky bar */}
-      <div className="h-16 sm:hidden" />
+      <div className="h-24 sm:hidden" aria-hidden="true" />
     </div>
   )
 }
