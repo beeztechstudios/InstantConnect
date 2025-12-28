@@ -3,13 +3,13 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Plus, Pencil, Trash2 } from 'lucide-react'
+import { Plus, Pencil, Trash2, Download } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { DataTable } from '@/components/admin/data-table'
 import { Modal } from '@/components/ui/modal'
 import { Badge } from '@/components/ui/badge'
 import { createClient } from '@/utils/supabase/client'
-import { formatPrice } from '@/lib/utils'
+import { formatPrice, exportToCSV } from '@/lib/utils'
 import type { Product, Category } from '@/types/database'
 import toast from 'react-hot-toast'
 
@@ -176,12 +176,34 @@ export default function AdminProductsPage() {
           <h1 className="text-2xl font-bold text-zinc-900">Products</h1>
           <p className="mt-1 text-zinc-500">Manage your product catalog</p>
         </div>
-        <Button asChild>
-          <Link href="/admin/products/new">
-            <Plus className="mr-2 h-4 w-4" />
-            Add Product
-          </Link>
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            onClick={() => {
+              exportToCSV(products, 'products', [
+                { key: 'name', header: 'Name' },
+                { key: 'slug', header: 'Slug' },
+                { key: 'categories.name', header: 'Category' },
+                { key: 'price', header: 'Price' },
+                { key: 'compare_at_price', header: 'Compare At Price' },
+                { key: 'stock_quantity', header: 'Stock' },
+                { key: 'is_active', header: 'Active', formatter: (v) => v ? 'Yes' : 'No' },
+                { key: 'is_featured', header: 'Featured', formatter: (v) => v ? 'Yes' : 'No' },
+              ])
+              toast.success('Products exported to CSV')
+            }}
+            disabled={products.length === 0}
+          >
+            <Download className="mr-2 h-4 w-4" />
+            Export CSV
+          </Button>
+          <Button asChild>
+            <Link href="/admin/products/new">
+              <Plus className="mr-2 h-4 w-4" />
+              Add Product
+            </Link>
+          </Button>
+        </div>
       </div>
 
       {/* Table */}

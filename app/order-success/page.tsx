@@ -53,6 +53,7 @@ function OrderSuccessContent() {
             order_id: order.id,
             detail_type: 'card_details',
             detail_data: formData,
+            status: 'pending',
           },
         ])
       }
@@ -170,53 +171,9 @@ function OrderSuccessContent() {
       <div className="flex justify-center bg-zinc-100 pb-8">
         <div className="w-[95%]">
           <div className="grid gap-6 lg:grid-cols-3">
-            {/* Left Column - Timeline & Form */}
+            {/* Left Column - Form & Timeline */}
             <div className="space-y-6 lg:col-span-2">
-              {/* What's Next Timeline */}
-              <div className="rounded-xl bg-white p-6">
-                <h2 className="text-lg font-bold text-zinc-900">What&apos;s Next?</h2>
-                <div className="mt-6 space-y-0">
-                  {timelineSteps.map((step, index) => {
-                    const Icon = step.icon
-                    const isLast = index === timelineSteps.length - 1
-                    return (
-                      <div key={step.title} className="relative flex gap-4">
-                        {/* Line */}
-                        {!isLast && (
-                          <div className="absolute left-5 top-10 h-full w-0.5 bg-zinc-200" />
-                        )}
-                        {/* Icon */}
-                        <div
-                          className={`relative z-10 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full ${
-                            step.status === 'completed'
-                              ? 'bg-teal-500 text-white'
-                              : step.status === 'current'
-                              ? 'bg-teal-100 text-teal-600'
-                              : 'bg-zinc-100 text-zinc-400'
-                          }`}
-                        >
-                          <Icon className="h-5 w-5" />
-                        </div>
-                        {/* Content */}
-                        <div className={`pb-8 ${isLast ? 'pb-0' : ''}`}>
-                          <h3
-                            className={`font-semibold ${
-                              step.status === 'completed' || step.status === 'current'
-                                ? 'text-zinc-900'
-                                : 'text-zinc-400'
-                            }`}
-                          >
-                            {step.title}
-                          </h3>
-                          <p className="text-sm text-zinc-500">{step.description}</p>
-                        </div>
-                      </div>
-                    )
-                  })}
-                </div>
-              </div>
-
-              {/* Post-Payment Form */}
+              {/* Post-Payment Form - Now First */}
               {!submitted ? (
                 <div className="rounded-xl bg-white p-6">
                   <div className="flex items-start gap-4">
@@ -384,6 +341,50 @@ function OrderSuccessContent() {
                   </div>
                 </div>
               )}
+
+              {/* What's Next Timeline */}
+              <div className="rounded-xl bg-white p-6">
+                <h2 className="text-lg font-bold text-zinc-900">What&apos;s Next?</h2>
+                <div className="mt-6 space-y-0">
+                  {timelineSteps.map((step, index) => {
+                    const Icon = step.icon
+                    const isLast = index === timelineSteps.length - 1
+                    return (
+                      <div key={step.title} className="relative flex gap-4">
+                        {/* Line */}
+                        {!isLast && (
+                          <div className="absolute left-5 top-10 h-full w-0.5 bg-zinc-200" />
+                        )}
+                        {/* Icon */}
+                        <div
+                          className={`relative z-10 flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-full ${
+                            step.status === 'completed'
+                              ? 'bg-teal-500 text-white'
+                              : step.status === 'current'
+                              ? 'bg-teal-100 text-teal-600'
+                              : 'bg-zinc-100 text-zinc-400'
+                          }`}
+                        >
+                          <Icon className="h-5 w-5" />
+                        </div>
+                        {/* Content */}
+                        <div className={`pb-8 ${isLast ? 'pb-0' : ''}`}>
+                          <h3
+                            className={`font-semibold ${
+                              step.status === 'completed' || step.status === 'current'
+                                ? 'text-zinc-900'
+                                : 'text-zinc-400'
+                            }`}
+                          >
+                            {step.title}
+                          </h3>
+                          <p className="text-sm text-zinc-500">{step.description}</p>
+                        </div>
+                      </div>
+                    )
+                  })}
+                </div>
+              </div>
             </div>
 
             {/* Right Column - Actions */}

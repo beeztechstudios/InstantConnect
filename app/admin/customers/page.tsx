@@ -1,10 +1,12 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Mail, Phone, ShoppingBag } from 'lucide-react'
+import { Mail, Phone, Download } from 'lucide-react'
+import { Button } from '@/components/ui/button'
 import { DataTable } from '@/components/admin/data-table'
 import { createClient } from '@/utils/supabase/client'
-import { formatDate } from '@/lib/utils'
+import { formatDate, exportToCSV } from '@/lib/utils'
+import toast from 'react-hot-toast'
 
 interface Customer {
   id: string
@@ -85,9 +87,28 @@ export default function AdminCustomersPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-zinc-900">Customers</h1>
-        <p className="mt-1 text-zinc-500">View all registered customers</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-zinc-900">Customers</h1>
+          <p className="mt-1 text-zinc-500">View all registered customers</p>
+        </div>
+        <Button
+          variant="outline"
+          onClick={() => {
+            exportToCSV(customers, 'customers', [
+              { key: 'first_name', header: 'First Name' },
+              { key: 'last_name', header: 'Last Name' },
+              { key: 'email', header: 'Email' },
+              { key: 'phone', header: 'Phone' },
+              { key: 'created_at', header: 'Joined', formatter: (v) => formatDate(v as string) },
+            ])
+            toast.success('Customers exported to CSV')
+          }}
+          disabled={customers.length === 0}
+        >
+          <Download className="mr-2 h-4 w-4" />
+          Export CSV
+        </Button>
       </div>
 
       {/* Table */}

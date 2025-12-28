@@ -2,13 +2,13 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { Plus, Pencil, Trash2, Ticket } from 'lucide-react'
+import { Plus, Pencil, Trash2, Ticket, Download } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { DataTable } from '@/components/admin/data-table'
 import { Modal } from '@/components/ui/modal'
 import { Badge } from '@/components/ui/badge'
 import { createClient } from '@/utils/supabase/client'
-import { formatPrice, formatDate } from '@/lib/utils'
+import { formatPrice, formatDate, exportToCSV } from '@/lib/utils'
 import type { Coupon } from '@/types/database'
 import toast from 'react-hot-toast'
 
@@ -148,12 +148,34 @@ export default function AdminCouponsPage() {
           <h1 className="text-2xl font-bold text-zinc-900">Coupons</h1>
           <p className="mt-1 text-zinc-500">Manage discount codes</p>
         </div>
-        <Button asChild>
-          <Link href="/admin/coupons/new">
-            <Plus className="mr-2 h-4 w-4" />
-            Add Coupon
-          </Link>
-        </Button>
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            onClick={() => {
+              exportToCSV(coupons, 'coupons', [
+                { key: 'code', header: 'Code' },
+                { key: 'discount_type', header: 'Discount Type' },
+                { key: 'discount_value', header: 'Discount Value' },
+                { key: 'min_order_amount', header: 'Min Order Amount' },
+                { key: 'max_uses', header: 'Max Uses' },
+                { key: 'current_uses', header: 'Current Uses' },
+                { key: 'valid_until', header: 'Valid Until', formatter: (v) => v ? formatDate(v as string) : 'No expiry' },
+                { key: 'is_active', header: 'Active', formatter: (v) => v ? 'Yes' : 'No' },
+              ])
+              toast.success('Coupons exported to CSV')
+            }}
+            disabled={coupons.length === 0}
+          >
+            <Download className="mr-2 h-4 w-4" />
+            Export CSV
+          </Button>
+          <Button asChild>
+            <Link href="/admin/coupons/new">
+              <Plus className="mr-2 h-4 w-4" />
+              Add Coupon
+            </Link>
+          </Button>
+        </div>
       </div>
 
       {/* Table */}

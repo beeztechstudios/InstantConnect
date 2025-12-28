@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter, usePathname } from 'next/navigation'
 import { Menu } from 'lucide-react'
 import { AdminSidebar } from '@/components/admin/admin-sidebar'
@@ -11,8 +11,10 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const router = useRouter()
   const pathname = usePathname()
   const [isLoading, setIsLoading] = useState(true)
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [isMobileOpen, setIsMobileOpen] = useState(false)
+  const authCheckedRef = useRef(false)
 
   // Skip auth check for login page
   const isLoginPage = pathname === '/admin/login'
@@ -22,41 +24,83 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     setIsMobileOpen(false)
   }, [pathname])
 
+  // Single auth check on mount + listen for auth changes
   useEffect(() => {
     if (isLoginPage) {
       setIsLoading(false)
       return
     }
 
-    const checkAuth = async () => {
-      const supabase = createClient()
-      const { data: { session } } = await supabase.auth.getSession()
+    const supabase = createClient()
 
-      if (!session) {
+    const checkAuth = async () => {
+      const { data: { user }, error } = await supabase.auth.getUser()
+
+      if (error || !user) {
+        setIsAuthenticated(false)
+        setIsLoading(false)
         router.push('/admin/login')
         return
       }
 
       // Check admin role
-      const isAdmin = session.user?.user_metadata?.role === 'admin'
+      const isAdmin = user.user_metadata?.role === 'admin'
       if (!isAdmin) {
         await supabase.auth.signOut()
+        setIsAuthenticated(false)
+        setIsLoading(false)
         router.push('/admin/login')
         return
       }
 
+      setIsAuthenticated(true)
+      setIsLoading(false)
+      authCheckedRef.current = true
+    }
+
+    // Only do initial check if not already authenticated
+    if (!authCheckedRef.current) {
+      checkAuth()
+    } else {
       setIsLoading(false)
     }
 
-    checkAuth()
-  }, [pathname, router, isLoginPage])
+    // Listen for auth state changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (event === 'SIGNED_OUT' || !session) {
+        setIsAuthenticated(false)
+        authCheckedRef.current = false
+        router.push('/admin/login')
+      } else if (event === 'SIGNED_IN' && session) {
+        const isAdmin = session.user?.user_metadata?.role === 'admin'
+        if (isAdmin) {
+          setIsAuthenticated(true)
+          authCheckedRef.current = true
+        }
+      }
+    })
+
+    return () => {
+      subscription.unsubscribe()
+    }
+  }, [isLoginPage, router])
 
   // Show login page without layout
   if (isLoginPage) {
     return <>{children}</>
   }
 
+  // Show loading only during initial auth check
   if (isLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-zinc-100">
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-zinc-300 border-t-zinc-900" />
+      </div>
+    )
+  }
+
+  // If not authenticated after loading, the useEffect will redirect
+  if (!isAuthenticated) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-zinc-100">
         <div className="h-8 w-8 animate-spin rounded-full border-4 border-zinc-300 border-t-zinc-900" />

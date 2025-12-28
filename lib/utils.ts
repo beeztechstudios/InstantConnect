@@ -65,3 +65,38 @@ export function formatDateTime(date: string | Date): string {
     hour12: true,
   }).format(new Date(date))
 }
+
+export function exportToCSV<T>(
+  data: T[],
+  filename: string,
+  columns: { key: string; header: string; formatter?: (value: unknown, row: T) => string }[]
+): void {
+  if (data.length === 0) return
+
+  const headers = columns.map((col) => col.header)
+  const rows = data.map((row) =>
+    columns.map((col) => {
+      const keys = col.key.split('.')
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      let value: any = row
+      for (const k of keys) {
+        value = value?.[k]
+      }
+      if (col.formatter) {
+        return `"${col.formatter(value, row).replace(/"/g, '""')}"`
+      }
+      if (value === null || value === undefined) return '""'
+      if (typeof value === 'string') return `"${value.replace(/"/g, '""')}"`
+      return `"${String(value)}"`
+    })
+  )
+
+  const csvContent = [headers.map((h) => `"${h}"`).join(','), ...rows.map((r) => r.join(','))].join('\n')
+
+  const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' })
+  const link = document.createElement('a')
+  link.href = URL.createObjectURL(blob)
+  link.download = `${filename}-${new Date().toISOString().split('T')[0]}.csv`
+  link.click()
+  URL.revokeObjectURL(link.href)
+}

@@ -1,10 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowLeft, Save, Plus, X } from 'lucide-react'
+import { ArrowLeft, Save, Plus, X, Upload, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -20,9 +20,11 @@ export default function ProductFormPage() {
   const isNew = params.id === 'new'
   const [isLoading, setIsLoading] = useState(!isNew)
   const [isSaving, setIsSaving] = useState(false)
+  const [isUploading, setIsUploading] = useState(false)
   const [categories, setCategories] = useState<Category[]>([])
   const [newFeature, setNewFeature] = useState('')
   const [newImageUrl, setNewImageUrl] = useState('')
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const [formData, setFormData] = useState({
     name: '',
@@ -131,6 +133,58 @@ export default function ProductFormPage() {
       ...formData,
       images: formData.images.filter((_, i) => i !== index),
     })
+  }
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files
+    if (!files || files.length === 0) return
+
+    setIsUploading(true)
+    const supabase = createClient()
+    const uploadedUrls: string[] = []
+
+    try {
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i]
+        const fileExt = file.name.split('.').pop()
+        const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`
+        const filePath = `products/${fileName}`
+
+        const { error: uploadError } = await supabase.storage
+          .from('product-images')
+          .upload(filePath, file)
+
+        if (uploadError) {
+          console.error('Upload error:', uploadError)
+          toast.error(`Failed to upload ${file.name}`)
+          continue
+        }
+
+        const { data: urlData } = supabase.storage
+          .from('product-images')
+          .getPublicUrl(filePath)
+
+        if (urlData?.publicUrl) {
+          uploadedUrls.push(urlData.publicUrl)
+        }
+      }
+
+      if (uploadedUrls.length > 0) {
+        setFormData({
+          ...formData,
+          images: [...formData.images, ...uploadedUrls],
+        })
+        toast.success(`${uploadedUrls.length} image(s) uploaded successfully`)
+      }
+    } catch (error) {
+      console.error('Upload error:', error)
+      toast.error('Failed to upload images')
+    } finally {
+      setIsUploading(false)
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''
+      }
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -356,6 +410,45 @@ export default function ProductFormPage() {
           <div className="rounded-xl border border-zinc-200 bg-white p-6">
             <h2 className="font-semibold text-zinc-900">Images</h2>
             <div className="mt-4 space-y-4">
+              {/* File Upload */}
+              <div>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/*"
+                  multiple
+                  onChange={handleFileUpload}
+                  className="hidden"
+                  id="image-upload"
+                />
+                <label
+                  htmlFor="image-upload"
+                  className={`flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-zinc-300 bg-zinc-50 p-4 transition-colors hover:border-zinc-400 hover:bg-zinc-100 ${isUploading ? 'pointer-events-none opacity-50' : ''}`}
+                >
+                  {isUploading ? (
+                    <>
+                      <Loader2 className="h-6 w-6 animate-spin text-zinc-500" />
+                      <span className="mt-2 text-sm text-zinc-500">Uploading...</span>
+                    </>
+                  ) : (
+                    <>
+                      <Upload className="h-6 w-6 text-zinc-500" />
+                      <span className="mt-2 text-sm text-zinc-500">Click to upload images</span>
+                      <span className="text-xs text-zinc-400">PNG, JPG, WEBP (multiple)</span>
+                    </>
+                  )}
+                </label>
+              </div>
+
+              {/* URL Input */}
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-zinc-200" />
+                </div>
+                <div className="relative flex justify-center">
+                  <span className="bg-white px-2 text-xs text-zinc-400">or add by URL</span>
+                </div>
+              </div>
               <div className="flex gap-2">
                 <Input
                   placeholder="Image URL..."
@@ -367,6 +460,8 @@ export default function ProductFormPage() {
                   <Plus className="h-4 w-4" />
                 </Button>
               </div>
+
+              {/* Image Preview Grid */}
               {formData.images.length > 0 && (
                 <div className="grid grid-cols-2 gap-2">
                   {formData.images.map((image, index) => (
@@ -377,6 +472,9 @@ export default function ProductFormPage() {
                         fill
                         className="rounded-lg object-cover"
                       />
+                      <div className="absolute left-1 top-1 rounded bg-black/60 px-1.5 py-0.5 text-xs text-white">
+                        {index + 1}
+                      </div>
                       <button
                         type="button"
                         onClick={() => removeImage(index)}
@@ -387,6 +485,9 @@ export default function ProductFormPage() {
                     </div>
                   ))}
                 </div>
+              )}
+              {formData.images.length > 0 && (
+                <p className="text-xs text-zinc-500">First image will be used as the main product image</p>
               )}
             </div>
           </div>

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
 import Image from 'next/image'
-import { ArrowLeft, Package, User, MapPin, CreditCard, FileText } from 'lucide-react'
+import { ArrowLeft, Package, User, MapPin, CreditCard } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Select } from '@/components/ui/select'
 import { Badge } from '@/components/ui/badge'
@@ -20,6 +20,7 @@ interface OrderDetails {
   discount: number
   shipping: number
   total: number
+  coupon_code: string | null
   notes: string | null
   created_at: string
   shipping_address: {
@@ -27,13 +28,13 @@ interface OrderDetails {
     city: string
     state: string
     pincode: string
-  }
+  } | null
   billing_address: {
     address: string
     city: string
     state: string
     pincode: string
-  }
+  } | null
   customers: {
     first_name: string
     last_name: string
@@ -56,11 +57,6 @@ interface OrderDetails {
     transaction_id: string | null
     created_at: string
   }>
-  post_payment_details: Array<{
-    id: string
-    detail_type: string
-    detail_data: Record<string, string>
-  }>
 }
 
 export default function OrderDetailPage() {
@@ -78,13 +74,19 @@ export default function OrderDetailPage() {
           *,
           customers(first_name, last_name, email, phone),
           order_items(id, product_name, product_image, quantity, unit_price, total_price),
-          payments(id, amount, status, method, transaction_id, created_at),
-          post_payment_details(id, detail_type, detail_data)
+          payments(id, amount, status, method, transaction_id, created_at)
         `)
         .eq('id', params.id)
         .single()
 
-      if (error || !data) {
+      if (error) {
+        console.error('Order fetch error:', error)
+        toast.error('Order not found')
+        router.push('/admin/orders')
+        return
+      }
+
+      if (!data) {
         toast.error('Order not found')
         router.push('/admin/orders')
         return
@@ -95,9 +97,8 @@ export default function OrderDetailPage() {
         shipping_address: data.shipping_address as OrderDetails['shipping_address'],
         billing_address: data.billing_address as OrderDetails['billing_address'],
         customers: Array.isArray(data.customers) ? data.customers[0] : data.customers,
-        order_items: data.order_items as OrderDetails['order_items'],
-        payments: data.payments as OrderDetails['payments'],
-        post_payment_details: data.post_payment_details as OrderDetails['post_payment_details'],
+        order_items: (data.order_items || []) as OrderDetails['order_items'],
+        payments: (data.payments || []) as OrderDetails['payments'],
       } as OrderDetails)
       setIsLoading(false)
     }
@@ -220,7 +221,7 @@ export default function OrderDetailPage() {
               </div>
               {order.discount > 0 && (
                 <div className="flex justify-between text-sm text-green-600">
-                  <span>Discount</span>
+                  <span>Discount {order.coupon_code && `(${order.coupon_code})`}</span>
                   <span>-{formatPrice(order.discount)}</span>
                 </div>
               )}
@@ -234,32 +235,6 @@ export default function OrderDetailPage() {
               </div>
             </div>
           </div>
-
-          {/* Post-Payment Details */}
-          {order.post_payment_details.length > 0 && (
-            <div className="rounded-xl border border-zinc-200 bg-white p-6">
-              <div className="flex items-center gap-2 mb-4">
-                <FileText className="h-5 w-5 text-zinc-500" />
-                <h2 className="font-semibold text-zinc-900">
-                  Card/Product Details
-                </h2>
-              </div>
-              {order.post_payment_details.map((detail) => (
-                <div key={detail.id} className="space-y-3">
-                  {Object.entries(detail.detail_data).map(([key, value]) => (
-                    <div key={key} className="flex justify-between">
-                      <span className="text-sm text-zinc-500 capitalize">
-                        {key.replace(/([A-Z])/g, ' $1').trim()}
-                      </span>
-                      <span className="text-sm font-medium text-right max-w-xs">
-                        {value || '-'}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              ))}
-            </div>
-          )}
 
           {/* Order Notes */}
           {order.notes && (
@@ -297,12 +272,16 @@ export default function OrderDetailPage() {
               <MapPin className="h-5 w-5 text-zinc-500" />
               <h2 className="font-semibold text-zinc-900">Shipping Address</h2>
             </div>
-            <p className="text-sm text-zinc-600">
-              {order.shipping_address.address}
-              <br />
-              {order.shipping_address.city}, {order.shipping_address.state}{' '}
-              {order.shipping_address.pincode}
-            </p>
+            {order.shipping_address ? (
+              <p className="text-sm text-zinc-600">
+                {order.shipping_address.address}
+                <br />
+                {order.shipping_address.city}, {order.shipping_address.state}{' '}
+                {order.shipping_address.pincode}
+              </p>
+            ) : (
+              <p className="text-sm text-zinc-400">No shipping address</p>
+            )}
           </div>
 
           {/* Billing Address */}
@@ -311,12 +290,16 @@ export default function OrderDetailPage() {
               <MapPin className="h-5 w-5 text-zinc-500" />
               <h2 className="font-semibold text-zinc-900">Billing Address</h2>
             </div>
-            <p className="text-sm text-zinc-600">
-              {order.billing_address.address}
-              <br />
-              {order.billing_address.city}, {order.billing_address.state}{' '}
-              {order.billing_address.pincode}
-            </p>
+            {order.billing_address ? (
+              <p className="text-sm text-zinc-600">
+                {order.billing_address.address}
+                <br />
+                {order.billing_address.city}, {order.billing_address.state}{' '}
+                {order.billing_address.pincode}
+              </p>
+            ) : (
+              <p className="text-sm text-zinc-400">Same as shipping</p>
+            )}
           </div>
 
           {/* Payment */}

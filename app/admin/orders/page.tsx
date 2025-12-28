@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { Eye, Search } from 'lucide-react'
+import { Eye, Search, Download } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Select } from '@/components/ui/select'
+import { Button } from '@/components/ui/button'
 import { createClient } from '@/utils/supabase/client'
-import { formatPrice, formatDate } from '@/lib/utils'
+import { formatPrice, formatDate, exportToCSV } from '@/lib/utils'
 import toast from 'react-hot-toast'
 
 interface Order {
@@ -88,6 +89,20 @@ export default function AdminOrdersPage() {
     return matchesSearch && matchesStatus
   })
 
+  const handleExportCSV = () => {
+    exportToCSV(filteredOrders, 'orders', [
+      { key: 'order_number', header: 'Order Number' },
+      { key: 'customers.first_name', header: 'First Name' },
+      { key: 'customers.last_name', header: 'Last Name' },
+      { key: 'customers.email', header: 'Email' },
+      { key: 'customers.phone', header: 'Phone' },
+      { key: 'status', header: 'Status' },
+      { key: 'total', header: 'Total', formatter: (v) => String(v || 0) },
+      { key: 'created_at', header: 'Date', formatter: (v) => formatDate(v as string) },
+    ])
+    toast.success('Orders exported to CSV')
+  }
+
   if (isLoading) {
     return (
       <div className="flex min-h-[400px] items-center justify-center">
@@ -99,9 +114,15 @@ export default function AdminOrdersPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-zinc-900">Orders</h1>
-        <p className="mt-1 text-zinc-500">View and manage customer orders</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-zinc-900">Orders</h1>
+          <p className="mt-1 text-zinc-500">View and manage customer orders</p>
+        </div>
+        <Button variant="outline" onClick={handleExportCSV} disabled={filteredOrders.length === 0}>
+          <Download className="mr-2 h-4 w-4" />
+          Export CSV
+        </Button>
       </div>
 
       {/* Filters */}

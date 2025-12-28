@@ -18,6 +18,7 @@ import {
   Calendar,
   ExternalLink,
   X,
+  IdCard,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { createClient } from '@/utils/supabase/client'
@@ -35,6 +36,7 @@ const navItems = [
   { href: '/admin/categories', icon: FolderTree, label: 'Categories' },
   { href: '/admin/products', icon: Package, label: 'Products' },
   { href: '/admin/orders', icon: ShoppingCart, label: 'Orders' },
+  { href: '/admin/card-details', icon: IdCard, label: 'Card Details' },
   { href: '/admin/payments', icon: CreditCard, label: 'Payments' },
   { href: '/admin/customers', icon: Users, label: 'Customers' },
   { href: '/admin/demo-bookings', icon: Calendar, label: 'Demo Bookings' },

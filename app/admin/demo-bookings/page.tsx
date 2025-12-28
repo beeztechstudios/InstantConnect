@@ -1,13 +1,13 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Eye, Search, Mail, Phone } from 'lucide-react'
+import { Eye, Search, Mail, Phone, Download } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Select } from '@/components/ui/select'
 import { Modal } from '@/components/ui/modal'
 import { Button } from '@/components/ui/button'
 import { createClient } from '@/utils/supabase/client'
-import { formatDate } from '@/lib/utils'
+import { formatDate, exportToCSV } from '@/lib/utils'
 import toast from 'react-hot-toast'
 import type { DemoBooking } from '@/types/database'
 
@@ -85,9 +85,30 @@ export default function AdminDemoBookingsPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-zinc-900">Demo Bookings</h1>
-        <p className="mt-1 text-zinc-500">Manage demo requests from potential customers</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-zinc-900">Demo Bookings</h1>
+          <p className="mt-1 text-zinc-500">Manage demo requests from potential customers</p>
+        </div>
+        <Button
+          variant="outline"
+          onClick={() => {
+            exportToCSV(filteredBookings, 'demo-bookings', [
+              { key: 'name', header: 'Name' },
+              { key: 'email', header: 'Email' },
+              { key: 'phone', header: 'Phone' },
+              { key: 'company', header: 'Company' },
+              { key: 'message', header: 'Message' },
+              { key: 'status', header: 'Status' },
+              { key: 'created_at', header: 'Date', formatter: (v) => formatDate(v as string) },
+            ])
+            toast.success('Demo bookings exported to CSV')
+          }}
+          disabled={filteredBookings.length === 0}
+        >
+          <Download className="mr-2 h-4 w-4" />
+          Export CSV
+        </Button>
       </div>
 
       {/* Stats */}
