@@ -87,28 +87,40 @@ export async function FeaturedProducts() {
   );
   function PromoCard() {
     return (
-      <div className="relative h-full min-h-[320px] overflow-hidden rounded-[12px]">
+      <div className="relative h-full min-h-[420px] overflow-hidden rounded-[20px]">
+        {/* Background Image */}
         <div
           className="absolute inset-0 bg-cover bg-center"
-          style={{
-            backgroundImage:
-              "url('https://images.unsplash.com/photo-1497215728101-856f4ea42174?q=80&w=2070&auto=format&fit=crop')",
-          }}
+          style={{ backgroundImage: "url('/PROMOCARDBG.png')" }}
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
 
-        <div className="absolute inset-0 flex flex-col items-center justify-center px-6 text-center text-white">
-          <div className="text-5xl font-extrabold leading-none">
-            25<sup className="text-xl">%</sup>
+        {/* Overlay for readability */}
+        <div className="absolute inset-0 bg-black/40" />
+
+        {/* Content */}
+        <div className="relative z-10 flex h-full flex-col items-center justify-center px-6 text-center text-white">
+          {/* Discount */}
+          <div className="leading-none flex justify-end items-end ">
+            <span className="text-[86px] font-extrabold tracking-tight ">
+              33
+            </span>
+            <div className="flex flex-col items-start  mb-2">
+              <span className="align-top text-3xl font-bold">%</span>
+              <div className="-mt-2 text-4xl font-extrabold">OFF</div>
+            </div>
           </div>
-          <div className="mt-1 text-xl font-bold">OFF</div>
-          <p className="mt-2 text-sm">On smart QR Cards</p>
 
-          <span className="mt-4 rounded-lg bg-white px-6 py-2 text-sm font-semibold text-zinc-900">
+          {/* Product Name */}
+          <h3 className="mt-6 text-4xl font-extrabold">Instant </h3>
+          <h3 className="mt-1 text-4xl font-extrabold">Discount </h3>
+
+          {/* CTA */}
+          <button className="mt-8 rounded-full bg-white px-10 py-3 text-lg font-semibold text-zinc-900 transition hover:bg-zinc-100">
             Shop now
-          </span>
+          </button>
         </div>
       </div>
     );
   }
+
 }
