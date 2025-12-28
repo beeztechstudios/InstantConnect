@@ -4,7 +4,7 @@ import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { ChevronRight, Lock, CreditCard, Smartphone, Building, Check } from 'lucide-react'
+import { Home, Lock, CreditCard, Smartphone, Building, Check, ChevronDown, ChevronUp, ShoppingBag, Tag } from 'lucide-react'
 import { useCart } from '@/contexts/cart-context'
 import { formatPrice, generateOrderNumber } from '@/lib/utils'
 import { createClient } from '@/utils/supabase/client'
@@ -18,10 +18,34 @@ const steps = [
 
 export default function CheckoutPage() {
   const router = useRouter()
-  const { items, subtotal, clearCart } = useCart()
+  const {
+    items,
+    subtotal,
+    clearCart,
+    appliedCoupon,
+    applyCoupon,
+    removeCoupon,
+    discountAmount,
+    total,
+    isApplyingCoupon
+  } = useCart()
   const [isLoading, setIsLoading] = useState(false)
   const [currentStep, setCurrentStep] = useState(1)
   const [sameAsShipping, setSameAsShipping] = useState(true)
+  const [showOrderSummary, setShowOrderSummary] = useState(false)
+  const [couponCode, setCouponCode] = useState('')
+
+  const handleApplyCoupon = async () => {
+    const success = await applyCoupon(couponCode)
+    if (success) {
+      setCouponCode('')
+    }
+  }
+
+  const handleRemoveCoupon = () => {
+    removeCoupon()
+    setCouponCode('')
+  }
 
   const [formData, setFormData] = useState({
     email: '',
@@ -80,9 +104,10 @@ export default function CheckoutPage() {
           customer_id: customer.id,
           status: 'confirmed',
           subtotal: subtotal,
-          discount: 0,
+          discount: discountAmount,
+          coupon_code: appliedCoupon?.code || null,
           shipping: 0,
-          total: subtotal,
+          total: total,
           shipping_address: shippingAddress,
           billing_address: billingAddress,
           notes: formData.notes,
@@ -105,7 +130,7 @@ export default function CheckoutPage() {
       await supabase.from('order_items').insert(orderItems)
       await supabase.from('payments').insert([{
         order_id: order.id,
-        amount: subtotal,
+        amount: total,
         status: 'completed',
         method: 'cod',
       }])
@@ -123,11 +148,18 @@ export default function CheckoutPage() {
 
   if (items.length === 0) {
     return (
-      <div className="min-h-screen bg-zinc-100">
-        <div className="flex min-h-[60vh] flex-col items-center justify-center px-4 text-center">
-          <h1 className="text-2xl font-bold text-zinc-900">Your cart is empty</h1>
-          <p className="mt-2 text-zinc-500">Add some products to checkout.</p>
-          <Link href="/shop" className="mt-6 rounded-lg bg-zinc-900 px-6 py-3 text-sm font-semibold text-white hover:bg-zinc-800">
+      <div className="min-h-screen pt-20 sm:pt-28 lg:pt-36" style={{ backgroundColor: '#F4F4F4' }}>
+        <div className="flex min-h-[50vh] flex-col items-center justify-center px-4 text-center">
+          <div className="flex h-20 w-20 sm:h-24 sm:w-24 items-center justify-center rounded-full bg-zinc-200">
+            <ShoppingBag className="h-10 w-10 sm:h-12 sm:w-12 text-zinc-400" />
+          </div>
+          <h1 className="mt-6 text-xl sm:text-2xl font-bold text-zinc-900">Your cart is empty</h1>
+          <p className="mt-2 text-sm sm:text-base text-zinc-500">Add some products to checkout.</p>
+          <Link
+            href="/shop"
+            className="mt-6 rounded-full px-6 py-3 text-sm font-semibold text-white"
+            style={{ backgroundColor: '#685BC7' }}
+          >
             Start Shopping
           </Link>
         </div>
@@ -136,36 +168,46 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="min-h-screen bg-zinc-100">
-      {/* Breadcrumb */}
-      <div className="flex justify-center bg-zinc-100 pt-6">
-        <div className="w-[95%]">
-          <nav className="flex items-center gap-2 text-sm">
-            <Link href="/" className="text-zinc-500 hover:text-zinc-700">Home</Link>
-            <ChevronRight className="h-4 w-4 text-zinc-400" />
-            <Link href="/cart" className="text-zinc-500 hover:text-zinc-700">Cart</Link>
-            <ChevronRight className="h-4 w-4 text-zinc-400" />
+    <div className="min-h-screen" style={{ backgroundColor: '#F4F4F4' }}>
+      {/* Header */}
+      <div className="pt-20 sm:pt-28 lg:pt-36 pb-4 sm:pb-6">
+        <div className="mx-auto w-[95%]">
+          {/* Breadcrumb */}
+          <nav className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-zinc-500 mb-4 sm:mb-6">
+            <Link href="/" className="hover:text-zinc-700">
+              <Home className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
+            </Link>
+            <span>/</span>
+            <Link href="/cart" className="hover:text-zinc-700">Cart</Link>
+            <span>/</span>
             <span className="font-medium text-zinc-900">Checkout</span>
           </nav>
-        </div>
-      </div>
 
-      {/* Step Indicator */}
-      <div className="flex justify-center bg-zinc-100 py-6">
-        <div className="w-[95%]">
+          {/* Step Indicator */}
           <div className="flex items-center justify-center">
             {steps.map((step, index) => (
               <div key={step.id} className="flex items-center">
-                <div className={`flex items-center gap-2 ${currentStep >= step.id ? 'text-zinc-900' : 'text-zinc-400'}`}>
-                  <div className={`flex h-8 w-8 items-center justify-center rounded-full text-sm font-medium ${
-                    currentStep > step.id ? 'bg-teal-500 text-white' : currentStep === step.id ? 'bg-zinc-900 text-white' : 'bg-zinc-200 text-zinc-500'
-                  }`}>
-                    {currentStep > step.id ? <Check className="h-4 w-4" /> : step.id}
+                <div className={`flex items-center gap-1.5 sm:gap-2 ${currentStep >= step.id ? 'text-zinc-900' : 'text-zinc-400'}`}>
+                  <div
+                    className={`flex h-7 w-7 sm:h-8 sm:w-8 items-center justify-center rounded-full text-xs sm:text-sm font-medium ${
+                      currentStep > step.id
+                        ? 'text-white'
+                        : currentStep === step.id
+                        ? 'text-white'
+                        : 'bg-zinc-200 text-zinc-500'
+                    }`}
+                    style={{
+                      backgroundColor: currentStep > step.id ? '#10B981' : currentStep === step.id ? '#685BC7' : undefined
+                    }}
+                  >
+                    {currentStep > step.id ? <Check className="h-3.5 w-3.5 sm:h-4 sm:w-4" /> : step.id}
                   </div>
-                  <span className="hidden text-sm font-medium sm:inline">{step.name}</span>
+                  <span className="hidden sm:inline text-sm font-medium">{step.name}</span>
                 </div>
                 {index < steps.length - 1 && (
-                  <div className={`mx-4 h-px w-12 sm:w-24 ${currentStep > step.id ? 'bg-teal-500' : 'bg-zinc-200'}`} />
+                  <div
+                    className={`mx-2 sm:mx-4 h-px w-8 sm:w-16 lg:w-24 ${currentStep > step.id ? 'bg-emerald-500' : 'bg-zinc-200'}`}
+                  />
                 )}
               </div>
             ))}
@@ -173,121 +215,311 @@ export default function CheckoutPage() {
         </div>
       </div>
 
+      {/* Mobile Order Summary Toggle */}
+      <div className="lg:hidden mx-auto w-[95%] mb-4">
+        <button
+          type="button"
+          onClick={() => setShowOrderSummary(!showOrderSummary)}
+          className="w-full flex items-center justify-between rounded-[10px] bg-white px-4 py-3"
+        >
+          <div className="flex items-center gap-2">
+            <ShoppingBag className="h-5 w-5 text-zinc-500" />
+            <span className="font-medium text-zinc-900">Order Summary</span>
+            <span className="text-xs text-zinc-500">({items.length} items)</span>
+            {appliedCoupon && (
+              <span className="flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium" style={{ backgroundColor: 'rgba(104, 91, 199, 0.1)', color: '#685BC7' }}>
+                <Tag className="h-3 w-3" />
+                {appliedCoupon.code}
+              </span>
+            )}
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-zinc-900">{formatPrice(total)}</span>
+            {showOrderSummary ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
+          </div>
+        </button>
+
+        {/* Collapsible Order Summary */}
+        {showOrderSummary && (
+          <div className="mt-2 rounded-[10px] bg-white p-4">
+            <div className="max-h-48 space-y-3 overflow-y-auto">
+              {items.map((item) => (
+                <div key={item.productId} className="flex gap-3">
+                  <div className="relative h-14 w-14 flex-shrink-0 overflow-hidden rounded-lg bg-zinc-100">
+                    <Image src={item.image || '/placeholder-product.jpg'} alt={item.name} fill className="object-cover" />
+                    <span className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-zinc-900 text-xs text-white">{item.quantity}</span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-medium text-zinc-900 truncate">{item.name}</p>
+                    <p className="text-sm text-zinc-500">{formatPrice(item.price * item.quantity)}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Coupon Code - Mobile */}
+            <div className="mt-3 pt-3 border-t border-zinc-100">
+              <label className="text-xs font-medium text-zinc-700">Coupon Code</label>
+              {appliedCoupon ? (
+                <div className="mt-2 flex items-center justify-between rounded-[10px] px-3 py-2.5" style={{ backgroundColor: 'rgba(104, 91, 199, 0.1)' }}>
+                  <div className="flex items-center gap-2">
+                    <Tag className="h-4 w-4" style={{ color: '#685BC7' }} />
+                    <span className="text-sm font-medium" style={{ color: '#685BC7' }}>{appliedCoupon.code}</span>
+                  </div>
+                  <button onClick={handleRemoveCoupon} className="text-xs hover:underline" style={{ color: '#685BC7' }}>Remove</button>
+                </div>
+              ) : (
+                <div className="mt-2 flex gap-2">
+                  <input
+                    type="text"
+                    placeholder="Enter code"
+                    value={couponCode}
+                    onChange={(e) => setCouponCode(e.target.value)}
+                    className="flex-1 rounded-[10px] border border-zinc-200 px-3 py-2 text-sm focus:border-zinc-400 focus:outline-none"
+                  />
+                  <button
+                    type="button"
+                    onClick={handleApplyCoupon}
+                    disabled={isApplyingCoupon}
+                    className="rounded-[10px] border border-zinc-200 px-3 py-2 text-sm font-medium text-zinc-700 hover:bg-zinc-50 disabled:opacity-50"
+                  >
+                    {isApplyingCoupon ? '...' : 'Apply'}
+                  </button>
+                </div>
+              )}
+            </div>
+
+            <div className="mt-3 pt-3 border-t border-zinc-100 space-y-2">
+              <div className="flex justify-between text-sm">
+                <span className="text-zinc-500">Subtotal</span>
+                <span className="text-zinc-900">{formatPrice(subtotal)}</span>
+              </div>
+              {appliedCoupon && (
+                <div className="flex justify-between text-sm" style={{ color: '#685BC7' }}>
+                  <span>Discount ({appliedCoupon.code})</span>
+                  <span>-{formatPrice(discountAmount)}</span>
+                </div>
+              )}
+              <div className="flex justify-between text-sm">
+                <span className="text-zinc-500">Shipping</span>
+                <span style={{ color: '#685BC7' }}>Free</span>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
       {/* Checkout Content */}
       <form onSubmit={handleSubmit}>
-        <div className="flex justify-center bg-zinc-100 pb-8">
-          <div className="w-[95%]">
-            <div className="grid gap-6 lg:grid-cols-3">
+        <div className="pb-8">
+          <div className="mx-auto w-[95%]">
+            <div className="grid gap-4 sm:gap-6 lg:grid-cols-3">
               {/* Form Sections */}
-              <div className="space-y-4 lg:col-span-2">
+              <div className="space-y-3 sm:space-y-4 lg:col-span-2">
                 {/* Contact Information */}
-                <div className="rounded-xl bg-white p-6">
+                <div className="rounded-[10px] bg-white p-4 sm:p-6">
                   <div className="flex items-center justify-between">
-                    <h2 className="text-lg font-bold text-zinc-900">Contact Information</h2>
+                    <h2 className="text-base sm:text-lg font-bold text-zinc-900">Contact Information</h2>
                     {currentStep > 1 && (
-                      <button type="button" onClick={() => setCurrentStep(1)} className="text-sm text-teal-600 hover:text-teal-700">Edit</button>
+                      <button type="button" onClick={() => setCurrentStep(1)} className="text-xs sm:text-sm font-medium" style={{ color: '#685BC7' }}>Edit</button>
                     )}
                   </div>
                   {currentStep === 1 ? (
-                    <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                    <div className="mt-4 grid gap-3 sm:gap-4 sm:grid-cols-2">
                       <div>
-                        <label className="block text-sm font-medium text-zinc-700">Email Address</label>
-                        <input type="email" placeholder="john@example.com" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} required className="mt-1 w-full rounded-lg border border-zinc-200 px-3 py-2.5 text-sm focus:border-zinc-400 focus:outline-none" />
+                        <label className="block text-xs sm:text-sm font-medium text-zinc-700">Email Address</label>
+                        <input
+                          type="email"
+                          placeholder="john@example.com"
+                          value={formData.email}
+                          onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                          required
+                          className="mt-1.5 w-full rounded-[10px] border border-zinc-200 px-3 py-2.5 sm:py-3 text-sm focus:border-zinc-400 focus:outline-none"
+                        />
                       </div>
                       <div>
-                        <label className="block text-sm font-medium text-zinc-700">Phone Number</label>
-                        <input type="tel" placeholder="+91 98765 43210" value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} required className="mt-1 w-full rounded-lg border border-zinc-200 px-3 py-2.5 text-sm focus:border-zinc-400 focus:outline-none" />
+                        <label className="block text-xs sm:text-sm font-medium text-zinc-700">Phone Number</label>
+                        <input
+                          type="tel"
+                          placeholder="+91 98765 43210"
+                          value={formData.phone}
+                          onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                          required
+                          className="mt-1.5 w-full rounded-[10px] border border-zinc-200 px-3 py-2.5 sm:py-3 text-sm focus:border-zinc-400 focus:outline-none"
+                        />
                       </div>
                       <div className="sm:col-span-2">
-                        <button type="button" onClick={() => setCurrentStep(2)} className="w-full rounded-lg bg-zinc-900 py-3 text-sm font-semibold text-white hover:bg-zinc-800">Continue to Shipping</button>
+                        <button
+                          type="button"
+                          onClick={() => setCurrentStep(2)}
+                          className="w-full rounded-full py-3 sm:py-3.5 text-sm font-semibold text-white"
+                          style={{ backgroundColor: '#685BC7' }}
+                        >
+                          Continue to Shipping
+                        </button>
                       </div>
                     </div>
                   ) : (
-                    <p className="mt-2 text-sm text-zinc-500">{formData.email} • {formData.phone}</p>
+                    <p className="mt-2 text-xs sm:text-sm text-zinc-500">{formData.email} • {formData.phone}</p>
                   )}
                 </div>
 
                 {/* Shipping Address */}
                 {currentStep >= 2 && (
-                  <div className="rounded-xl bg-white p-6">
+                  <div className="rounded-[10px] bg-white p-4 sm:p-6">
                     <div className="flex items-center justify-between">
-                      <h2 className="text-lg font-bold text-zinc-900">Shipping Address</h2>
+                      <h2 className="text-base sm:text-lg font-bold text-zinc-900">Shipping Address</h2>
                       {currentStep > 2 && (
-                        <button type="button" onClick={() => setCurrentStep(2)} className="text-sm text-teal-600 hover:text-teal-700">Edit</button>
+                        <button type="button" onClick={() => setCurrentStep(2)} className="text-xs sm:text-sm font-medium" style={{ color: '#685BC7' }}>Edit</button>
                       )}
                     </div>
                     {currentStep === 2 ? (
-                      <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                      <div className="mt-4 grid gap-3 sm:gap-4 sm:grid-cols-2">
                         <div>
-                          <label className="block text-sm font-medium text-zinc-700">First Name</label>
-                          <input type="text" placeholder="John" value={formData.firstName} onChange={(e) => setFormData({ ...formData, firstName: e.target.value })} required className="mt-1 w-full rounded-lg border border-zinc-200 px-3 py-2.5 text-sm focus:border-zinc-400 focus:outline-none" />
+                          <label className="block text-xs sm:text-sm font-medium text-zinc-700">First Name</label>
+                          <input
+                            type="text"
+                            placeholder="John"
+                            value={formData.firstName}
+                            onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                            required
+                            className="mt-1.5 w-full rounded-[10px] border border-zinc-200 px-3 py-2.5 sm:py-3 text-sm focus:border-zinc-400 focus:outline-none"
+                          />
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-zinc-700">Last Name</label>
-                          <input type="text" placeholder="Doe" value={formData.lastName} onChange={(e) => setFormData({ ...formData, lastName: e.target.value })} required className="mt-1 w-full rounded-lg border border-zinc-200 px-3 py-2.5 text-sm focus:border-zinc-400 focus:outline-none" />
+                          <label className="block text-xs sm:text-sm font-medium text-zinc-700">Last Name</label>
+                          <input
+                            type="text"
+                            placeholder="Doe"
+                            value={formData.lastName}
+                            onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                            required
+                            className="mt-1.5 w-full rounded-[10px] border border-zinc-200 px-3 py-2.5 sm:py-3 text-sm focus:border-zinc-400 focus:outline-none"
+                          />
                         </div>
                         <div className="sm:col-span-2">
-                          <label className="block text-sm font-medium text-zinc-700">Address</label>
-                          <textarea placeholder="House/Flat No., Street, Landmark" value={formData.address} onChange={(e) => setFormData({ ...formData, address: e.target.value })} required className="mt-1 w-full rounded-lg border border-zinc-200 px-3 py-2.5 text-sm focus:border-zinc-400 focus:outline-none" rows={2} />
+                          <label className="block text-xs sm:text-sm font-medium text-zinc-700">Address</label>
+                          <textarea
+                            placeholder="House/Flat No., Street, Landmark"
+                            value={formData.address}
+                            onChange={(e) => setFormData({ ...formData, address: e.target.value })}
+                            required
+                            className="mt-1.5 w-full rounded-[10px] border border-zinc-200 px-3 py-2.5 sm:py-3 text-sm focus:border-zinc-400 focus:outline-none resize-none"
+                            rows={2}
+                          />
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-zinc-700">City</label>
-                          <input type="text" placeholder="Mumbai" value={formData.city} onChange={(e) => setFormData({ ...formData, city: e.target.value })} required className="mt-1 w-full rounded-lg border border-zinc-200 px-3 py-2.5 text-sm focus:border-zinc-400 focus:outline-none" />
+                          <label className="block text-xs sm:text-sm font-medium text-zinc-700">City</label>
+                          <input
+                            type="text"
+                            placeholder="Mumbai"
+                            value={formData.city}
+                            onChange={(e) => setFormData({ ...formData, city: e.target.value })}
+                            required
+                            className="mt-1.5 w-full rounded-[10px] border border-zinc-200 px-3 py-2.5 sm:py-3 text-sm focus:border-zinc-400 focus:outline-none"
+                          />
                         </div>
                         <div>
-                          <label className="block text-sm font-medium text-zinc-700">State</label>
-                          <input type="text" placeholder="Maharashtra" value={formData.state} onChange={(e) => setFormData({ ...formData, state: e.target.value })} required className="mt-1 w-full rounded-lg border border-zinc-200 px-3 py-2.5 text-sm focus:border-zinc-400 focus:outline-none" />
+                          <label className="block text-xs sm:text-sm font-medium text-zinc-700">State</label>
+                          <input
+                            type="text"
+                            placeholder="Maharashtra"
+                            value={formData.state}
+                            onChange={(e) => setFormData({ ...formData, state: e.target.value })}
+                            required
+                            className="mt-1.5 w-full rounded-[10px] border border-zinc-200 px-3 py-2.5 sm:py-3 text-sm focus:border-zinc-400 focus:outline-none"
+                          />
                         </div>
-                        <div>
-                          <label className="block text-sm font-medium text-zinc-700">PIN Code</label>
-                          <input type="text" placeholder="400001" value={formData.pincode} onChange={(e) => setFormData({ ...formData, pincode: e.target.value })} required className="mt-1 w-full rounded-lg border border-zinc-200 px-3 py-2.5 text-sm focus:border-zinc-400 focus:outline-none" />
+                        <div className="sm:col-span-2 sm:w-1/2">
+                          <label className="block text-xs sm:text-sm font-medium text-zinc-700">PIN Code</label>
+                          <input
+                            type="text"
+                            placeholder="400001"
+                            value={formData.pincode}
+                            onChange={(e) => setFormData({ ...formData, pincode: e.target.value })}
+                            required
+                            className="mt-1.5 w-full rounded-[10px] border border-zinc-200 px-3 py-2.5 sm:py-3 text-sm focus:border-zinc-400 focus:outline-none"
+                          />
                         </div>
                         <div className="sm:col-span-2">
                           <label className="flex items-center gap-3 cursor-pointer">
-                            <input type="checkbox" checked={sameAsShipping} onChange={(e) => setSameAsShipping(e.target.checked)} className="h-4 w-4 rounded border-zinc-300" />
-                            <span className="text-sm text-zinc-600">Billing address same as shipping</span>
+                            <input
+                              type="checkbox"
+                              checked={sameAsShipping}
+                              onChange={(e) => setSameAsShipping(e.target.checked)}
+                              className="h-4 w-4 rounded border-zinc-300"
+                              style={{ accentColor: '#685BC7' }}
+                            />
+                            <span className="text-xs sm:text-sm text-zinc-600">Billing address same as shipping</span>
                           </label>
                         </div>
                         <div className="sm:col-span-2">
-                          <button type="button" onClick={() => setCurrentStep(3)} className="w-full rounded-lg bg-zinc-900 py-3 text-sm font-semibold text-white hover:bg-zinc-800">Continue to Payment</button>
+                          <button
+                            type="button"
+                            onClick={() => setCurrentStep(3)}
+                            className="w-full rounded-full py-3 sm:py-3.5 text-sm font-semibold text-white"
+                            style={{ backgroundColor: '#685BC7' }}
+                          >
+                            Continue to Payment
+                          </button>
                         </div>
                       </div>
                     ) : (
-                      <p className="mt-2 text-sm text-zinc-500">{formData.firstName} {formData.lastName}, {formData.address}, {formData.city}, {formData.state} - {formData.pincode}</p>
+                      <p className="mt-2 text-xs sm:text-sm text-zinc-500">{formData.firstName} {formData.lastName}, {formData.address}, {formData.city}, {formData.state} - {formData.pincode}</p>
                     )}
                   </div>
                 )}
 
                 {/* Payment */}
                 {currentStep >= 3 && (
-                  <div className="rounded-xl bg-white p-6">
-                    <h2 className="text-lg font-bold text-zinc-900">Payment Method</h2>
-                    <p className="mt-2 text-sm text-zinc-500">Payment integration coming soon. Orders will be placed as COD.</p>
-                    <div className="mt-4 grid grid-cols-3 gap-3">
-                      <div className="flex flex-col items-center gap-2 rounded-lg border border-zinc-200 p-4 opacity-50">
-                        <Smartphone className="h-6 w-6 text-zinc-400" />
-                        <span className="text-xs text-zinc-500">UPI</span>
+                  <div className="rounded-[10px] bg-white p-4 sm:p-6">
+                    <h2 className="text-base sm:text-lg font-bold text-zinc-900">Payment Method</h2>
+                    <p className="mt-2 text-xs sm:text-sm text-zinc-500">Payment integration coming soon. Orders will be placed as COD.</p>
+                    <div className="mt-4 grid grid-cols-3 gap-2 sm:gap-3">
+                      <div className="flex flex-col items-center gap-1.5 sm:gap-2 rounded-[10px] border border-zinc-200 p-3 sm:p-4 opacity-50">
+                        <Smartphone className="h-5 w-5 sm:h-6 sm:w-6 text-zinc-400" />
+                        <span className="text-[10px] sm:text-xs text-zinc-500">UPI</span>
                       </div>
-                      <div className="flex flex-col items-center gap-2 rounded-lg border border-zinc-200 p-4 opacity-50">
-                        <CreditCard className="h-6 w-6 text-zinc-400" />
-                        <span className="text-xs text-zinc-500">Card</span>
+                      <div className="flex flex-col items-center gap-1.5 sm:gap-2 rounded-[10px] border border-zinc-200 p-3 sm:p-4 opacity-50">
+                        <CreditCard className="h-5 w-5 sm:h-6 sm:w-6 text-zinc-400" />
+                        <span className="text-[10px] sm:text-xs text-zinc-500">Card</span>
                       </div>
-                      <div className="flex flex-col items-center gap-2 rounded-lg border-2 border-teal-500 bg-teal-50 p-4">
-                        <Building className="h-6 w-6 text-teal-600" />
-                        <span className="text-xs font-medium text-teal-700">COD</span>
+                      <div
+                        className="flex flex-col items-center gap-1.5 sm:gap-2 rounded-[10px] border-2 p-3 sm:p-4"
+                        style={{ borderColor: '#685BC7', backgroundColor: 'rgba(104, 91, 199, 0.05)' }}
+                      >
+                        <Building className="h-5 w-5 sm:h-6 sm:w-6" style={{ color: '#685BC7' }} />
+                        <span className="text-[10px] sm:text-xs font-medium" style={{ color: '#685BC7' }}>COD</span>
                       </div>
                     </div>
                     <div className="mt-4">
-                      <label className="block text-sm font-medium text-zinc-700">Order Notes (Optional)</label>
-                      <textarea placeholder="Any special instructions..." value={formData.notes} onChange={(e) => setFormData({ ...formData, notes: e.target.value })} className="mt-1 w-full rounded-lg border border-zinc-200 px-3 py-2.5 text-sm focus:border-zinc-400 focus:outline-none" rows={2} />
+                      <label className="block text-xs sm:text-sm font-medium text-zinc-700">Order Notes (Optional)</label>
+                      <textarea
+                        placeholder="Any special instructions..."
+                        value={formData.notes}
+                        onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+                        className="mt-1.5 w-full rounded-[10px] border border-zinc-200 px-3 py-2.5 sm:py-3 text-sm focus:border-zinc-400 focus:outline-none resize-none"
+                        rows={2}
+                      />
                     </div>
+
+                    {/* Mobile Place Order Button */}
+                    <button
+                      type="submit"
+                      disabled={isLoading}
+                      className="lg:hidden mt-4 flex w-full items-center justify-center gap-2 rounded-full py-3.5 text-sm font-semibold text-white disabled:opacity-50"
+                      style={{ backgroundColor: '#685BC7' }}
+                    >
+                      <Lock className="h-4 w-4" />
+                      {isLoading ? 'Processing...' : `Place Order • ${formatPrice(total)}`}
+                    </button>
                   </div>
                 )}
               </div>
 
-              {/* Order Summary */}
-              <div className="lg:col-span-1">
-                <div className="sticky top-24 rounded-xl bg-white p-6">
+              {/* Order Summary - Desktop */}
+              <div className="hidden lg:block lg:col-span-1">
+                <div className="sticky top-24 rounded-[10px] bg-white p-6">
                   <h2 className="text-lg font-bold text-zinc-900">Order Summary</h2>
                   <div className="mt-4 max-h-48 space-y-3 overflow-y-auto">
                     {items.map((item) => (
@@ -303,22 +535,66 @@ export default function CheckoutPage() {
                       </div>
                     ))}
                   </div>
+
+                  {/* Coupon Code - Desktop */}
+                  <div className="mt-4 pt-4 border-t border-zinc-100">
+                    <label className="text-sm font-medium text-zinc-700">Coupon Code</label>
+                    {appliedCoupon ? (
+                      <div className="mt-2 flex items-center justify-between rounded-[10px] px-4 py-3" style={{ backgroundColor: 'rgba(104, 91, 199, 0.1)' }}>
+                        <div className="flex items-center gap-2">
+                          <Tag className="h-4 w-4" style={{ color: '#685BC7' }} />
+                          <span className="font-medium" style={{ color: '#685BC7' }}>{appliedCoupon.code}</span>
+                        </div>
+                        <button type="button" onClick={handleRemoveCoupon} className="text-sm hover:underline" style={{ color: '#685BC7' }}>Remove</button>
+                      </div>
+                    ) : (
+                      <div className="mt-2 flex gap-2">
+                        <input
+                          type="text"
+                          placeholder="Enter code"
+                          value={couponCode}
+                          onChange={(e) => setCouponCode(e.target.value)}
+                          className="flex-1 rounded-[10px] border border-zinc-200 px-3 py-2.5 text-sm focus:border-zinc-400 focus:outline-none"
+                        />
+                        <button
+                          type="button"
+                          onClick={handleApplyCoupon}
+                          disabled={isApplyingCoupon}
+                          className="rounded-[10px] border border-zinc-200 px-4 py-2.5 text-sm font-medium text-zinc-700 hover:bg-zinc-50 disabled:opacity-50"
+                        >
+                          {isApplyingCoupon ? '...' : 'Apply'}
+                        </button>
+                      </div>
+                    )}
+                  </div>
+
                   <div className="mt-4 space-y-2 border-t border-zinc-100 pt-4">
                     <div className="flex justify-between text-sm">
                       <span className="text-zinc-500">Subtotal</span>
                       <span className="text-zinc-900">{formatPrice(subtotal)}</span>
                     </div>
+                    {appliedCoupon && (
+                      <div className="flex justify-between text-sm" style={{ color: '#685BC7' }}>
+                        <span>Discount ({appliedCoupon.code})</span>
+                        <span>-{formatPrice(discountAmount)}</span>
+                      </div>
+                    )}
                     <div className="flex justify-between text-sm">
                       <span className="text-zinc-500">Shipping</span>
-                      <span className="text-teal-600">Free</span>
+                      <span style={{ color: '#685BC7' }}>Free</span>
                     </div>
                   </div>
                   <div className="mt-4 flex justify-between border-t border-zinc-100 pt-4">
                     <span className="text-lg font-semibold text-zinc-900">Total</span>
-                    <span className="text-lg font-bold text-zinc-900">{formatPrice(subtotal)}</span>
+                    <span className="text-lg font-bold text-zinc-900">{formatPrice(total)}</span>
                   </div>
                   {currentStep === 3 && (
-                    <button type="submit" disabled={isLoading} className="mt-6 flex w-full items-center justify-center gap-2 rounded-lg bg-zinc-900 py-3 text-sm font-semibold text-white hover:bg-zinc-800 disabled:opacity-50">
+                    <button
+                      type="submit"
+                      disabled={isLoading}
+                      className="mt-5 flex w-full items-center justify-center gap-2 rounded-full py-3.5 text-sm font-semibold text-white disabled:opacity-50"
+                      style={{ backgroundColor: '#685BC7' }}
+                    >
                       <Lock className="h-4 w-4" />
                       {isLoading ? 'Processing...' : 'Place Order'}
                     </button>

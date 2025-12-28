@@ -4,16 +4,31 @@ import { useEffect, useState } from 'react'
 import { notFound } from 'next/navigation'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ChevronRight, Minus, Plus, ShoppingCart, Check, Truck, Shield, RotateCcw, ChevronDown } from 'lucide-react'
+import { Home, ChevronLeft, ChevronRight, Star, Scissors, Users, Smartphone, Apple, Tablet, Shield, Minus, Plus } from 'lucide-react'
 import { createClient } from '@/utils/supabase/client'
 import { useCart } from '@/contexts/cart-context'
-import { formatPrice, calculateDiscount, cn } from '@/lib/utils'
+import { formatPrice } from '@/lib/utils'
 import type { Product, Category } from '@/types/database'
-import { ProductCard } from '@/components/products/product-card'
+import { ShopProductCard } from '@/components/products/shop-product-card'
 
 interface PageProps {
   params: Promise<{ slug: string }>
 }
+
+const productFaqs = [
+  {
+    question: 'On-going fees?',
+    answer: 'No ongoing fees! Pay once and use your card forever. All features are included with your purchase.',
+  },
+  {
+    question: 'How do I customise my card?',
+    answer: 'After purchase, you\'ll receive a link to our customisation portal where you can add your contact details, social links, and profile information.',
+  },
+  {
+    question: 'What can I customise in my digital profile?',
+    answer: 'You can customise your name, photo, job title, company, phone numbers, email, website, social media links, and more. Your profile can be updated anytime.',
+  },
+]
 
 export default function ProductPage({ params }: PageProps) {
   const [product, setProduct] = useState<Product | null>(null)
@@ -22,6 +37,7 @@ export default function ProductPage({ params }: PageProps) {
   const [selectedImage, setSelectedImage] = useState(0)
   const [quantity, setQuantity] = useState(1)
   const [isLoading, setIsLoading] = useState(true)
+  const [openFaq, setOpenFaq] = useState<number | null>(null)
   const { addItem } = useCart()
 
   useEffect(() => {
@@ -68,8 +84,24 @@ export default function ProductPage({ params }: PageProps) {
 
   if (isLoading) {
     return (
-      <div className="flex min-h-[400px] items-center justify-center bg-zinc-100">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-zinc-300 border-t-zinc-900" />
+      <div className="min-h-screen pt-20 sm:pt-28 lg:pt-36" style={{ backgroundColor: '#F4F4F4' }}>
+        <div className="mx-auto w-[95%]">
+          <div className="grid lg:grid-cols-2 gap-4 sm:gap-8 lg:gap-12">
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+              <div className="hidden sm:flex flex-col gap-3">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="w-16 h-16 lg:w-20 lg:h-20 rounded-[10px] bg-zinc-200 animate-pulse" />
+                ))}
+              </div>
+              <div className="flex-1 aspect-square rounded-[10px] bg-zinc-200 animate-pulse" />
+            </div>
+            <div className="space-y-3 sm:space-y-4">
+              <div className="h-5 w-32 sm:w-48 bg-zinc-200 rounded animate-pulse" />
+              <div className="h-8 sm:h-10 w-48 sm:w-64 bg-zinc-200 rounded animate-pulse" />
+              <div className="h-16 sm:h-20 w-full bg-zinc-200 rounded animate-pulse" />
+            </div>
+          </div>
+        </div>
       </div>
     )
   }
@@ -78,7 +110,7 @@ export default function ProductPage({ params }: PageProps) {
     return notFound()
   }
 
-  const discount = calculateDiscount(product.price, product.compare_at_price)
+  const images = product.images.length > 0 ? product.images : ['/placeholder-product.jpg']
 
   const handleAddToCart = () => {
     addItem(
@@ -88,79 +120,32 @@ export default function ProductPage({ params }: PageProps) {
         slug: product.slug,
         price: product.price,
         compareAtPrice: product.compare_at_price,
-        image: product.images[0] || '/placeholder-product.jpg',
+        image: images[0],
       },
       quantity
     )
   }
 
   return (
-    <div className="min-h-screen bg-zinc-100">
-      {/* Breadcrumb */}
-      <div className="flex justify-center bg-zinc-100 pt-6">
-        <div className="w-[95%]">
-          <nav className="flex items-center gap-2 text-sm">
-            <Link href="/" className="text-zinc-500 hover:text-zinc-700">
-              Home
-            </Link>
-            <ChevronRight className="h-4 w-4 text-zinc-400" />
-            <Link href="/shop" className="text-zinc-500 hover:text-zinc-700">
-              Shop
-            </Link>
-            {category && (
-              <>
-                <ChevronRight className="h-4 w-4 text-zinc-400" />
-                <Link href={`/shop/${category.slug}`} className="text-zinc-500 hover:text-zinc-700">
-                  {category.name}
-                </Link>
-              </>
-            )}
-            <ChevronRight className="h-4 w-4 text-zinc-400" />
-            <span className="font-medium text-zinc-900 line-clamp-1">{product.name}</span>
-          </nav>
-        </div>
-      </div>
-
-      {/* Product Details */}
-      <section className="flex justify-center bg-zinc-100 py-6">
-        <div className="w-[95%]">
-          <div className="grid gap-6 rounded-xl bg-white p-6 lg:grid-cols-2 lg:p-8">
-            {/* Image Gallery */}
-            <div className="space-y-4">
-              {/* Main Image */}
-              <div className="relative aspect-square overflow-hidden rounded-xl bg-zinc-100">
-                <Image
-                  src={product.images[selectedImage] || '/placeholder-product.jpg'}
-                  alt={product.name}
-                  fill
-                  className="object-cover"
-                  priority
-                />
-                {discount > 0 && (
-                  <span className="absolute left-4 top-4 rounded-lg bg-teal-500 px-3 py-1.5 text-sm font-semibold text-white">
-                    {discount}% OFF
-                  </span>
-                )}
-                {product.is_featured && (
-                  <span className="absolute right-4 top-4 rounded-lg bg-orange-500 px-3 py-1.5 text-sm font-semibold text-white">
-                    Bestseller
-                  </span>
-                )}
-              </div>
-
-              {/* Thumbnails */}
-              {product.images.length > 1 && (
-                <div className="flex gap-3">
-                  {product.images.map((image, index) => (
+    <div className="min-h-screen" style={{ backgroundColor: '#F4F4F4' }}>
+      {/* Main Content */}
+      <section className="pt-20 sm:pt-28 lg:pt-36 pb-6 sm:pb-10 lg:pb-16">
+        <div className="mx-auto w-[95%]">
+          <div className="grid lg:grid-cols-2 gap-4 sm:gap-8 lg:gap-12 xl:gap-16">
+            {/* Left: Image Gallery */}
+            <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+              {/* Vertical Thumbnails (Desktop/Tablet) */}
+              {images.length > 1 && (
+                <div className="hidden sm:flex flex-col gap-2 lg:gap-3 order-first">
+                  {images.map((image, index) => (
                     <button
                       key={index}
                       onClick={() => setSelectedImage(index)}
-                      className={cn(
-                        'relative h-20 w-20 overflow-hidden rounded-lg border-2 transition-all',
+                      className={`relative w-14 h-14 lg:w-20 lg:h-20 rounded-[10px] overflow-hidden border-2 transition-all flex-shrink-0 ${
                         selectedImage === index
                           ? 'border-zinc-900'
-                          : 'border-zinc-200 hover:border-zinc-400'
-                      )}
+                          : 'border-transparent hover:border-zinc-300'
+                      }`}
                     >
                       <Image
                         src={image}
@@ -172,174 +157,166 @@ export default function ProductPage({ params }: PageProps) {
                   ))}
                 </div>
               )}
-            </div>
 
-            {/* Product Info */}
-            <div className="flex flex-col">
-              {product.best_for && (
-                <p className="text-sm text-zinc-500">
-                  Best for {product.best_for}
-                </p>
-              )}
+              {/* Main Image */}
+              <div className="relative flex-1 aspect-square rounded-[10px] overflow-hidden bg-white">
+                <Image
+                  src={images[selectedImage]}
+                  alt={product.name}
+                  fill
+                  className="object-contain p-4 sm:p-6 lg:p-10"
+                  priority
+                />
 
-              <h1 className="mt-2 text-2xl font-bold text-zinc-900 md:text-3xl">
-                {product.name}
-              </h1>
-
-              {/* Price */}
-              <div className="mt-4 flex flex-wrap items-center gap-3">
-                <span className="text-3xl font-bold text-zinc-900">
-                  {formatPrice(product.price)}
-                </span>
-                {product.compare_at_price && product.compare_at_price > product.price && (
-                  <span className="text-lg text-zinc-400 line-through">
-                    {formatPrice(product.compare_at_price)}
-                  </span>
-                )}
-                {discount > 0 && (
-                  <span className="rounded-lg bg-teal-100 px-3 py-1 text-sm font-semibold text-teal-700">
-                    Save {discount}%
-                  </span>
+                {/* Mobile Image Dots */}
+                {images.length > 1 && (
+                  <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 sm:hidden">
+                    {images.map((_, index) => (
+                      <button
+                        key={index}
+                        onClick={() => setSelectedImage(index)}
+                        className={`w-2 h-2 rounded-full transition-colors ${
+                          selectedImage === index ? 'bg-zinc-900' : 'bg-zinc-300'
+                        }`}
+                      />
+                    ))}
+                  </div>
                 )}
               </div>
+            </div>
 
-              {/* Short Description */}
+            {/* Mobile Thumbnails (Horizontal scroll) */}
+            {images.length > 1 && (
+              <div className="flex sm:hidden gap-2 overflow-x-auto no-scrollbar -mt-2 pb-1">
+                {images.map((image, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setSelectedImage(index)}
+                    className={`relative w-16 h-16 rounded-[10px] overflow-hidden border-2 transition-all flex-shrink-0 ${
+                      selectedImage === index
+                        ? 'border-zinc-900'
+                        : 'border-zinc-200'
+                    }`}
+                  >
+                    <Image
+                      src={image}
+                      alt={`${product.name} ${index + 1}`}
+                      fill
+                      className="object-cover"
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
+
+            {/* Right: Product Info */}
+            <div className="mt-2 sm:mt-0 lg:pt-4">
+              {/* Breadcrumb */}
+              <nav className="hidden sm:flex items-center gap-2 text-sm text-zinc-500">
+                <Link href="/" className="hover:text-zinc-700">
+                  <Home className="h-4 w-4" />
+                </Link>
+                {category && (
+                  <>
+                    <span className="text-zinc-300">/</span>
+                    <Link href={`/shop?category=${category.slug}`} className="hover:text-zinc-700">
+                      {category.name}
+                    </Link>
+                  </>
+                )}
+                <span className="text-zinc-300">/</span>
+                <span className="text-zinc-700 font-medium line-clamp-1">{product.name}</span>
+              </nav>
+
+              {/* Mobile Breadcrumb (Simplified) */}
+              <nav className="flex sm:hidden items-center gap-1.5 text-xs text-zinc-500 mb-2">
+                <Link href="/" className="hover:text-zinc-700">
+                  <Home className="h-3.5 w-3.5" />
+                </Link>
+                {category && (
+                  <>
+                    <span>/</span>
+                    <Link href={`/shop?category=${category.slug}`} className="hover:text-zinc-700">
+                      {category.name}
+                    </Link>
+                  </>
+                )}
+              </nav>
+
+              {/* Rating */}
+              <div className="flex items-center gap-1 sm:gap-1.5 sm:mt-4">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="h-3.5 w-3.5 sm:h-4 sm:w-4 fill-yellow-400 text-yellow-400" />
+                ))}
+                <span className="text-xs sm:text-sm text-zinc-500 ml-1">(739)</span>
+              </div>
+
+              {/* Title & Price */}
+              <div className="mt-2 sm:mt-3">
+                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 sm:gap-4">
+                  <h1 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-zinc-900">
+                    {product.name}
+                  </h1>
+                  <p className="text-lg sm:text-xl lg:text-2xl font-semibold text-zinc-900 flex-shrink-0">
+                    {formatPrice(product.price)}
+                  </p>
+                </div>
+              </div>
+
+              {/* Description */}
               {product.short_description && (
-                <p className="mt-4 text-zinc-600">
+                <p className="mt-3 sm:mt-4 text-sm sm:text-base text-zinc-600 leading-relaxed">
                   {product.short_description}
                 </p>
               )}
 
-              {/* Features */}
-              {product.features && product.features.length > 0 && (
-                <div className="mt-6 space-y-2">
-                  {product.features.map((feature, index) => (
-                    <div key={index} className="flex items-center gap-2 text-sm">
-                      <div className="flex h-5 w-5 items-center justify-center rounded-full bg-teal-100">
-                        <Check className="h-3 w-3 text-teal-600" />
-                      </div>
-                      <span className="text-zinc-600">{feature}</span>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {/* Quantity & Add to Cart */}
-              <div className="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center">
+              {/* Quantity & Add to Cart (Desktop/Tablet only) */}
+              <div className="hidden sm:flex items-center gap-3 sm:gap-4 mt-6 sm:mt-8">
                 {/* Quantity Selector */}
-                <div className="flex items-center rounded-lg border border-zinc-200">
+                <div className="flex items-center border border-zinc-200 rounded-full">
                   <button
                     onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                    className="p-3 hover:bg-zinc-50"
+                    className="h-10 w-10 sm:h-12 sm:w-12 flex items-center justify-center text-zinc-500 hover:text-zinc-900 transition-colors"
                   >
                     <Minus className="h-4 w-4" />
                   </button>
-                  <span className="w-12 text-center font-medium">{quantity}</span>
+                  <span className="w-8 sm:w-10 text-center font-medium text-zinc-900">{quantity}</span>
                   <button
                     onClick={() => setQuantity(quantity + 1)}
-                    className="p-3 hover:bg-zinc-50"
+                    className="h-10 w-10 sm:h-12 sm:w-12 flex items-center justify-center text-zinc-500 hover:text-zinc-900 transition-colors"
                   >
                     <Plus className="h-4 w-4" />
                   </button>
                 </div>
 
-                {/* Add to Cart */}
+                {/* Add to Cart Button */}
                 <button
                   onClick={handleAddToCart}
-                  className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-zinc-900 px-6 py-3 text-sm font-semibold text-white hover:bg-zinc-800"
+                  className="flex-1 h-10 sm:h-12 rounded-full text-white font-semibold text-sm hover:opacity-90 transition-opacity"
+                  style={{ backgroundColor: '#685BC7' }}
                 >
-                  <ShoppingCart className="h-5 w-5" />
-                  Add to Cart
+                  Add to cart
                 </button>
               </div>
 
-              {/* Trust Badges */}
-              <div className="mt-6 grid grid-cols-3 gap-4 rounded-xl bg-zinc-50 p-4">
-                <div className="text-center">
-                  <Truck className="mx-auto h-5 w-5 text-teal-600" />
-                  <p className="mt-1.5 text-xs font-medium text-zinc-700">Free Shipping</p>
-                  <p className="text-[10px] text-zinc-500">Orders over ₹999</p>
-                </div>
-                <div className="text-center">
-                  <Shield className="mx-auto h-5 w-5 text-teal-600" />
-                  <p className="mt-1.5 text-xs font-medium text-zinc-700">Secure Payment</p>
-                  <p className="text-[10px] text-zinc-500">100% Protected</p>
-                </div>
-                <div className="text-center">
-                  <RotateCcw className="mx-auto h-5 w-5 text-teal-600" />
-                  <p className="mt-1.5 text-xs font-medium text-zinc-700">Easy Returns</p>
-                  <p className="text-[10px] text-zinc-500">7 Day Policy</p>
-                </div>
-              </div>
-
-              {/* Accordion Sections */}
-              <div className="mt-6 space-y-3">
-                {/* Description */}
-                {product.description && (
-                  <details className="group rounded-xl border border-zinc-200" open>
-                    <summary className="flex cursor-pointer items-center justify-between p-4">
-                      <span className="font-semibold text-zinc-900">Product Description</span>
-                      <ChevronDown className="h-5 w-5 text-zinc-400 transition-transform group-open:rotate-180" />
-                    </summary>
-                    <div className="border-t border-zinc-200 p-4">
-                      <p className="whitespace-pre-line text-sm text-zinc-600">
-                        {product.description}
-                      </p>
-                    </div>
-                  </details>
-                )}
-
-                {/* Shipping Info */}
-                <details className="group rounded-xl border border-zinc-200">
-                  <summary className="flex cursor-pointer items-center justify-between p-4">
-                    <span className="font-semibold text-zinc-900">Shipping & Delivery</span>
-                    <ChevronDown className="h-5 w-5 text-zinc-400 transition-transform group-open:rotate-180" />
-                  </summary>
-                  <div className="border-t border-zinc-200 p-4">
-                    <ul className="space-y-2 text-sm text-zinc-600">
-                      <li className="flex items-start gap-2">
-                        <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-teal-500" />
-                        <span>Free shipping on orders above ₹999</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-teal-500" />
-                        <span>Standard delivery: 5-7 business days</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-teal-500" />
-                        <span>Express delivery available at checkout</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-teal-500" />
-                        <span>Track your order in real-time</span>
-                      </li>
-                    </ul>
+              {/* FAQ Accordion */}
+              <div className="mt-6 sm:mt-10 space-y-0">
+                {productFaqs.map((faq, index) => (
+                  <div key={index} className="border-b border-zinc-200">
+                    <button
+                      onClick={() => setOpenFaq(openFaq === index ? null : index)}
+                      className="w-full flex items-center gap-2.5 sm:gap-3 py-3.5 sm:py-4 text-left active:bg-zinc-100 transition-colors"
+                    >
+                      <Scissors className="h-4 w-4 text-zinc-400 flex-shrink-0" />
+                      <span className="font-medium text-zinc-900 text-sm sm:text-base">{faq.question}</span>
+                    </button>
+                    {openFaq === index && (
+                      <div className="pb-3.5 sm:pb-4 pl-6.5 sm:pl-7">
+                        <p className="text-xs sm:text-sm text-zinc-600 leading-relaxed">{faq.answer}</p>
+                      </div>
+                    )}
                   </div>
-                </details>
-
-                {/* Returns */}
-                <details className="group rounded-xl border border-zinc-200">
-                  <summary className="flex cursor-pointer items-center justify-between p-4">
-                    <span className="font-semibold text-zinc-900">Returns & Exchange</span>
-                    <ChevronDown className="h-5 w-5 text-zinc-400 transition-transform group-open:rotate-180" />
-                  </summary>
-                  <div className="border-t border-zinc-200 p-4">
-                    <ul className="space-y-2 text-sm text-zinc-600">
-                      <li className="flex items-start gap-2">
-                        <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-teal-500" />
-                        <span>7-day easy return policy</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-teal-500" />
-                        <span>Free replacement for defective products</span>
-                      </li>
-                      <li className="flex items-start gap-2">
-                        <Check className="mt-0.5 h-4 w-4 flex-shrink-0 text-teal-500" />
-                        <span>Refund processed within 5-7 days</span>
-                      </li>
-                    </ul>
-                  </div>
-                </details>
+                ))}
               </div>
             </div>
           </div>
@@ -348,50 +325,124 @@ export default function ProductPage({ params }: PageProps) {
 
       {/* Related Products */}
       {relatedProducts.length > 0 && (
-        <section className="flex justify-center bg-zinc-100 pb-8">
-          <div className="w-[95%]">
-            <div className="rounded-xl bg-white p-6 lg:p-8">
-              <div className="mb-6 flex items-center justify-between">
-                <h2 className="text-xl font-bold text-zinc-900">You might also like</h2>
-                {category && (
-                  <Link
-                    href={`/shop/${category.slug}`}
-                    className="text-sm font-medium text-teal-600 hover:text-teal-700"
-                  >
-                    View all
-                  </Link>
-                )}
-              </div>
-              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                {relatedProducts.map((relatedProduct) => (
-                  <ProductCard
-                    key={relatedProduct.id}
-                    product={relatedProduct}
-                    categorySlug={category?.slug}
-                  />
-                ))}
-              </div>
+        <section className="pb-6 sm:pb-10 lg:pb-16">
+          <div className="mx-auto w-[95%]">
+            <div className="flex items-center justify-between mb-4 sm:mb-6">
+              <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-zinc-900">You might also like</h2>
+              {category && (
+                <Link
+                  href={`/shop?category=${category.slug}`}
+                  className="text-xs sm:text-sm font-medium hover:underline"
+                  style={{ color: '#685BC7' }}
+                >
+                  View all
+                </Link>
+              )}
+            </div>
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
+              {relatedProducts.map((relatedProduct) => (
+                <ShopProductCard key={relatedProduct.id} product={relatedProduct} />
+              ))}
             </div>
           </div>
         </section>
       )}
 
-      {/* Sticky Add to Cart Bar (Mobile) */}
-      <div className="fixed bottom-0 left-0 right-0 z-40 border-t border-zinc-200 bg-white p-4 lg:hidden">
-        <div className="flex items-center gap-4">
-          <div>
-            <p className="text-sm text-zinc-500">{product.name}</p>
-            <p className="font-bold text-zinc-900">{formatPrice(product.price)}</p>
+      {/* Features Bar */}
+      <section className="py-6 sm:py-8 lg:py-12 border-t border-zinc-200">
+        <div className="mx-auto w-[95%]">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
+            {/* Connect with anyone */}
+            <div className="flex gap-3 items-start">
+              <div className="flex-shrink-0 w-8 h-8 sm:w-auto sm:h-auto flex items-center justify-center">
+                <Users className="h-5 w-5 text-zinc-700" />
+              </div>
+              <div className="min-w-0">
+                <h3 className="font-semibold text-zinc-900 text-sm">Connect with anyone</h3>
+                <p className="mt-0.5 sm:mt-1 text-xs text-zinc-500 leading-relaxed">
+                  Just one person needs Tapt to begin networking.
+                </p>
+              </div>
+            </div>
+
+            {/* No app required */}
+            <div className="flex gap-3 items-start">
+              <div className="flex-shrink-0 w-8 h-8 sm:w-auto sm:h-auto flex items-center justify-center">
+                <Smartphone className="h-5 w-5 text-zinc-700" />
+              </div>
+              <div className="min-w-0">
+                <h3 className="font-semibold text-zinc-900 text-sm">No app required</h3>
+                <p className="mt-0.5 sm:mt-1 text-xs text-zinc-500 leading-relaxed">
+                  Use your web browser to exchange contact details.
+                </p>
+              </div>
+            </div>
+
+            {/* iOS & Android compatible */}
+            <div className="flex gap-3 items-start">
+              <div className="flex-shrink-0 w-8 h-8 sm:w-auto sm:h-auto flex items-center justify-center">
+                <div className="flex flex-col gap-0.5">
+                  <Apple className="h-3 w-3 text-zinc-700" />
+                  <Tablet className="h-3 w-3 text-zinc-700" />
+                </div>
+              </div>
+              <div className="min-w-0">
+                <h3 className="font-semibold text-zinc-900 text-sm">iOS & Android compatible</h3>
+                <p className="mt-0.5 sm:mt-1 text-xs text-zinc-500 leading-relaxed">
+                  Works with all mobile devices.
+                </p>
+              </div>
+            </div>
+
+            {/* Built to last */}
+            <div className="flex gap-3 items-start">
+              <div className="flex-shrink-0 w-8 h-8 sm:w-auto sm:h-auto flex items-center justify-center">
+                <Shield className="h-5 w-5 text-zinc-700" />
+              </div>
+              <div className="min-w-0">
+                <h3 className="font-semibold text-zinc-900 text-sm">Built to last</h3>
+                <p className="mt-0.5 sm:mt-1 text-xs text-zinc-500 leading-relaxed">
+                  Crafted like a credit card, our cards are durable and timeless.
+                </p>
+              </div>
+            </div>
           </div>
+        </div>
+      </section>
+
+      {/* Sticky Add to Cart Bar (Mobile) */}
+      <div className="fixed bottom-0 left-0 right-0 z-40 bg-white border-t border-zinc-200 p-3 sm:hidden safe-area-bottom">
+        <div className="flex items-center gap-3">
+          {/* Quantity Selector */}
+          <div className="flex items-center border border-zinc-200 rounded-full">
+            <button
+              onClick={() => setQuantity(Math.max(1, quantity - 1))}
+              className="h-10 w-10 flex items-center justify-center text-zinc-500 active:bg-zinc-100"
+            >
+              <Minus className="h-4 w-4" />
+            </button>
+            <span className="w-6 text-center font-medium text-zinc-900 text-sm">{quantity}</span>
+            <button
+              onClick={() => setQuantity(quantity + 1)}
+              className="h-10 w-10 flex items-center justify-center text-zinc-500 active:bg-zinc-100"
+            >
+              <Plus className="h-4 w-4" />
+            </button>
+          </div>
+
+          {/* Add to Cart Button */}
           <button
             onClick={handleAddToCart}
-            className="flex flex-1 items-center justify-center gap-2 rounded-lg bg-zinc-900 px-4 py-3 text-sm font-semibold text-white"
+            className="flex-1 h-10 rounded-full text-white font-semibold text-sm active:opacity-90"
+            style={{ backgroundColor: '#685BC7' }}
           >
-            <ShoppingCart className="h-4 w-4" />
-            Add to Cart
+            Add to cart • {formatPrice(product.price)}
           </button>
         </div>
       </div>
+
+      {/* Spacer for mobile sticky bar */}
+      <div className="h-16 sm:hidden" />
     </div>
   )
 }
