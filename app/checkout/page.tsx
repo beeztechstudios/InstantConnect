@@ -1,14 +1,53 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
+import Script from 'next/script'
 import { useRouter } from 'next/navigation'
 import { Home, Lock, CreditCard, Smartphone, Building, Check, ChevronDown, ChevronUp, ShoppingBag, Tag } from 'lucide-react'
 import { useCart } from '@/contexts/cart-context'
 import { formatPrice, generateOrderNumber } from '@/lib/utils'
 import { createClient } from '@/utils/supabase/client'
 import toast from 'react-hot-toast'
+
+declare global {
+  interface Window {
+    Razorpay: new (options: RazorpayOptions) => RazorpayInstance
+  }
+}
+
+interface RazorpayOptions {
+  key: string
+  amount: number
+  currency: string
+  name: string
+  description: string
+  order_id: string
+  handler: (response: RazorpayResponse) => void
+  prefill: {
+    name: string
+    email: string
+    contact: string
+  }
+  theme: {
+    color: string
+  }
+  modal?: {
+    ondismiss?: () => void
+  }
+}
+
+interface RazorpayInstance {
+  open: () => void
+  close: () => void
+}
+
+interface RazorpayResponse {
+  razorpay_payment_id: string
+  razorpay_order_id: string
+  razorpay_signature: string
+}
 
 const steps = [
   { id: 1, name: 'Contact' },
@@ -34,6 +73,8 @@ export default function CheckoutPage() {
   const [sameAsShipping, setSameAsShipping] = useState(true)
   const [showOrderSummary, setShowOrderSummary] = useState(false)
   const [couponCode, setCouponCode] = useState('')
+  const [paymentMethod, setPaymentMethod] = useState<'online' | 'cod'>('online')
+  const [razorpayLoaded, setRazorpayLoaded] = useState(false)
 
   const handleApplyCoupon = async () => {
     const success = await applyCoupon(couponCode)
@@ -63,85 +104,207 @@ export default function CheckoutPage() {
     notes: '',
   })
 
+  const createOrder = async () => {
+    const supabase = createClient()
+
+    // Create or find customer
+    const { data: customer, error: customerError } = await supabase
+      .from('customers')
+      .insert([{
+        email: formData.email,
+        phone: formData.phone,
+        first_name: formData.firstName,
+        last_name: formData.lastName,
+      }])
+      .select()
+      .single()
+
+    if (customerError) {
+      console.error('Customer creation error:', customerError)
+      throw new Error(`Customer creation failed: ${customerError.message}`)
+    }
+
+    const orderNumber = generateOrderNumber()
+    const shippingAddress = {
+      address: formData.address,
+      city: formData.city,
+      state: formData.state,
+      pincode: formData.pincode,
+    }
+    const billingAddress = sameAsShipping ? shippingAddress : {
+      address: formData.billingAddress,
+      city: formData.billingCity,
+      state: formData.billingState,
+      pincode: formData.billingPincode,
+    }
+
+    const { data: order, error: orderError } = await supabase
+      .from('orders')
+      .insert([{
+        order_number: orderNumber,
+        customer_id: customer.id,
+        status: paymentMethod === 'cod' ? 'confirmed' : 'pending',
+        subtotal: subtotal,
+        discount: discountAmount,
+        coupon_code: appliedCoupon?.code || null,
+        shipping: 0,
+        total: total,
+        shipping_address: shippingAddress,
+        billing_address: billingAddress,
+        notes: formData.notes,
+      }])
+      .select()
+      .single()
+
+    if (orderError) {
+      console.error('Order creation error:', orderError)
+      throw new Error(`Order creation failed: ${orderError.message}`)
+    }
+
+    const orderItems = items.map((item) => ({
+      order_id: order.id,
+      product_id: item.productId,
+      product_name: item.name,
+      product_image: item.image,
+      quantity: item.quantity,
+      unit_price: item.price,
+      total_price: item.price * item.quantity,
+    }))
+
+    const { error: itemsError } = await supabase.from('order_items').insert(orderItems)
+    if (itemsError) {
+      console.error('Order items error:', itemsError)
+      throw new Error(`Order items failed: ${itemsError.message}`)
+    }
+
+    return { order, orderNumber, customer }
+  }
+
+  const handleRazorpayPayment = async (orderId: string, orderNumber: string) => {
+    try {
+      // Create Razorpay order
+      const response = await fetch('/api/razorpay/create-order', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          amount: total,
+          currency: 'INR',
+          receipt: orderNumber,
+          notes: { order_id: orderId },
+        }),
+      })
+
+      const data = await response.json()
+
+      if (!data.success) {
+        throw new Error(data.error || 'Failed to create payment order')
+      }
+
+      // Initialize Razorpay
+      const options: RazorpayOptions = {
+        key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID!,
+        amount: data.order.amount,
+        currency: data.order.currency,
+        name: 'Instant Connect',
+        description: `Order ${orderNumber}`,
+        order_id: data.order.id,
+        handler: async (response: RazorpayResponse) => {
+          try {
+            // Verify payment
+            const verifyResponse = await fetch('/api/razorpay/verify-payment', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                razorpay_order_id: response.razorpay_order_id,
+                razorpay_payment_id: response.razorpay_payment_id,
+                razorpay_signature: response.razorpay_signature,
+                order_id: orderId,
+              }),
+            })
+
+            const verifyData = await verifyResponse.json()
+
+            if (verifyData.success) {
+              clearCart()
+              toast.success('Payment successful!')
+              router.push(`/order-success?order=${orderNumber}`)
+            } else {
+              toast.error('Payment verification failed. Please contact support.')
+            }
+          } catch {
+            toast.error('Payment verification failed. Please contact support.')
+          }
+        },
+        prefill: {
+          name: `${formData.firstName} ${formData.lastName}`,
+          email: formData.email,
+          contact: formData.phone,
+        },
+        theme: {
+          color: '#685BC7',
+        },
+        modal: {
+          ondismiss: () => {
+            setIsLoading(false)
+            toast.error('Payment cancelled')
+          },
+        },
+      }
+
+      const razorpay = new window.Razorpay(options)
+      razorpay.open()
+    } catch (error) {
+      console.error('Razorpay error:', error)
+      toast.error('Failed to initiate payment. Please try again.')
+      setIsLoading(false)
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsLoading(true)
 
     try {
       const supabase = createClient()
+      const { order, orderNumber } = await createOrder()
 
-      const { data: customer, error: customerError } = await supabase
-        .from('customers')
-        .insert([{
-          email: formData.email,
-          phone: formData.phone,
-          first_name: formData.firstName,
-          last_name: formData.lastName,
+      if (paymentMethod === 'cod') {
+        // COD payment
+        const { error: paymentError } = await supabase.from('payments').insert([{
+          order_id: order.id,
+          amount: total,
+          status: 'pending',
+          method: 'cod',
         }])
-        .select()
-        .single()
 
-      if (customerError) throw customerError
+        if (paymentError) {
+          console.error('Payment record error:', paymentError)
+          throw new Error(`Payment record failed: ${paymentError.message}`)
+        }
 
-      const orderNumber = generateOrderNumber()
-      const shippingAddress = {
-        address: formData.address,
-        city: formData.city,
-        state: formData.state,
-        pincode: formData.pincode,
-      }
-      const billingAddress = sameAsShipping ? shippingAddress : {
-        address: formData.billingAddress,
-        city: formData.billingCity,
-        state: formData.billingState,
-        pincode: formData.billingPincode,
-      }
-
-      const { data: order, error: orderError } = await supabase
-        .from('orders')
-        .insert([{
-          order_number: orderNumber,
-          customer_id: customer.id,
-          status: 'confirmed',
-          subtotal: subtotal,
-          discount: discountAmount,
-          coupon_code: appliedCoupon?.code || null,
-          shipping: 0,
-          total: total,
-          shipping_address: shippingAddress,
-          billing_address: billingAddress,
-          notes: formData.notes,
+        clearCart()
+        toast.success('Order placed successfully!')
+        router.push(`/order-success?order=${orderNumber}`)
+      } else {
+        // Online payment via Razorpay
+        const { error: paymentError } = await supabase.from('payments').insert([{
+          order_id: order.id,
+          amount: total,
+          status: 'pending',
+          method: 'razorpay',
         }])
-        .select()
-        .single()
 
-      if (orderError) throw orderError
+        if (paymentError) {
+          console.error('Payment record error:', paymentError)
+          throw new Error(`Payment record failed: ${paymentError.message}`)
+        }
 
-      const orderItems = items.map((item) => ({
-        order_id: order.id,
-        product_id: item.productId,
-        product_name: item.name,
-        product_image: item.image,
-        quantity: item.quantity,
-        unit_price: item.price,
-        total_price: item.price * item.quantity,
-      }))
-
-      await supabase.from('order_items').insert(orderItems)
-      await supabase.from('payments').insert([{
-        order_id: order.id,
-        amount: total,
-        status: 'completed',
-        method: 'cod',
-      }])
-
-      clearCart()
-      toast.success('Order placed successfully!')
-      router.push(`/order-success?order=${orderNumber}`)
+        await handleRazorpayPayment(order.id, orderNumber)
+      }
     } catch (error) {
-      console.error('Checkout error:', error)
-      toast.error('Failed to place order. Please try again.')
-    } finally {
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred'
+      console.error('Checkout error:', errorMessage, error)
+      toast.error(errorMessage || 'Failed to place order. Please try again.')
       setIsLoading(false)
     }
   }
@@ -168,7 +331,12 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="min-h-screen" style={{ backgroundColor: '#F4F4F4' }}>
+    <>
+      <Script
+        src="https://checkout.razorpay.com/v1/checkout.js"
+        onLoad={() => setRazorpayLoaded(true)}
+      />
+      <div className="min-h-screen" style={{ backgroundColor: '#F4F4F4' }}>
       {/* Header */}
       <div className="pt-20 sm:pt-28 lg:pt-36 pb-4 sm:pb-6">
         <div className="mx-auto w-[95%]">
@@ -474,23 +642,43 @@ export default function CheckoutPage() {
                 {currentStep >= 3 && (
                   <div className="rounded-[10px] bg-white p-4 sm:p-6">
                     <h2 className="text-base sm:text-lg font-bold text-zinc-900">Payment Method</h2>
-                    <p className="mt-2 text-xs sm:text-sm text-zinc-500">Payment integration coming soon. Orders will be placed as COD.</p>
-                    <div className="mt-4 grid grid-cols-3 gap-2 sm:gap-3">
-                      <div className="flex flex-col items-center gap-1.5 sm:gap-2 rounded-[10px] border border-zinc-200 p-3 sm:p-4 opacity-50">
-                        <Smartphone className="h-5 w-5 sm:h-6 sm:w-6 text-zinc-400" />
-                        <span className="text-[10px] sm:text-xs text-zinc-500">UPI</span>
-                      </div>
-                      <div className="flex flex-col items-center gap-1.5 sm:gap-2 rounded-[10px] border border-zinc-200 p-3 sm:p-4 opacity-50">
-                        <CreditCard className="h-5 w-5 sm:h-6 sm:w-6 text-zinc-400" />
-                        <span className="text-[10px] sm:text-xs text-zinc-500">Card</span>
-                      </div>
-                      <div
-                        className="flex flex-col items-center gap-1.5 sm:gap-2 rounded-[10px] border-2 p-3 sm:p-4"
-                        style={{ borderColor: '#685BC7', backgroundColor: 'rgba(104, 91, 199, 0.05)' }}
+                    <p className="mt-2 text-xs sm:text-sm text-zinc-500">Choose your preferred payment method</p>
+                    <div className="mt-4 grid grid-cols-2 gap-2 sm:gap-3">
+                      <button
+                        type="button"
+                        onClick={() => setPaymentMethod('online')}
+                        className={`flex flex-col items-center gap-1.5 sm:gap-2 rounded-[10px] border-2 p-3 sm:p-4 transition-all ${
+                          paymentMethod === 'online'
+                            ? ''
+                            : 'border-zinc-200 hover:border-zinc-300'
+                        }`}
+                        style={paymentMethod === 'online' ? { borderColor: '#685BC7', backgroundColor: 'rgba(104, 91, 199, 0.05)' } : {}}
                       >
-                        <Building className="h-5 w-5 sm:h-6 sm:w-6" style={{ color: '#685BC7' }} />
-                        <span className="text-[10px] sm:text-xs font-medium" style={{ color: '#685BC7' }}>COD</span>
-                      </div>
+                        <div className="flex items-center gap-2">
+                          <CreditCard className="h-5 w-5 sm:h-6 sm:w-6" style={{ color: paymentMethod === 'online' ? '#685BC7' : '#71717a' }} />
+                          <Smartphone className="h-5 w-5 sm:h-6 sm:w-6" style={{ color: paymentMethod === 'online' ? '#685BC7' : '#71717a' }} />
+                        </div>
+                        <span className={`text-[10px] sm:text-xs font-medium ${paymentMethod === 'online' ? '' : 'text-zinc-500'}`} style={paymentMethod === 'online' ? { color: '#685BC7' } : {}}>
+                          Pay Online
+                        </span>
+                        <span className="text-[9px] sm:text-[10px] text-zinc-400">UPI / Card / Netbanking</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setPaymentMethod('cod')}
+                        className={`flex flex-col items-center gap-1.5 sm:gap-2 rounded-[10px] border-2 p-3 sm:p-4 transition-all ${
+                          paymentMethod === 'cod'
+                            ? ''
+                            : 'border-zinc-200 hover:border-zinc-300'
+                        }`}
+                        style={paymentMethod === 'cod' ? { borderColor: '#685BC7', backgroundColor: 'rgba(104, 91, 199, 0.05)' } : {}}
+                      >
+                        <Building className="h-5 w-5 sm:h-6 sm:w-6" style={{ color: paymentMethod === 'cod' ? '#685BC7' : '#71717a' }} />
+                        <span className={`text-[10px] sm:text-xs font-medium ${paymentMethod === 'cod' ? '' : 'text-zinc-500'}`} style={paymentMethod === 'cod' ? { color: '#685BC7' } : {}}>
+                          Cash on Delivery
+                        </span>
+                        <span className="text-[9px] sm:text-[10px] text-zinc-400">Pay when delivered</span>
+                      </button>
                     </div>
                     <div className="mt-4">
                       <label className="block text-xs sm:text-sm font-medium text-zinc-700">Order Notes (Optional)</label>
@@ -506,12 +694,12 @@ export default function CheckoutPage() {
                     {/* Mobile Place Order Button */}
                     <button
                       type="submit"
-                      disabled={isLoading}
+                      disabled={isLoading || (paymentMethod === 'online' && !razorpayLoaded)}
                       className="lg:hidden mt-4 flex w-full items-center justify-center gap-2 rounded-full py-3.5 text-sm font-semibold text-white disabled:opacity-50"
                       style={{ backgroundColor: '#685BC7' }}
                     >
                       <Lock className="h-4 w-4" />
-                      {isLoading ? 'Processing...' : `Place Order • ${formatPrice(total)}`}
+                      {isLoading ? 'Processing...' : paymentMethod === 'online' ? `Pay Now • ${formatPrice(total)}` : `Place Order (COD) • ${formatPrice(total)}`}
                     </button>
                   </div>
                 )}
@@ -591,12 +779,12 @@ export default function CheckoutPage() {
                   {currentStep === 3 && (
                     <button
                       type="submit"
-                      disabled={isLoading}
+                      disabled={isLoading || (paymentMethod === 'online' && !razorpayLoaded)}
                       className="mt-5 flex w-full items-center justify-center gap-2 rounded-full py-3.5 text-sm font-semibold text-white disabled:opacity-50"
                       style={{ backgroundColor: '#685BC7' }}
                     >
                       <Lock className="h-4 w-4" />
-                      {isLoading ? 'Processing...' : 'Place Order'}
+                      {isLoading ? 'Processing...' : paymentMethod === 'online' ? 'Pay Now' : 'Place Order (COD)'}
                     </button>
                   )}
                   <p className="mt-4 text-center text-xs text-zinc-500">By placing this order, you agree to our Terms of Service.</p>
@@ -607,5 +795,6 @@ export default function CheckoutPage() {
         </div>
       </form>
     </div>
+    </>
   )
 }
