@@ -4,7 +4,7 @@ import { Toaster } from "react-hot-toast";
 import { CartProvider } from "@/contexts/cart-context";
 import { LayoutWrapper } from "@/components/layout/layout-wrapper";
 import "./globals.css";
-
+import { Roboto } from "next/font/google";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -13,6 +13,12 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+
+const roboto = Roboto({
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "700", "900"],
+  variable: "--font-roboto",
 });
 
 export const metadata: Metadata = {
@@ -40,7 +46,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="light">
+    <html lang="en" className={roboto.variable}>
       <body
         className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
       >

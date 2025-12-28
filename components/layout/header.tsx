@@ -1,297 +1,380 @@
-'use client'
 
-import { useState } from 'react'
-import Link from 'next/link'
-import { usePathname } from 'next/navigation'
-import Image from 'next/image'
-import { Search, ShoppingCart, Menu, X, ChevronDown, Sparkles } from 'lucide-react'
-import { cn } from '@/lib/utils'
-import { useCart } from '@/contexts/cart-context'
-import { SearchModal } from './search-modal'
+
+"use client";
+
+import { useState } from "react";
+import Link from "next/link";
+import Image from "next/image";
+import { usePathname } from "next/navigation";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+  Search,
+  ShoppingCart,
+  Menu,
+  X,
+  ChevronDown,
+  Sparkles,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useCart } from "@/contexts/cart-context";
+import { SearchModal } from "./search-modal";
+
+const navLinks = [
+  { name: "Home", href: "/" },
+  { name: "How It Works", href: "/how-it-works" },
+  { name: "AI Review Card", href: "/ai-review-card", featured: true },
+];
 
 const categories = [
   {
-    name: 'Cards',
-    slug: 'nfc-cards',
-    image: 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?q=80&w=400&auto=format&fit=crop',
-    description: 'View the collection'
+    name: "NFC-Cards",
+    slug: "nfc-cards",
+    image: "/DropDownImgNFC.png",
+    description: "View the collection",
   },
   {
-    name: 'Stands',
-    slug: 'standees',
-    image: 'https://images.unsplash.com/photo-1586953208448-b95a79798f07?q=80&w=400&auto=format&fit=crop',
-    description: 'View the collection'
+    name: "Standees",
+    slug: "standees",
+    image:
+      "https://i.pinimg.com/1200x/1e/72/fa/1e72fa2fa2fad834e94d250f19e3b769.jpg",
+    description: "View the collection",
   },
   {
-    name: 'Custom Products',
-    slug: 'review-cards',
-    image: 'https://images.unsplash.com/photo-1611532736597-de2d4265fba3?q=80&w=400&auto=format&fit=crop',
-    description: 'View the collection'
+    name: "Custom Products",
+    slug: "review-cards",
+    image: "/card1.png",
+    description: "View the collection",
   },
   {
-    name: 'All Products',
-    slug: '',
-    image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=400&auto=format&fit=crop',
-    description: 'Browse everything',
-    isAllProducts: true
+    name: "All Products",
+    slug: "",
+    image:
+      "https://i.pinimg.com/736x/d9/70/2d/d9702dcefc32cb5357f35070a1bfb4d5.jpg",
+    description: "Browse everything",
+    isAllProducts: true,
   },
-]
-
-const navLinks = [
-  { name: 'Home', href: '/' },
-  { name: 'How It Works', href: '/how-it-works' },
-  { name: 'AI Review Card', href: '/ai-review-card', featured: true },
-]
+];
 
 export function Header() {
-  const pathname = usePathname()
-  const { itemCount, openCart } = useCart()
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
-  const [isShopDropdownOpen, setIsShopDropdownOpen] = useState(false)
-  const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const pathname = usePathname();
+  const { itemCount, openCart } = useCart();
+
+  const [mobileOpen, setMobileOpen] = useState(false);
+  const [shopOpen, setShopOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [mobileShopOpen, setMobileShopOpen] = useState(false);
+
 
   return (
-    <header className="absolute top-0 left-0 right-0 z-50 w-full">
-      <div className="mx-auto w-[95%] sm:w-auto sm:max-w-3xl px-0 sm:px-4 pt-3 sm:pt-4">
-        <div className="flex h-12 items-center justify-between rounded-xl bg-white px-4 shadow-md">
-          {/* Logo */}
-          <Link href="/" className="flex items-center">
-            <Image
-              src="/logo.svg"
-              alt="Instant Connect"
-              width={120}
-              height={42}
-              className="h-8 w-auto sm:h-9"
-              priority
-            />
-          </Link>
+    <>
+      <header className="absolute top-4 left-0 right-0 z-50">
+        <div className="mx-auto max-w-5xl px-3">
+          {/* ================= DESKTOP ================= */}
+          <div className="hidden lg:flex h-20 items-center justify-between rounded-xl bg-black px-5 shadow-md">
+            {/* Logo */}
+            <Link href="/">
+              <Image
+                src="/Logo_1.svg"
+                alt="Instant Connect"
+                width={130}
+                height={50}
+                priority
+              />
+            </Link>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden items-center gap-1 lg:flex">
-            {navLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  'flex items-center gap-1.5 px-4 py-2 text-sm font-medium transition-colors',
-                  link.featured
-                    ? 'text-zinc-700 hover:text-zinc-900'
-                    : pathname === link.href
-                    ? 'text-zinc-900'
-                    : 'text-zinc-600 hover:text-zinc-900'
-                )}
-              >
-                {link.featured && <Sparkles className="h-4 w-4 text-violet-600" />}
-                {link.name}
-              </Link>
-            ))}
-
-            {/* Shop Dropdown */}
-            <div
-              className="relative"
-              onMouseEnter={() => setIsShopDropdownOpen(true)}
-              onMouseLeave={() => setIsShopDropdownOpen(false)}
-            >
-              <button
-                className={cn(
-                  'flex items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-medium transition-colors',
-                  isShopDropdownOpen
-                    ? 'bg-zinc-100 text-zinc-900'
-                    : pathname.startsWith('/shop')
-                    ? 'text-zinc-900'
-                    : 'text-zinc-600 hover:text-zinc-900'
-                )}
-              >
-                Shop
-                <ChevronDown className={cn('h-4 w-4 transition-transform', isShopDropdownOpen && 'rotate-180')} />
-              </button>
-              {/* Invisible bridge to connect button and dropdown */}
-              <div className="absolute left-0 right-0 h-4 top-full" />
-            </div>
-          </nav>
-
-          {/* Right Side Actions */}
-          <div className="flex items-center gap-1">
-            {/* Search */}
-            <button
-              onClick={() => setIsSearchOpen(true)}
-              className="flex h-9 w-9 items-center justify-center rounded-full text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
-            >
-              <Search className="h-4 w-4" />
-            </button>
-
-            {/* Cart */}
-            <button
-              className="relative flex h-9 w-9 items-center justify-center rounded-full text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900"
-              onClick={openCart}
-            >
-              <ShoppingCart className="h-4 w-4" />
-              <span className="absolute -right-0.5 -top-0.5 flex h-4 w-4 items-center justify-center rounded-full bg-violet-600 text-[9px] font-bold text-white">
-                {itemCount}
-              </span>
-            </button>
-
-            {/* Mobile Menu Button */}
-            <button
-              className="flex h-9 w-9 items-center justify-center rounded-full text-zinc-600 hover:bg-zinc-100 hover:text-zinc-900 lg:hidden"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            >
-              {isMobileMenuOpen ? (
-                <X className="h-4 w-4" />
-              ) : (
-                <Menu className="h-4 w-4" />
-              )}
-            </button>
-          </div>
-        </div>
-
-        {/* Mega Menu Dropdown - Full width below navbar */}
-        <div
-          onMouseEnter={() => setIsShopDropdownOpen(true)}
-          onMouseLeave={() => setIsShopDropdownOpen(false)}
-          className={cn(
-            'mt-1 rounded-xl border border-zinc-200 bg-white p-5 shadow-xl transition-all duration-200',
-            isShopDropdownOpen
-              ? 'block opacity-100'
-              : 'hidden opacity-0 pointer-events-none'
-          )}
-        >
-          {/* Invisible bridge at top to connect with navbar */}
-          <div className="absolute -top-3 left-0 right-0 h-4" />
-          <div className="flex items-start gap-4">
-            {/* Category Cards */}
-            {categories.map((category) => (
-              <Link
-                key={category.slug || 'all'}
-                href={category.slug ? `/shop/${category.slug}` : '/shop'}
-                className="group flex-1"
-              >
-                <div className="overflow-hidden rounded-lg bg-zinc-100">
-                  <div
-                    className="aspect-square bg-cover bg-center transition-transform duration-300 group-hover:scale-105"
-                    style={{ backgroundImage: `url('${category.image}')` }}
-                  />
-                </div>
-                <div className="mt-2 flex items-center gap-1">
-                  <h3 className={cn(
-                    "text-sm font-semibold",
-                    (category as { isAllProducts?: boolean }).isAllProducts ? "text-violet-600" : "text-zinc-900"
-                  )}>{category.name}</h3>
-                  <ChevronDown className={cn(
-                    "h-3 w-3 -rotate-90 transition-transform group-hover:translate-x-0.5",
-                    (category as { isAllProducts?: boolean }).isAllProducts ? "text-violet-600" : "text-zinc-400"
-                  )} />
-                </div>
-                <p className="text-xs text-zinc-500">{category.description}</p>
-              </Link>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      {/* Mobile Navigation - Off-canvas Sheet */}
-      <div
-        className={cn(
-          'fixed inset-0 z-50 lg:hidden transition-opacity duration-300',
-          isMobileMenuOpen ? 'opacity-100' : 'opacity-0 pointer-events-none'
-        )}
-      >
-        {/* Backdrop */}
-        <div
-          className="absolute inset-0 bg-black/40 backdrop-blur-sm"
-          onClick={() => setIsMobileMenuOpen(false)}
-        />
-
-        {/* Sheet */}
-        <div
-          className={cn(
-            'absolute top-0 right-0 h-full w-[320px] max-w-[90vw] bg-[#F4F4F4] shadow-2xl transition-transform duration-300 ease-out flex flex-col',
-            isMobileMenuOpen ? 'translate-x-0' : 'translate-x-full'
-          )}
-        >
-          {/* Sheet Header */}
-          <div className="flex items-center justify-between px-5 py-4 bg-white">
-            <Image
-              src="/logo.svg"
-              alt="Instant Connect"
-              width={100}
-              height={35}
-              className="h-7 w-auto"
-            />
-            <button
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="flex h-10 w-10 items-center justify-center rounded-full bg-zinc-100 text-zinc-600 hover:bg-zinc-200 transition-colors"
-            >
-              <X className="h-5 w-5" />
-            </button>
-          </div>
-
-          {/* Sheet Content */}
-          <div className="flex-1 overflow-y-auto px-4 py-5">
-            {/* Navigation Links */}
-            <div className="bg-white rounded-[10px] p-2">
+            {/* Nav */}
+            <nav className="flex items-center gap-1">
               {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
-                  onClick={() => setIsMobileMenuOpen(false)}
                   className={cn(
-                    'flex items-center gap-3 rounded-lg px-4 py-3.5 text-[15px] font-medium transition-colors',
-                    pathname === link.href
-                      ? 'bg-zinc-900 text-white'
-                      : 'text-zinc-700 hover:bg-zinc-100'
+                    "flex items-center gap-1.5 px-4 py-2 rounded-lg text-md font-medium transition",
+                    "text-white hover:bg-white hover:text-black",
+                    pathname === link.href && "bg-white text-black"
                   )}
                 >
-                  {link.featured && <Sparkles className="h-4 w-4 text-violet-500" />}
+                  {link.featured && (
+                    <Sparkles className="h-5 w-5 text-sky-400" />
+                  )}
                   {link.name}
                 </Link>
               ))}
-            </div>
 
-            {/* Shop Categories */}
-            <div className="mt-4">
-              <p className="px-2 mb-3 text-xs font-semibold uppercase tracking-wider text-zinc-500">
-                Shop by Category
-              </p>
-              <div className="grid grid-cols-2 gap-2">
-                {categories.map((category) => (
-                  <Link
-                    key={category.slug || 'all'}
-                    href={category.slug ? `/shop?category=${category.slug}` : '/shop'}
-                    onClick={() => setIsMobileMenuOpen(false)}
-                    className="group relative overflow-hidden rounded-[10px] bg-white"
-                  >
-                    <div
-                      className="aspect-square bg-cover bg-center transition-transform duration-300 group-hover:scale-105"
-                      style={{ backgroundImage: `url('${category.image}')` }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
-                    <div className="absolute bottom-0 left-0 right-0 p-3">
-                      <span className="text-sm font-semibold text-white">{category.name}</span>
-                    </div>
-                  </Link>
-                ))}
+              {/* Shop */}
+              <div
+                className="relative"
+                onMouseEnter={() => setShopOpen(true)}
+                onMouseLeave={() => setShopOpen(false)}
+              >
+                <button
+                  onClick={() => setShopOpen((v) => !v)}
+                  onMouseEnter={() => setShopOpen(true)}
+                  className="flex items-center gap-1 px-4 py-2 text-md font-medium text-white hover:bg-white hover:text-black rounded-lg"
+                >
+                  Shop
+                  <ChevronDown
+                    className={cn(
+                      "h-5 w-5 text-sky-400 transition-transform duration-300",
+                      shopOpen && "rotate-180"
+                    )}
+                  />
+                </button>
+                {/* Invisible bridge */}
+                <div className="absolute left-0 right-0 h-4 top-full" />
               </div>
+            </nav>
+
+            {/* Actions */}
+            <div className="flex items-center gap-2">
+              <button onClick={() => setSearchOpen(true)} className="icon-btn">
+                <Search />
+              </button>
+              <button onClick={openCart} className="relative icon-btn">
+                <ShoppingCart />
+                {itemCount > 0 && <span className="badge">{itemCount}</span>}
+              </button>
             </div>
           </div>
 
-          {/* Sheet Footer */}
-          <div className="px-4 py-4 bg-white border-t border-zinc-200">
-            <Link
-              href="/shop"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="flex items-center justify-center gap-2 w-full rounded-lg py-3 text-sm font-semibold text-white transition-colors"
-              style={{ backgroundColor: '#685BC7' }}
-            >
-              Browse All Products
-              <ChevronDown className="h-4 w-4 -rotate-90" />
+          {/* ================= MEGA MENU (ORIGINAL DESIGN) ================= */}
+          <AnimatePresence>
+            {shopOpen && (
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                transition={{ duration: 0.25, ease: "easeOut" }}
+                onMouseEnter={() => setShopOpen(true)}
+                onMouseLeave={() => setShopOpen(false)}
+                className="absolute left-0 right-0 top-[calc(100%+8px)] mx-auto max-w-7xl rounded-xl bg-white p-6 shadow-2xl border-none"
+              >
+                <div className="grid grid-cols-4 gap-6">
+                  {categories.map((category, index) => (
+                    <motion.div
+                      key={category.name}
+                      initial={{ opacity: 0, y: 16 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{
+                        delay: index * 0.15,
+                        duration: 0.3,
+                        ease: "easeOut",
+                      }}
+                    >
+                      <Link
+                        href={
+                          category.slug ? `/shop/${category.slug}` : "/shop"
+                        }
+                        className={cn(
+                          "group block rounded-xl p-4 transition hover:shadow-lg",
+                          category.isAllProducts
+                            ? "bg-black text-white"
+                            : "bg-zinc-100"
+                        )}
+                      >
+                        {/* Image */}
+                        <div className="overflow-hidden rounded-xl">
+                          <div
+                            className="aspect-[1/1] bg-cover bg-center transition-transform duration-300 group-hover:scale-105"
+                            style={{
+                              backgroundImage: `url(${category.image})`,
+                            }}
+                          />
+                        </div>
+
+                        {/* Content */}
+                        <div className="mt-4 flex items-center justify-between">
+                          <div>
+                            <h3
+                              className={cn(
+                                "text-2xl font-extrabold",
+                                category.isAllProducts
+                                  ? "text-white"
+                                  : "text-zinc-900"
+                              )}
+                            >
+                              {category.name}
+                            </h3>
+                            <p
+                              className={cn(
+                                "text-sm",
+                                category.isAllProducts
+                                  ? "text-zinc-300"
+                                  : "text-zinc-500"
+                              )}
+                            >
+                              View the collection
+                            </p>
+                          </div>
+
+                          <span
+                            className={cn(
+                              "text-2xl transition-transform group-hover:translate-x-1",
+                              category.isAllProducts
+                                ? "text-white"
+                                : "text-zinc-400"
+                            )}
+                          >
+                            →
+                          </span>
+                        </div>
+                      </Link>
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+
+          {/* ================= MOBILE / TABLET ================= */}
+          <div className="lg:hidden flex items-center justify-between rounded-xl bg-black px-4 py-3 shadow-md">
+            <button onClick={() => setMobileOpen(true)}>
+              <Menu className="h-6 w-6 text-white" />
+            </button>
+
+            <Link href="/">
+              <Image
+                src="/Logo_1.svg"
+                alt="Instant Connect"
+                width={110}
+                height={40}
+              />
             </Link>
+
+            <div className="flex items-center gap-3">
+              <button onClick={() => setSearchOpen(true)}>
+                <Search className="h-6 w-6 text-white" />
+              </button>
+              <button onClick={openCart} className="relative">
+                <ShoppingCart className="h-6 w-6 text-white" />
+                {itemCount > 0 && <span className="badge-sm">{itemCount}</span>}
+              </button>
+            </div>
           </div>
         </div>
-      </div>
+      </header>
 
-      {/* Search Modal */}
-      <SearchModal isOpen={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
-    </header>
-  )
+      {/* MOBILE DRAWER (UNCHANGED) */}
+      {/* MOBILE DRAWER */}
+      {mobileOpen && (
+        <div className="fixed inset-0 z-50">
+          <div
+            className="absolute inset-0 bg-black/40"
+            onClick={() => setMobileOpen(false)}
+          />
+
+          <div className="absolute left-0 top-0 h-full w-[320px] bg-black shadow-xl flex flex-col">
+            {/* Header */}
+            <div className="flex justify-between items-center px-4 py-4 border-b border-zinc-800">
+              <Image src="/Logo_1.svg" alt="Logo" width={100} height={35} />
+              <button onClick={() => setMobileOpen(false)}>
+                <X className="h-6 w-6 text-white" />
+              </button>
+            </div>
+
+            {/* Content */}
+            <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
+              {/* Nav Links */}
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setMobileOpen(false)}
+                  className="block rounded-lg px-4 py-3 text-white font-medium hover:bg-zinc-800"
+                >
+                  {link.name}
+                </Link>
+              ))}
+
+              {/* SHOP ACCORDION */}
+              <button
+                onClick={() => setMobileShopOpen((v) => !v)}
+                className="flex w-full items-center justify-between rounded-lg px-4 py-3 text-white font-medium hover:bg-zinc-800"
+              >
+                Shop
+                <ChevronDown
+                  className={cn(
+                    "h-5 w-5 transition-transform",
+                    mobileShopOpen && "rotate-180"
+                  )}
+                />
+              </button>
+
+              <AnimatePresence>
+                {mobileShopOpen && (
+                  <motion.div
+                    initial={{ height: 0, opacity: 0 }}
+                    animate={{ height: "auto", opacity: 1 }}
+                    exit={{ height: 0, opacity: 0 }}
+                    transition={{ duration: 0.25 }}
+                    className="overflow-hidden pl-4 space-y-2"
+                  >
+                    {categories.map((category) => (
+                      <Link
+                        key={category.name}
+                        href={
+                          category.slug ? `/shop/${category.slug}` : "/shop"
+                        }
+                        onClick={() => setMobileOpen(false)}
+                        className="block rounded-lg px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800"
+                      >
+                        {category.name}
+                      </Link>
+                    ))}
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
+
+      {/* UTILITIES */}
+      <style jsx>{`
+        .icon-btn {
+          height: 36px;
+          width: 36px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          border-radius: 12px;
+          color: white;
+        }
+        .icon-btn:hover {
+          background: white;
+          color: black;
+        }
+        .badge {
+          position: absolute;
+          top: -6px;
+          right: -6px;
+          height: 20px;
+          width: 20px;
+          border-radius: 999px;
+          background: #38bdf8;
+          color: white;
+          font-size: 12px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .badge-sm {
+          position: absolute;
+          top: -6px;
+          right: -6px;
+          height: 18px;
+          width: 18px;
+          border-radius: 999px;
+          background: #38bdf8;
+          color: white;
+          font-size: 11px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      `}</style>
+    </>
+  );
 }

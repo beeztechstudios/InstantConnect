@@ -6,6 +6,11 @@
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
+@layer base {
+  html {
+    font-family: var(--font-roboto), system-ui, sans-serif;
+  }
+}
 
 /* Base layer for custom styles - works with Tailwind v4 layers */
 @layer base {
