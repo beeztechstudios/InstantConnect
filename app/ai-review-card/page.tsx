@@ -113,7 +113,7 @@ export default async function AIReviewCardPage() {
               </h2>
             </div>
             <Link
-              href="/shop"
+              href="/shop?category=nfc-cards"
               className="inline-block rounded-lg bg-zinc-900 px-4 py-2 sm:px-5 sm:py-2.5 text-xs sm:text-sm font-semibold text-white hover:bg-zinc-800 whitespace-nowrap w-fit"
             >
               Try Instant Connect
@@ -200,7 +200,7 @@ export default async function AIReviewCardPage() {
               </h2>
             </div>
             <Link
-              href="/shop?category=review-cards"
+              href="/shop?category=nfc-cards"
               className="inline-block rounded-lg bg-zinc-900 px-4 py-2 sm:px-5 sm:py-2.5 text-xs sm:text-sm font-semibold text-white hover:bg-zinc-800 whitespace-nowrap w-fit"
             >
               Explore products
@@ -208,7 +208,7 @@ export default async function AIReviewCardPage() {
           </div>
 
           {/* Products Grid */}
-          <ProductGrid products={products} categorySlug="nfc-cards" columns={4} />
+          <ProductGrid products={products} columns={4} />
         </div>
       </section>
 

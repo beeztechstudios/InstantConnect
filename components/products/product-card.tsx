@@ -14,9 +14,9 @@ interface ProductCardProps {
 export function ProductCard({ product, categorySlug }: ProductCardProps) {
   const discount = calculateDiscount(product.price, product.compare_at_price);
 
-  const productUrl = categorySlug
-    ? `/shop/${categorySlug}/${product.slug}`
-    : `/product/${product.slug}`;
+
+  const productUrl = `/product/${product.slug}`
+
 
   // Mock review data (replace later)
   const reviewCount = 349;
