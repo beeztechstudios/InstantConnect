@@ -78,20 +78,19 @@ export function JustDropped() {
   }, []);
 
   return (
-    <section className="bg-white py-16 ">
-      <div className="mx-auto w-[93%]">
+    <section className="bg-slate-100 py-16 ">
+      <div className="mx-auto w-[95%]">
         {/* Header: Premium Centered/Split Style */}
         <div className="mb-12 flex flex-col gap-6 md:flex-row  items-center md:items-end md:justify-between">
           <div>
             <div className="flex items-center gap-2 mb-4">
               <span className="md:block hidden h-px w-8 bg-sky-400" />
-              <span className="text-md font-black uppercase tracking-[0.3em] text-sky-400">
+              <span className="md:block hidden text-md font-black uppercase tracking-[0.2em] text-sky-400">
                 Inventory Update
               </span>
             </div>
             <h2 className="text-4xl font-black text-black tracking-tighter leading-[0.9] sm:text-6xl">
-              Just{" "}
-              <span className="italic font-light text-zinc-400">dropped.</span>
+              Just <span className=" font-black text-zinc-400">dropped.</span>
             </h2>
           </div>
           <Link
@@ -147,7 +146,7 @@ export function JustDropped() {
             <Link
               key={product.id}
               href={`/product/${product.slug}`}
-              className="group rounded-2xl bg-slate-100 shadow-2xl p-4 transition-all hover:bg-white hover:shadow-2xl hover:shadow-sky-500/5 border border-transparent hover:border-zinc-100"
+              className="group rounded-2xl bg-white  shadow-2xl p-4 transition-all hover:bg-white hover:shadow-2xl hover:shadow-sky-500/5 border border-transparent hover:border-zinc-100"
             >
               {/* IMAGE */}
               <div className="relative aspect-[4/5] overflow-hidden rounded-3xl bg-white shadow-inner">
@@ -155,7 +154,7 @@ export function JustDropped() {
                   src={product.images[0]}
                   alt={product.name}
                   fill
-                  className="object-contain  transition-transform duration-500 group-hover:scale-115"
+                  className="object-contain scale-110  transition-transform duration-500 group-hover:scale-115"
                 />
                 <div className="absolute left-3 top-3">
                   <span className="rounded-lg bg-zinc-900 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-white">
@@ -175,7 +174,7 @@ export function JustDropped() {
 
                 {/* PRICE */}
                 <div className="mt-4 flex items-center gap-3">
-                  <span className="text-2xl font-black text-black">
+                  <span className="text-xl font-black text-black">
                     ₹{product.price.toLocaleString()}
                   </span>
                   <span className="text-sm text-zinc-400 line-through font-medium">

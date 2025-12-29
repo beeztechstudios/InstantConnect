@@ -3,18 +3,20 @@
 import Link from "next/link";
 import Image from "next/image";
 import {
+  Mail,
   MapPin,
-  Truck,
-  ShieldCheck,
-  Gift,
   Star,
   Instagram,
   Facebook,
+  Twitter,
   Linkedin,
   Youtube,
-  ExternalLink,
+  Truck,
+  IndianRupee,
+  Wand,
+  ShieldCheck,
+  Gift,
 } from "lucide-react";
-
 const productLinks = [
   { name: "NFC Cards", href: "/shop?category=nfc-cards" },
   { name: "QR Cards", href: "/shop?category=qr-cards" },
@@ -40,45 +42,34 @@ const socialLinks = [
 
 export function Footer() {
   return (
-    <footer className="bg-black border-t border-white/5 text-white">
-      <div className="mx-auto max-w-[95%] px-4 pt-16 pb-8">
-        {/* Main Navigation Grid */}
-        <div className="grid gap-12 md:grid-cols-12 mb-20">
-          {/* Brand & Contact */}
-          <div className="col-span-full lg:col-span-4">
-            <Link href="/" className="inline-block">
-              <Image
-                src="/Logo_1.svg"
-                alt="Instant Connect"
-                width={220}
-                height={50}
-                className="h-18  w-auto "
-              />
-            </Link>
-            <p className="mt-6 text-white text-sm max-w-xs leading-relaxed">
-              Transforming physical networking into digital growth with smart
-              NFC technology. Designed in Udaipur.
-            </p>
-            <div className="mt-8 space-y-4">
-              <div className="flex items-start gap-3">
-                <MapPin className="h-5 w-5 text-sky-400 mt-0.5" />
-                <span className="text-sm text-white">
-                  New Bhupalpura, Udaipur, RJ 313001
-                </span>
+    <footer className="bg-[#EBEBEB] pt-16 pb-8 text-black font-sans">
+      <div className="mx-auto max-w-[95%] px-4 lg:px-10">
+        {/* --- TOP SECTION: CONTACT & LINKS --- */}
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-10 mb-16">
+          {/* Email & Address (Left) */}
+          <div className="md:col-span-4 space-y-6">
+            <a
+              href="mailto:instax@fujifilm.com"
+              className="text-2xl font-bold border-b-2 border-black pb-1 hover:opacity-70 transition-opacity"
+            >
+              hello@iconnect.com
+            </a>
+
+            <div className="flex items-start gap-4 pt-4">
+              <div className="p-3 bg-white/50 rounded-xl border border-zinc-200">
+                <MapPin size={24} className="text-zinc-500" />
               </div>
-              <a
-                href="mailto:support@instantconnect.in"
-                className="block text-lg font-black text-white hover:text-sky-400 transition-colors"
-              >
-                support@instantconnect.in
-              </a>
+              <p className="text-sm font-bold leading-relaxed max-w-[260px]">
+                Siddharth nagar, opposite of Miraj Malhar appartment, New
+                Bhupalpura, Udaipur, Rajasthan 313001
+              </p>
             </div>
           </div>
 
-          {/* Links Columns */}
+          {/* Links Grid (Middle) */}
           <div className="grid grid-cols-2 sm:grid-cols-3 col-span-full lg:col-span-5 gap-8">
             <div>
-              <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 mb-6">
+              <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-6">
                 Product
               </h3>
               <ul className="space-y-4">
@@ -86,7 +77,7 @@ export function Footer() {
                   <li key={link.name}>
                     <Link
                       href={link.href}
-                      className="text-sm font-medium text-zinc-400 hover:text-sky-400 transition-colors"
+                      className="text-sm font-bold text-zinc-600 hover:text-sky-600 transition-colors"
                     >
                       {link.name}
                     </Link>
@@ -95,7 +86,7 @@ export function Footer() {
               </ul>
             </div>
             <div>
-              <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 mb-6">
+              <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-6">
                 Explore
               </h3>
               <ul className="space-y-4">
@@ -103,10 +94,10 @@ export function Footer() {
                   <li key={link.name}>
                     <Link
                       href={link.href}
-                      className="flex items-center gap-2 text-sm font-medium text-zinc-400 hover:text-sky-400 transition-colors"
+                      className="flex items-center gap-2 text-sm font-bold text-zinc-600 hover:text-sky-600 transition-colors"
                     >
                       {link.featured && (
-                        <Star size={12} className="fill-sky-400 text-sky-400" />
+                        <Star size={12} className="fill-sky-500 text-sky-500" />
                       )}
                       {link.name}
                     </Link>
@@ -115,7 +106,7 @@ export function Footer() {
               </ul>
             </div>
             <div className="col-span-2 sm:col-span-1">
-              <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-500 mb-6">
+              <h3 className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 mb-6">
                 Support
               </h3>
               <ul className="space-y-4">
@@ -124,7 +115,7 @@ export function Footer() {
                     <li key={name}>
                       <Link
                         href="#"
-                        className="text-sm font-medium text-zinc-400 hover:text-sky-400 transition-colors"
+                        className="text-sm font-bold text-zinc-600 hover:text-sky-600 transition-colors"
                       >
                         {name}
                       </Link>
@@ -135,97 +126,113 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Trust Badges Sidebar */}
-          <div className="col-span-full lg:col-span-3 flex lg:flex-col justify-between lg:justify-start gap-6 border-t lg:border-t-0 lg:border-l border-white/5 pt-8 lg:pt-0 lg:pl-10">
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-sky-400 border border-white/5">
-                <Truck size={20} />
-              </div>
-              <span className="text-[10px] font-black uppercase tracking-widest text-white">
-                Free <br />
-                Shipping
-              </span>
+          
+        
+
+          {/* Trust Badges (Right) */}
+          <div className="md:col-span-2 space-y-4">
+            <div className="flex items-center gap-3 text-sm font-medium">
+              <Truck />
+              Free Shipping*
             </div>
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-sky-400 border border-white/5">
-                <ShieldCheck size={20} />
-              </div>
-              <span className="text-[10px] font-black uppercase tracking-widest text-white">
-                Secure <br />
-                Payments
-              </span>
+            <div className="flex items-center gap-3 text-sm font-medium">
+              <IndianRupee />
+              Secured Payments
             </div>
-            <div className="flex items-center gap-4">
-              <div className="w-10 h-10 rounded-full bg-white/5 flex items-center justify-center text-sky-400 border border-white/5">
-                <Gift size={20} />
-              </div>
-              <span className="text-[10px] font-black uppercase tracking-widest text-white">
-                Corporate <br />
-                Gifting
-              </span>
+            <div className="flex items-center gap-3 text-sm font-medium">
+              <Wand />
+              Surprises
             </div>
           </div>
         </div>
 
-        {/* --- BOTTOM BAR: BEEZTECH PARTNERSHIP --- */}
-        <div className="pt-12 border-t border-white/5 flex flex-col md:flex-row justify-between items-center gap-10">
-          {/* Copyright Section */}
-          <div className="order-3 md:order-1 text-center md:text-left space-y-1">
-            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-600">
-              The Standard of Excellence
-            </p>
-            <p className="text-[12px] font-medium text-zinc-400">
-              © 2025{" "}
-              <span className="text-white font-bold">Instant Connect</span>.
-              <span className="mx-2 text-zinc-800">|</span>
-              Crafted in <span className="text-zinc-200">Udaipur</span>
-            </p>
-          </div>
+        {/* ---  NEWSLETTER --- */}
+        <div className="flex flex-col lg:flex-row justify-between items-end gap-10 mb-8">
+          {/* Large Brand Logo */}
 
-          {/* Socials - Premium Floating Style */}
-          <div className="order-1 md:order-2 flex gap-3">
-            {socialLinks.map((social) => (
-              <a
-                key={social.name}
-                href={social.href}
-                className="group w-11 h-11 rounded-2xl bg-zinc-900/50 flex items-center justify-center  hover:text-sky-400 transition-all duration-500 border border-sky-400 text-sky-400 hover:border-sky-400/30 hover:shadow-[0_0_20px_rgba(56,189,248,0.1)]"
-              >
-                <social.icon
-                  size={18}
-                  className="group-hover:scale-110 transition-transform"
-                />
-              </a>
-            ))}
-          </div>
+          <img src="/Logo_3.svg" className="w-sm" alt="" />
 
-          {/* BEEZTECH ADVERTISEMENT - PREMIUM CARD */}
-          <Link
+          {/* BeezTech Advertisement Card */}
+          <a
             href="https://www.beeztech.studio/"
             target="_blank"
-            className="order-2 md:order-3 group relative overflow-hidden"
+            rel="noopener noreferrer"
+            className="block w-full lg:max-w-lg group"
           >
-            {/* Background Glow Effect on Hover */}
-            <div className="absolute inset-0 bg-gradient-to-r from-yellow-500/0 via-orange-500/0 to-red-500/0 group-hover:via-orange-500/5 transition-all duration-700" />
-
-            <div className="flex flex-col items-center md:items-end gap-1 px-5 py-3 rounded-2xl border border-white/5 bg-zinc-900/30 backdrop-blur-sm group-hover:border-orange-500/30 group-hover:bg-zinc-900/50 transition-all duration-500">
-              <span className="text-[9px] font-black uppercase tracking-[0.3em] text-zinc-500 group-hover:text-orange-400 transition-colors">
-                Developed by
-              </span>
-              <div className="relative h-10 w-auto transition-transform duration-500 group-hover:scale-105">
-                {/* Your BeezTech Logo */}
+            <div className="relative w-full h-[110px] sm:h-[130px]  rounded-2xl overflow-hidden bg-[#FF8026] flex items-center p-0 transition-transform duration-300 hover:shadow-xl hover:shadow-orange-500/20 active:scale-95">
+              {/* Left Side: Icon/Logo Container */}
+              <div className="w-1/3 sm:w-1/4 flex items-center justify-center p-2">
                 <img
-                  src="/Logo_White.svg"
-                  className="h-full w-auto  opacity-80 group-hover:opacity-100 transition-opacity"
-                  alt="BeezTech Studio"
+                  src="/Icon.svg"
+                  alt="BeezTech Icon"
+                  className="w-16 sm:w-20 md:w-24 lg:w-28 h-auto transition-transform duration-500 group-hover:rotate-12"
                 />
               </div>
-            </div>
 
-            {/* Subtle underline animation */}
-            <div className="absolute bottom-0 left-0 w-0 h-[1px] bg-gradient-to-r from-yellow-400 to-orange-600 group-hover:w-full transition-all duration-700" />
-          </Link>
+              {/* Right Side: Content Container */}
+              <div className="w-2/3 sm:w-3/4 px-3 sm:px-6 flex flex-col justify-center items-center text-center space-y-2 sm:space-y-3">
+                <h4 className="text-white font-black text-[11px] sm:text-sm md:text-base italic leading-tight tracking-tight uppercase">
+                  Looking for a <br className="sm:hidden" />
+                  <span className="text-black/90">custom website?</span>
+                </h4>
+
+                <button className="bg-white w-full max-w-[140px] sm:max-w-[180px] text-black px-3 py-2 sm:py-2.5 rounded-xl text-[9px] sm:text-[11px] md:text-xs font-black uppercase tracking-widest shadow-md transition-all group-hover:bg-black group-hover:text-white">
+                  Contact Beeztech
+                </button>
+              </div>
+
+              {/* Subtle Decorative Element */}
+              <div className="absolute top-0 right-0 p-2 opacity-20">
+                <div className="w-8 h-8 rounded-full border-2 border-white" />
+              </div>
+            </div>
+          </a>
+        </div>
+
+        {/* --- LEGAL --- */}
+        <div className="flex flex-col md:flex-row justify-between items-center gap-8 border-t border-black/10 pt-4">
+          <div className="flex flex-row w-full justify-between gap-4">
+            <p className="text-xs font-bold text-zinc-500">
+              Copyright © 2025 <span className="text-[#FF4D4D]">Instax</span>{" "}
+              All Rights Reserved.
+            </p>
+            <div className="hidden md:flex flex-wrap gap-x-8 gap-y-2 text-xs font-black">
+              {[
+                "Privacy Policy",
+                "Terms of Service",
+                "Refund policy",
+                "Delivery Policy",
+              ].map((item) => (
+                <Link key={item} href="#" className="hover:underline">
+                  {item}
+                </Link>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </footer>
+  );
+}
+
+function FooterColumn({ title, links }: { title: string; links: string[] }) {
+  return (
+    <div className="flex flex-col gap-5">
+      <h3 className="text-xs font-black uppercase tracking-widest text-zinc-400">
+        {title}
+      </h3>
+      <ul className="flex flex-col gap-3">
+        {links.map((link) => (
+          <li key={link}>
+            <Link
+              href="#"
+              className="text-xs font-bold hover:text-[#FF8026] transition-colors"
+            >
+              {link}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }

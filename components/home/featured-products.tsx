@@ -25,7 +25,7 @@ export async function FeaturedProducts() {
           {/* HEADER */}
           <div className="mb-6 flex flex-col text-center gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="text-[12px] font-black uppercase tracking-[0.3em] text-sky-400 mb-3">
+              <p className="text-[10px] md:text-[12px] font-black uppercase tracking-[0.2em] text-sky-400 mb-3">
                 Our most popular smart products
               </p>
               <h2 className="text-3xl font-extrabold  text-black tracking-tighter leading-[0.9] sm:text-4xl">
@@ -65,7 +65,7 @@ export async function FeaturedProducts() {
               ))}
 
               {/* Promo slide */}
-              <div className="min-w-[85%] snap-center">
+              <div className="min-w-[100%] snap-center">
                 <PromoCard />
               </div>
             </div>

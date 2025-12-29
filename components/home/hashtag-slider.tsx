@@ -67,7 +67,7 @@ export function HashtagSlider() {
 
         {/* 📌 STATIC TEXT (NEVER MOVES) */}
         <div className="pointer-events-none absolute right-0 top-0 bottom-0 flex items-center bg-[#e61b3a] px-3 md:px-6">
-          <span className="rounded-xl px-0 md:px-5 py-3  font-extrabold italic text-white text-lg md:text-3xl">
+          <span className="rounded-xl px-0 md:px-5 py-3  font-extrabold italic text-white text-md md:text-3xl">
             "connect instantly"
           </span>
         </div>

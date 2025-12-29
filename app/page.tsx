@@ -39,7 +39,7 @@ export default function HomePage() {
       <CategoryBlocks />
       <HeroBanner />
       <JustDropped />
-      {/* <HowItWorks /> */}
+
       <TestimonialsSection />
       <BookDemoCTA />
     </>

@@ -14,43 +14,49 @@ const cardVariants: Variants = {
 
 export function BookDemoCTA() {
   return (
-    <section className="bg-white  py-10 sm:py-24 sm:pt-0">
-      <div className="container mx-auto px-4 w-[93%]">
+    <section className="bg-white py-8 md:py-8 flex justify-center overflow-hidden">
+      {/* Container forced to 95% to match your Nav and Product Grids */}
+      <div className="w-[95%] max-w-[1440px] mx-auto">
         {/* --- MAIN HERO CTA --- */}
         <motion.div
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true }}
           variants={cardVariants}
-          className="relative group w-full overflow-hidden rounded-2xl bg-sky-900 px-6 py-20 sm:py-32 md:py-40 text-center border border-white/5 shadow-2xl"
+          className="relative group w-full overflow-hidden rounded-[2rem] bg-sky-700 px-6 py-16 sm:py-28 md:py-40 text-center border border-white/5 shadow-2xl shadow-sky-950/20"
         >
-          {/* Creative Background: Mesh + Logo Glow */}
+          {/* Creative Background: Adaptive for Tablet/Mobile */}
           <div className="absolute inset-0 z-0">
-            {/* <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] bg-sky-500/80 blur-[10px] rounded-full group-hover:bg-sky-500/20 transition-colors duration-700" /> */}
-            <div className="absolute inset-0 bg-[url('/footerheroctabg.png')] bg-cover bg-center opacity-40 mix-blend-overlay" />
-            <div className="absolute  top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60%] h-[60%] bg-blue-400/40 rounded-full blur-[100px] animate-pulse" />
+            {/* The background image is set to cover to ensure it matches width perfectly */}
+            <div className="absolute inset-0 bg-[url('/footerheroctabg.png')] bg-cover bg-center opacity-40 mix-blend-overlay scale-105 group-hover:scale-100 transition-transform duration-1000" />
+
+            {/* Pulsing Glow - Centered for all screen sizes */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[80%] h-[60%] md:w-[60%] bg-sky-500/30 rounded-full blur-[80px] md:blur-[120px] animate-pulse pointer-events-none" />
           </div>
 
-          <div className="relative z-10 max-w-4xl mx-auto">
+          <div className="relative z-10 max-w-5xl mx-auto px-2">
+            {/* Top Badge - Responsive Text Size */}
             <motion.div
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-sky-400 text-white text-md font-black uppercase tracking-widest mb-6"
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-sky-400/50 text-white text-[10px] sm:text-xs md:text-sm font-black uppercase tracking-[0.2em] mb-6 md:mb-8"
             >
-              <Sparkles size={14} className="" /> Ready to scale?
+              <Sparkles size={14} className="text-sky-400" /> Ready to scale?
             </motion.div>
 
-            <h2 className="text-4xl sm:text-6xl md:text-8xl font-black text-white tracking-tighter leading-[0.9] mb-8">
+            {/* Main Heading - Highly Responsive tracking and leading */}
+            <h2 className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-black text-white tracking-tighter leading-[0.85] md:leading-[0.9] mb-8 md:mb-12">
               One tap is <br />
-              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-sky-200 to-sky-500 italic font-light">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-white via-sky-200 to-sky-400  font-light pb-2 inline-block">
                 all it takes
               </span>
             </h2>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
+            {/* CTA Buttons - Vertical on Mobile, Horizontal on Tablet/Laptop */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 md:gap-6">
               <Link
                 href="/shop"
-                className="group w-full sm:w-auto flex items-center justify-center gap-3 rounded-2xl bg-white px-10 py-5 text-md font-black text-black transition-all hover:scale-105 active:scale-95 shadow-xl shadow-white/5"
+                className="group w-full sm:w-auto flex items-center justify-center gap-3 rounded-2xl bg-white px-8 md:px-12 py-5 text-sm md:text-md font-black text-black transition-all hover:bg-sky-400 hover:text-white hover:scale-105 active:scale-95 shadow-xl shadow-white/5"
               >
                 Get Started{" "}
                 <ArrowRight
@@ -58,18 +64,18 @@ export function BookDemoCTA() {
                   className="transition-transform group-hover:translate-x-1"
                 />
               </Link>
+
               <Link
                 href="/book-demo"
-                className="group w-full sm:w-auto flex items-center justify-center gap-3 rounded-2xl bg-black backdrop-blur-md border border-white/10 px-10 py-5 text-md font-bold text-white transition-all hover:bg-white/10"
+                className="group w-full sm:w-auto flex items-center justify-center gap-3 rounded-2xl bg-black/40 backdrop-blur-xl border border-white/10 px-8 md:px-12 py-5 text-sm md:text-md font-bold text-white transition-all hover:bg-white/10 hover:border-white/20"
               >
-                <Calendar size={18} className="text-sky-400 " /> Book a Demo
+                <Calendar size={18} className="text-sky-400" /> Book a Demo
               </Link>
             </div>
           </div>
         </motion.div>
 
-        {/* --- CREATIVE THREE CARD GRID --- */}
-       
+        {/* --- OPTIONAL: MARQUEE OR LOGO STRIP COULD GO HERE TO MATCH YOUR SCREENSHOTS --- */}
       </div>
     </section>
   );

@@ -54,15 +54,15 @@ export function TestimonialsSection() {
   };
 
   return (
-    <section className="bg-white py-12 sm:py-14 overflow-hidden">
-      <div className="mx-auto w-[93%]">
+    <section className="bg-white py-12 sm:py-14 pb-0 md:pb-12 overflow-hidden">
+      <div className="mx-auto w-[95%]">
         {/* Header Section */}
         <div className="mb-10 flex flex-col items-center text-center sm:flex-row sm:items-end sm:justify-between sm:text-left">
           <div className="max-w-2xl">
             <motion.p
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
-              className="text-[12px] font-black uppercase tracking-[0.3em] text-sky-400 mb-3"
+              className=" text-[10px] md:text-[12px] font-black uppercase tracking-[0.2em] text-sky-400 mb-3"
             >
               The Trust Network
             </motion.p>

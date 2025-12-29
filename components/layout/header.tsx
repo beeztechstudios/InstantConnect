@@ -227,14 +227,14 @@ export function Header() {
           </AnimatePresence>
 
           {/* ================= MOBILE / TABLET ================= */}
-          <div className="lg:hidden flex items-center justify-between rounded-xl bg-black px-4 py-3 shadow-md">
+          <div className="lg:hidden flex items-center justify-between rounded-xl bg-white px-4 py-3 shadow-md">
             <button onClick={() => setMobileOpen(true)}>
-              <Menu className="h-6 w-6 text-white" />
+              <Menu className="h-6 w-6 text-black" />
             </button>
 
             <Link href="/">
               <Image
-                src="/Logo_1.svg"
+                src="/Logo_3.svg"
                 alt="Instant Connect"
                 width={110}
                 height={40}
@@ -243,10 +243,10 @@ export function Header() {
 
             <div className="flex items-center gap-3">
               <button onClick={() => setSearchOpen(true)}>
-                <Search className="h-6 w-6 text-white" />
+                <Search className="h-6 w-6 text-black" />
               </button>
               <button onClick={openCart} className="relative">
-                <ShoppingCart className="h-6 w-6 text-white" />
+                <ShoppingCart className="h-6 w-6 text-black" />
                 {itemCount > 0 && <span className="badge-sm">{itemCount}</span>}
               </button>
             </div>
@@ -259,16 +259,16 @@ export function Header() {
       {mobileOpen && (
         <div className="fixed inset-0 z-50">
           <div
-            className="absolute inset-0 bg-black/40"
+            className="absolute inset-0 bg-white"
             onClick={() => setMobileOpen(false)}
           />
 
-          <div className="absolute left-0 top-0 h-full w-[320px] bg-black shadow-xl flex flex-col">
+          <div className="absolute left-0 top-0 h-full w-[320px] bg-white shadow-xl flex flex-col">
             {/* Header */}
-            <div className="flex justify-between items-center px-4 py-4 border-b border-zinc-800">
-              <Image src="/Logo_1.svg" alt="Logo" width={100} height={35} />
+            <div className="flex justify-between items-center px-4 py-4 border-b border-gray-400">
+              <Image src="/Logo_3.svg" alt="Logo" width={100} height={35} />
               <button onClick={() => setMobileOpen(false)}>
-                <X className="h-6 w-6 text-white" />
+                <X className="h-6 w-6 text-black" />
               </button>
             </div>
 
@@ -280,7 +280,7 @@ export function Header() {
                   key={link.href}
                   href={link.href}
                   onClick={() => setMobileOpen(false)}
-                  className="block rounded-lg px-4 py-3 text-white font-medium hover:bg-zinc-800"
+                  className="block rounded-lg px-4 py-3 text-black font-medium hover:bg-zinc-800"
                 >
                   {link.name}
                 </Link>
@@ -289,7 +289,7 @@ export function Header() {
               {/* SHOP ACCORDION */}
               <button
                 onClick={() => setMobileShopOpen((v) => !v)}
-                className="flex w-full items-center justify-between rounded-lg px-4 py-3 text-white font-medium hover:bg-zinc-800"
+                className="flex w-full items-center justify-between rounded-lg px-4 py-3 text-black font-medium hover:bg-zinc-400"
               >
                 Shop
                 <ChevronDown
@@ -316,7 +316,7 @@ export function Header() {
                           category.slug ? `/shop/${category.slug}` : "/shop"
                         }
                         onClick={() => setMobileOpen(false)}
-                        className="block rounded-lg px-4 py-2 text-sm text-zinc-300 hover:bg-zinc-800"
+                        className="block rounded-lg px-4 py-2 text-sm text-black hover:bg-zinc-800"
                       >
                         {category.name}
                       </Link>
