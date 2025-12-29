@@ -24,7 +24,7 @@ export function ProductCard({ product, categorySlug }: ProductCardProps) {
 
   return (
     <Link href={productUrl}>
-      <div className="group rounded-2xl bg-white p-4 shadow-sm transition hover:shadow-md">
+      <div className="group rounded-2xl bg-white p-4 shadow-xl transition hover:shadow-md">
         {/* IMAGE */}
         <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-white">
           <Image

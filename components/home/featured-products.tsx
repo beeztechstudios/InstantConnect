@@ -25,10 +25,10 @@ export async function FeaturedProducts() {
           {/* HEADER */}
           <div className="mb-6 flex flex-col text-center gap-2 sm:flex-row sm:items-end sm:justify-between">
             <div>
-              <p className="md:hidden sm:block text-sm font-bold text-zinc-800 sm:text-lg">
+              <p className="text-[12px] font-black uppercase tracking-[0.3em] text-sky-400 mb-3">
                 Our most popular smart products
               </p>
-              <h2 className="text-3xl font-extrabold text-zinc-900 sm:text-4xl">
+              <h2 className="text-3xl font-extrabold  text-black tracking-tighter leading-[0.9] sm:text-4xl">
                 This week&apos;s steal deals
               </h2>
             </div>

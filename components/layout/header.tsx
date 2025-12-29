@@ -70,11 +70,11 @@ export function Header() {
       <header className="absolute top-4 left-0 right-0 z-50">
         <div className="mx-auto max-w-5xl px-3">
           {/* ================= DESKTOP ================= */}
-          <div className="hidden lg:flex h-20 items-center justify-between rounded-xl bg-black px-5 shadow-md">
+          <div className="hidden lg:flex h-20 items-center justify-between rounded-xl bg-white px-5 shadow-md">
             {/* Logo */}
             <Link href="/">
               <Image
-                src="/Logo_1.svg"
+                src="/Logo_3.svg"
                 alt="Instant Connect"
                 width={130}
                 height={50}
@@ -90,7 +90,7 @@ export function Header() {
                   href={link.href}
                   className={cn(
                     "flex items-center gap-1.5 px-4 py-2 rounded-lg text-md font-medium transition",
-                    "text-white hover:bg-white hover:text-black",
+                    "text-black hover:bg-white hover:text-black",
                     pathname === link.href && "bg-white text-black"
                   )}
                 >
@@ -110,7 +110,7 @@ export function Header() {
                 <button
                   onClick={() => setShopOpen((v) => !v)}
                   onMouseEnter={() => setShopOpen(true)}
-                  className="flex items-center gap-1 px-4 py-2 text-md font-medium text-white hover:bg-white hover:text-black rounded-lg"
+                  className="flex items-center gap-1 px-4 py-2 text-md font-medium text-black hover:bg-white hover:text-black rounded-lg"
                 >
                   Shop
                   <ChevronDown
@@ -128,10 +128,10 @@ export function Header() {
             {/* Actions */}
             <div className="flex items-center gap-2">
               <button onClick={() => setSearchOpen(true)} className="icon-btn">
-                <Search />
+                <Search className="text-black" />
               </button>
               <button onClick={openCart} className="relative icon-btn">
-                <ShoppingCart />
+                <ShoppingCart className="text-black" />
                 {itemCount > 0 && <span className="badge">{itemCount}</span>}
               </button>
             </div>

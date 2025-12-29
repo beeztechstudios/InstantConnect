@@ -48,7 +48,7 @@ export function HeroBanner() {
       ref={containerRef}
       className="relative flex justify-center bg-white overflow-hidden"
     >
-      <motion.div className="relative w-[98%] min-h-[600px] md:min-h-[750px] rounded-2xl overflow-hidden bg-sky-950">
+      <motion.div className="relative w-full mx-6 min-h-[600px] md:min-h-[750px] rounded-2xl overflow-hidden bg-sky-950">
         {/* --- PREMIUM MESH BACKGROUND --- */}
         <div className="absolute inset-0 z-0">
           <div className="absolute top-[-10%] left-[-10%] w-[70%] h-[70%] bg-sky-400/30 rounded-full blur-[190px] animate-pulse" />
