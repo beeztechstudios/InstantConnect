@@ -1,8 +1,9 @@
 "use client";
 
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Star, Heart } from "lucide-react";
+import { Star } from "lucide-react";
 import { formatPrice, calculateDiscount } from "@/lib/utils";
 import type { Product } from "@/types/database";
 
@@ -13,10 +14,14 @@ interface ProductCardProps {
 
 export function ProductCard({ product, categorySlug }: ProductCardProps) {
   const discount = calculateDiscount(product.price, product.compare_at_price);
+  const [isHovered, setIsHovered] = useState(false);
 
+  const productUrl = `/product/${product.slug}`;
 
-  const productUrl = `/product/${product.slug}`
-
+  // Get primary and hover images
+  const primaryImage = product.images[0] || "/placeholder-product.jpg";
+  const hoverImage = product.images[1] || primaryImage;
+  const hasMultipleImages = product.images.length > 1;
 
   // Mock review data (replace later)
   const reviewCount = 349;
@@ -24,25 +29,43 @@ export function ProductCard({ product, categorySlug }: ProductCardProps) {
 
   return (
     <Link href={productUrl}>
-      <div className="group rounded-2xl bg-white p-4 shadow-xl transition hover:shadow-md">
+      <div
+        className="group rounded-2xl bg-white p-4 shadow-xl transition hover:shadow-md"
+        onMouseEnter={() => setIsHovered(true)}
+        onMouseLeave={() => setIsHovered(false)}
+      >
         {/* IMAGE */}
         <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-white">
+          {/* Primary Image */}
           <Image
-            src={product.images[0] || "/placeholder-product.jpg"}
+            src={primaryImage}
             alt={product.name}
             fill
-            className="object-contain transition-transform duration-300 group-hover:scale-105"
+            className={`object-contain transition-all duration-500 ${
+              hasMultipleImages && isHovered ? "opacity-0 scale-105" : "opacity-100 scale-100"
+            }`}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
           />
 
+          {/* Hover Image (only if multiple images exist) */}
+          {hasMultipleImages && (
+            <Image
+              src={hoverImage}
+              alt={`${product.name} - alternate view`}
+              fill
+              className={`object-contain transition-all duration-500 ${
+                isHovered ? "opacity-100 scale-100" : "opacity-0 scale-95"
+              }`}
+              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+            />
+          )}
+
           {/* BADGE */}
-          <div className="absolute left-3 top-3">
+          <div className="absolute left-3 top-3 z-10">
             <span className="rounded-md bg-red-500 px-3 py-1 text-xs font-semibold text-white">
               {product.is_featured ? "Bestseller" : "New"}
             </span>
           </div>
-
-          
         </div>
 
         {/* INFO */}
