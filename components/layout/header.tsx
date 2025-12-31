@@ -27,27 +27,27 @@ const navLinks = [
 
 const categories = [
   {
-    name: "NFC-Cards",
-    slug: "nfc-cards",
+    name: "NFC Cards",
+    href: "/shop?category=nfc-cards",
     image: "/DropDownImgNFC.png",
     description: "View the collection",
   },
   {
+    name: "QR Cards",
+    href: "/shop?category=qr-cards",
+    image: "/card1.png",
+    description: "View the collection",
+  },
+  {
     name: "Standees",
-    slug: "standees",
+    href: "/shop?category=standees",
     image:
       "https://i.pinimg.com/1200x/1e/72/fa/1e72fa2fa2fad834e94d250f19e3b769.jpg",
     description: "View the collection",
   },
   {
-    name: "Custom Products",
-    slug: "review-cards",
-    image: "/card1.png",
-    description: "View the collection",
-  },
-  {
     name: "All Products",
-    slug: "",
+    href: "/shop",
     image:
       "https://i.pinimg.com/736x/d9/70/2d/d9702dcefc32cb5357f35070a1bfb4d5.jpg",
     description: "Browse everything",
@@ -57,7 +57,7 @@ const categories = [
 
 export function Header() {
   const pathname = usePathname();
-  const { itemCount, openCart } = useCart();
+  const { itemCount } = useCart();
 
   const [mobileOpen, setMobileOpen] = useState(false);
   const [shopOpen, setShopOpen] = useState(false);
@@ -130,10 +130,10 @@ export function Header() {
               <button onClick={() => setSearchOpen(true)} className="icon-btn">
                 <Search className="text-black" />
               </button>
-              <button onClick={openCart} className="relative icon-btn">
+              <Link href="/cart" className="relative icon-btn">
                 <ShoppingCart className="text-black" />
                 {itemCount > 0 && <span className="badge">{itemCount}</span>}
-              </button>
+              </Link>
             </div>
           </div>
 
@@ -147,7 +147,7 @@ export function Header() {
                 transition={{ duration: 0.25, ease: "easeOut" }}
                 onMouseEnter={() => setShopOpen(true)}
                 onMouseLeave={() => setShopOpen(false)}
-                className="absolute left-0 right-0 top-[calc(100%+8px)] mx-auto max-w-7xl rounded-xl bg-white p-6 shadow-2xl border-none"
+                className="absolute left-0 right-0 top-[calc(100%+8px)] mx-auto max-w-5xl rounded-xl bg-white p-6 shadow-2xl border-none"
               >
                 <div className="grid grid-cols-4 gap-6">
                   {categories.map((category, index) => (
@@ -162,9 +162,7 @@ export function Header() {
                       }}
                     >
                       <Link
-                        href={
-                          category.slug ? `/shop/${category.slug}` : "/shop"
-                        }
+                        href={category.href}
                         className={cn(
                           "group block rounded-xl p-4 transition hover:shadow-lg",
                           category.isAllProducts
@@ -245,10 +243,10 @@ export function Header() {
               <button onClick={() => setSearchOpen(true)}>
                 <Search className="h-6 w-6 text-black" />
               </button>
-              <button onClick={openCart} className="relative">
+              <Link href="/cart" className="relative">
                 <ShoppingCart className="h-6 w-6 text-black" />
                 {itemCount > 0 && <span className="badge-sm">{itemCount}</span>}
-              </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -312,9 +310,7 @@ export function Header() {
                     {categories.map((category) => (
                       <Link
                         key={category.name}
-                        href={
-                          category.slug ? `/shop/${category.slug}` : "/shop"
-                        }
+                        href={category.href}
                         onClick={() => setMobileOpen(false)}
                         className="block rounded-lg px-4 py-2 text-sm text-black hover:bg-zinc-800"
                       >

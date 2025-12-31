@@ -52,22 +52,31 @@ export function HashtagSlider() {
       style={{ marginTop: '-14rem', marginBottom: '7rem' }}
     >
       {/* RED BAR */}
-      <div className="relative w-[95%] overflow-hidden rounded-xl bg-[#e61b3a] py-6 shadow-lg">
+      <div className="relative w-[95%] overflow-hidden rounded-xl bg-[#e61b3a] py-4 sm:py-6 shadow-lg">
 
-        {/* 🔁 SCROLLING HASHTAGS (ONLY THIS MOVES) */}
-        <div
-          ref={scrollRef}
-          className="flex w-max items-center whitespace-nowrap pr-[260px]"
-        >
-          {renderTags()}
-          {renderTags()}
-          {renderTags()}
-          {renderTags()}
+        {/* 📌 MOBILE: STATIC TEXT ON TOP LEFT */}
+        <div className="sm:hidden text-left pl-4 pb-3">
+          <span className="font-extrabold italic text-white text-lg">
+            "connect instantly"
+          </span>
         </div>
 
-        {/* 📌 STATIC TEXT (NEVER MOVES) */}
-        <div className="pointer-events-none absolute right-0 top-0 bottom-0 flex items-center bg-[#e61b3a] px-3 md:px-6">
-          <span className="rounded-xl px-0 md:px-5 py-3  font-extrabold italic text-white text-md md:text-3xl">
+        {/* 🔁 SCROLLING HASHTAGS (ONLY THIS MOVES) */}
+        <div className="overflow-hidden">
+          <div
+            ref={scrollRef}
+            className="flex w-max items-center whitespace-nowrap sm:pr-[260px]"
+          >
+            {renderTags()}
+            {renderTags()}
+            {renderTags()}
+            {renderTags()}
+          </div>
+        </div>
+
+        {/* 📌 DESKTOP: STATIC TEXT ON RIGHT (NEVER MOVES) */}
+        <div className="pointer-events-none absolute right-0 top-0 bottom-0 hidden sm:flex items-center bg-[#e61b3a] px-3 md:px-6">
+          <span className="rounded-xl px-0 md:px-5 py-3 font-extrabold italic text-white text-md md:text-3xl">
             "connect instantly"
           </span>
         </div>

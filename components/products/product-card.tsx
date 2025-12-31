@@ -30,18 +30,19 @@ export function ProductCard({ product, categorySlug }: ProductCardProps) {
   return (
     <Link href={productUrl}>
       <div
-        className="group rounded-2xl bg-white p-4 shadow-xl transition hover:shadow-md"
+        className="group rounded-2xl p-4 transition"
+        style={{ background: "#ebebeb" }}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
         {/* IMAGE */}
-        <div className="relative aspect-[4/5] overflow-hidden rounded-xl bg-white">
+        <div className="relative aspect-[4/5] overflow-hidden rounded-[10px] bg-white">
           {/* Primary Image */}
           <Image
             src={primaryImage}
             alt={product.name}
             fill
-            className={`object-contain transition-all duration-500 ${
+            className={`object-cover transition-all duration-500 ${
               hasMultipleImages && isHovered ? "opacity-0 scale-105" : "opacity-100 scale-100"
             }`}
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
@@ -53,7 +54,7 @@ export function ProductCard({ product, categorySlug }: ProductCardProps) {
               src={hoverImage}
               alt={`${product.name} - alternate view`}
               fill
-              className={`object-contain transition-all duration-500 ${
+              className={`object-cover transition-all duration-500 ${
                 isHovered ? "opacity-100 scale-100" : "opacity-0 scale-95"
               }`}
               sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"

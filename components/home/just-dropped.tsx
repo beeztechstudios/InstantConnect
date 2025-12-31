@@ -1,14 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useEffect, useRef } from "react";
-import { Star, ArrowRight, Sparkles } from "lucide-react";
+import { ArrowRight, Sparkles } from "lucide-react";
+import { ProductCard } from "@/components/products/product-card";
+import type { Product } from "@/types/database";
 
 // --- MOCK DATA (Matches your Database Schema) ---
-const products = [
+const products: Product[] = [
   {
-    id: 1,
+    id: "1",
     name: "InstantConnect NFC Pro Card",
     short_description: "The elite choice for modern networking.",
     price: 999,
@@ -18,9 +19,14 @@ const products = [
     ],
     slug: "nfc-card",
     is_featured: true,
+    is_active: true,
+    category_id: "1",
+    description: "",
+    created_at: "",
+    updated_at: "",
   },
   {
-    id: 2,
+    id: "2",
     name: "Smart Review Standee",
     short_description: "Collect 5-star reviews instantly.",
     price: 2999,
@@ -28,9 +34,14 @@ const products = [
     images: ["/PROMOCARDBG.png"],
     slug: "smart-standee",
     is_featured: false,
+    is_active: true,
+    category_id: "1",
+    description: "",
+    created_at: "",
+    updated_at: "",
   },
   {
-    id: 3,
+    id: "3",
     name: "NFC Smart Keychain",
     short_description: "Always ready to connect.",
     price: 499,
@@ -38,6 +49,11 @@ const products = [
     images: ["/PROMOCARDBG.png"],
     slug: "nfc-keychain",
     is_featured: false,
+    is_active: true,
+    category_id: "1",
+    description: "",
+    created_at: "",
+    updated_at: "",
   },
 ];
 
@@ -106,97 +122,32 @@ export function JustDropped() {
         </div>
 
         {/* Products Grid */}
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-          {/* Large Featured Card (Customized Version of your Card) */}
-          <Link
-            href={`/product/${products[0].slug}`}
-            className="group relative h-[400px] lg:h-auto lg:col-span-2 overflow-hidden rounded-xl bg-zinc-900"
-          >
-            <Image
-              src={products[0].images[0]}
-              alt={products[0].name}
-              fill
-              className="object-cover opacity-60 transition-transform duration-700 group-hover:scale-110 group-hover:opacity-40"
+        <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4">
+          {/* Large Product Card */}
+          <Link href={`/product/${products[0].slug}`} className="group relative h-[350px] overflow-hidden rounded-xl sm:h-[500px] sm:col-span-2">
+            <div
+              className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+              style={{ backgroundImage: `url('${products[0].images[0]}')` }}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black via-transparent to-transparent" />
-
-            <div className="absolute bottom-8 left-8 right-8 flex flex-col items-start">
-              <span className="mb-4 rounded-full bg-sky-500 px-4 py-1 text-[10px] font-black uppercase tracking-widest text-white shadow-lg shadow-sky-500/40">
-                Featured Product
-              </span>
-              <h3 className="text-3xl font-black text-white tracking-tighter mb-2">
-                {products[0].name}
-              </h3>
-              <p className="text-zinc-400 text-sm mb-6 max-w-sm">
-                {products[0].short_description}
-              </p>
-              <div className="flex items-center gap-4 bg-white/10 backdrop-blur-md p-2 pr-6 rounded-full border border-white/10">
-                <div className="h-10 w-10 rounded-full bg-white flex items-center justify-center text-black font-black text-xs">
-                  ₹
+            {/* Product Info Overlay */}
+            <div className="absolute bottom-4 left-4 right-4 flex items-center gap-3 rounded-lg bg-white/95 p-3 shadow-lg backdrop-blur-sm sm:right-auto">
+              <div className="min-w-0 flex-1">
+                <h3 className="truncate font-semibold text-zinc-900">{products[0].name}</h3>
+                <p className="hidden text-xs text-zinc-500 sm:block">{products[0].short_description}</p>
+                <div className="mt-1 flex flex-wrap items-center gap-2">
+                  <span className="font-bold text-zinc-900">₹{products[0].price.toLocaleString()}</span>
+                  <span className="text-sm text-zinc-400 line-through">₹{products[0].compare_at_price.toLocaleString()}</span>
+                  <span className="rounded bg-teal-500 px-2 py-0.5 text-xs font-semibold text-white">
+                    20% OFF
+                  </span>
                 </div>
-                <span className="text-white font-bold">
-                  Start at ₹{products[0].price}
-                </span>
               </div>
             </div>
           </Link>
 
-          {/* Standard Product Cards (Using your Exact UI Logic) */}
+          {/* Right Side - Two Smaller Cards using ProductCard */}
           {products.slice(1).map((product) => (
-            <Link
-              key={product.id}
-              href={`/product/${product.slug}`}
-              className="group rounded-2xl bg-white  shadow-2xl p-4 transition-all hover:bg-white hover:shadow-2xl hover:shadow-sky-500/5 border border-transparent hover:border-zinc-100"
-            >
-              {/* IMAGE */}
-              <div className="relative aspect-[4/5] overflow-hidden rounded-3xl bg-white shadow-inner">
-                <Image
-                  src={product.images[0]}
-                  alt={product.name}
-                  fill
-                  className="object-contain scale-110  transition-transform duration-500 group-hover:scale-115"
-                />
-                <div className="absolute left-3 top-3">
-                  <span className="rounded-lg bg-zinc-900 px-3 py-1 text-[10px] font-black uppercase tracking-widest text-white">
-                    {product.is_featured ? "Bestseller" : "New Arrival"}
-                  </span>
-                </div>
-              </div>
-
-              {/* INFO */}
-              <div className="mt-6 px-2 pb-2  space-y-2">
-                <h3 className="text-xl font-black leading-tight text-black line-clamp-1 ">
-                  {product.name}
-                </h3>
-                <p className="text-xs font-medium text-zinc-400 line-clamp-1">
-                  {product.short_description}
-                </p>
-
-                {/* PRICE */}
-                <div className="mt-4 flex items-center gap-3">
-                  <span className="text-xl font-black text-black">
-                    ₹{product.price.toLocaleString()}
-                  </span>
-                  <span className="text-sm text-zinc-400 line-through font-medium">
-                    ₹{product.compare_at_price.toLocaleString()}
-                  </span>
-                  <div className="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[13px] font-black text-emerald-600 uppercase">
-                    20% OFF
-                  </div>
-                </div>
-
-                {/* REVIEWS */}
-                <div className="mt-4 flex items-center justify-between border-t border-zinc-100 pt-4">
-                  <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
-                    (349 Reviews)
-                  </span>
-                  <div className="flex items-center gap-1.5 rounded-full bg-sky-50 px-3 py-1">
-                    <Star className="h-3 w-3 fill-sky-400 text-sky-400" />
-                    <span className="text-xs font-black text-sky-600">4.1</span>
-                  </div>
-                </div>
-              </div>
-            </Link>
+            <ProductCard key={product.id} product={product} />
           ))}
         </div>
 
