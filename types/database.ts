@@ -59,6 +59,7 @@ export interface Database {
           features: string[]
           specifications: Json
           is_featured: boolean
+          is_popular: boolean
           is_active: boolean
           stock_quantity: number
           created_at: string
@@ -78,6 +79,7 @@ export interface Database {
           features?: string[]
           specifications?: Json
           is_featured?: boolean
+          is_popular?: boolean
           is_active?: boolean
           stock_quantity?: number
           created_at?: string
@@ -97,6 +99,7 @@ export interface Database {
           features?: string[]
           specifications?: Json
           is_featured?: boolean
+          is_popular?: boolean
           is_active?: boolean
           stock_quantity?: number
           created_at?: string

@@ -16,6 +16,13 @@ import {
     ChevronUp,
     ShoppingBag,
     Tag,
+    User,
+    Building2,
+    Phone,
+    Mail,
+    Globe,
+    MessageSquare,
+    ChevronRight,
 } from "lucide-react";
 import { useCart } from "@/contexts/cart-context";
 import { formatPrice, generateOrderNumber } from "@/lib/utils";
@@ -64,6 +71,7 @@ const steps = [
     { id: 1, name: "Contact" },
     { id: 2, name: "Shipping" },
     { id: 3, name: "Payment" },
+    { id: 4, name: "Card Details", optional: true },
 ];
 
 export default function CheckoutPage() {
@@ -85,7 +93,7 @@ export default function CheckoutPage() {
     const [showOrderSummary, setShowOrderSummary] = useState(false);
     const [couponCode, setCouponCode] = useState("");
     const [paymentMethod, setPaymentMethod] = useState<"online" | "cod">(
-        "online",
+        "cod",
     );
     const [razorpayLoaded, setRazorpayLoaded] = useState(false);
 
@@ -116,6 +124,38 @@ export default function CheckoutPage() {
         billingPincode: "",
         notes: "",
     });
+
+    // Card details form (optional)
+    const [cardDetails, setCardDetails] = useState({
+        name: "",
+        designation: "",
+        companyName: "",
+        cardPhone: "",
+        cardEmail: "",
+        website: "",
+        socialLinks: "",
+        additionalNotes: "",
+    });
+    const [showCardDetails, setShowCardDetails] = useState(false);
+
+    // Validation errors
+    const [errors, setErrors] = useState<Record<string, string>>({});
+
+    // Validation functions
+    const validatePhone = (phone: string) => {
+        const cleaned = phone.replace(/\D/g, "");
+        return cleaned.length === 10;
+    };
+
+    const validateEmail = (email: string) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
+    const validatePincode = (pincode: string) => {
+        const cleaned = pincode.replace(/\D/g, "");
+        return cleaned.length === 6;
+    };
 
     const createOrder = async () => {
         const supabase = createClient();
@@ -198,6 +238,18 @@ export default function CheckoutPage() {
         if (itemsError) {
             console.error("Order items error:", itemsError);
             throw new Error(`Order items failed: ${itemsError.message}`);
+        }
+
+        // Save card details if provided
+        if (showCardDetails && cardDetails.name) {
+            await supabase.from("post_payment_details").insert([
+                {
+                    order_id: order.id,
+                    detail_type: "card_details",
+                    detail_data: cardDetails,
+                    status: "pending",
+                },
+            ]);
         }
 
         return { order, orderNumber, customer };
@@ -365,7 +417,7 @@ export default function CheckoutPage() {
     if (items.length === 0) {
         return (
             <div
-                className="min-h-screen pt-20 sm:pt-28 lg:pt-36"
+                className="min-h-screen pt-28 sm:pt-32 lg:pt-36"
                 style={{ backgroundColor: "#F4F4F4" }}
             >
                 <div className="flex min-h-[50vh] flex-col items-center justify-center px-4 text-center">
@@ -401,7 +453,7 @@ export default function CheckoutPage() {
                 style={{ backgroundColor: "#F4F4F4" }}
             >
                 {/* Header */}
-                <div className="pt-20 sm:pt-28 lg:pt-36 pb-4 sm:pb-6">
+                <div className="pt-28 sm:pt-32 lg:pt-36 pb-4 sm:pb-6">
                     <div className="mx-auto w-[95%]">
                         {/* Breadcrumb */}
                         <nav className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-zinc-500 mb-4 sm:mb-6">
@@ -452,11 +504,18 @@ export default function CheckoutPage() {
                                                 step.id
                                             )}
                                         </div>
-                                        <span
-                                            className={`text-[10px] sm:text-sm font-medium ${currentStep >= step.id ? "text-zinc-900" : "text-zinc-400"}`}
-                                        >
-                                            {step.name}
-                                        </span>
+                                        <div className="flex flex-col items-center sm:items-start">
+                                            <span
+                                                className={`text-[10px] sm:text-sm font-medium ${currentStep >= step.id ? "text-zinc-900" : "text-zinc-400"}`}
+                                            >
+                                                {step.name}
+                                            </span>
+                                            {"optional" in step && step.optional && (
+                                                <span className="text-[8px] sm:text-[10px] text-zinc-400">
+                                                    (Optional)
+                                                </span>
+                                            )}
+                                        </div>
                                     </div>
                                     {index < steps.length - 1 && (
                                         <div
@@ -683,16 +742,25 @@ export default function CheckoutPage() {
                                                         type="email"
                                                         placeholder="john@example.com"
                                                         value={formData.email}
-                                                        onChange={(e) =>
+                                                        onChange={(e) => {
                                                             setFormData({
                                                                 ...formData,
-                                                                email: e.target
-                                                                    .value,
-                                                            })
-                                                        }
+                                                                email: e.target.value,
+                                                            });
+                                                            if (errors.email) {
+                                                                setErrors({ ...errors, email: "" });
+                                                            }
+                                                        }}
                                                         required
-                                                        className="mt-1.5 w-full rounded-[10px] border border-zinc-200 px-3 py-2.5 sm:py-3 text-sm focus:border-zinc-400 focus:outline-none"
+                                                        className={`mt-1.5 w-full rounded-[10px] border px-3 py-2.5 sm:py-3 text-sm focus:outline-none ${
+                                                            errors.email
+                                                                ? "border-red-500 focus:border-red-500"
+                                                                : "border-zinc-200 focus:border-zinc-400"
+                                                        }`}
                                                     />
+                                                    {errors.email && (
+                                                        <p className="mt-1 text-xs text-red-500">{errors.email}</p>
+                                                    )}
                                                 </div>
                                                 <div>
                                                     <label className="block text-xs sm:text-sm font-medium text-zinc-700">
@@ -700,30 +768,52 @@ export default function CheckoutPage() {
                                                     </label>
                                                     <input
                                                         type="tel"
-                                                        placeholder="+91 87646 31130"
+                                                        placeholder="9876543210"
                                                         value={formData.phone}
-                                                        onChange={(e) =>
+                                                        onChange={(e) => {
+                                                            // Only allow digits
+                                                            const value = e.target.value.replace(/\D/g, "").slice(0, 10);
                                                             setFormData({
                                                                 ...formData,
-                                                                phone: e.target
-                                                                    .value,
-                                                            })
-                                                        }
+                                                                phone: value,
+                                                            });
+                                                            if (errors.phone) {
+                                                                setErrors({ ...errors, phone: "" });
+                                                            }
+                                                        }}
                                                         required
-                                                        className="mt-1.5 w-full rounded-[10px] border border-zinc-200 px-3 py-2.5 sm:py-3 text-sm focus:border-zinc-400 focus:outline-none"
+                                                        className={`mt-1.5 w-full rounded-[10px] border px-3 py-2.5 sm:py-3 text-sm focus:outline-none ${
+                                                            errors.phone
+                                                                ? "border-red-500 focus:border-red-500"
+                                                                : "border-zinc-200 focus:border-zinc-400"
+                                                        }`}
                                                     />
+                                                    {errors.phone && (
+                                                        <p className="mt-1 text-xs text-red-500">{errors.phone}</p>
+                                                    )}
                                                 </div>
                                                 <div className="sm:col-span-2">
                                                     <button
                                                         type="button"
                                                         onClick={() => {
-                                                            if (
-                                                                !formData.email ||
-                                                                !formData.phone
-                                                            ) {
-                                                                toast.error(
-                                                                    "Please fill in all contact details",
-                                                                );
+                                                            const newErrors: Record<string, string> = {};
+
+                                                            if (!formData.email) {
+                                                                newErrors.email = "Email is required";
+                                                            } else if (!validateEmail(formData.email)) {
+                                                                newErrors.email = "Please enter a valid email";
+                                                            }
+
+                                                            if (!formData.phone) {
+                                                                newErrors.phone = "Phone number is required";
+                                                            } else if (!validatePhone(formData.phone)) {
+                                                                newErrors.phone = "Please enter a valid 10-digit phone number";
+                                                            }
+
+                                                            setErrors(newErrors);
+
+                                                            if (Object.keys(newErrors).length > 0) {
+                                                                toast.error("Please fix the errors");
                                                                 return;
                                                             }
                                                             setCurrentStep(2);
@@ -887,20 +977,28 @@ export default function CheckoutPage() {
                                                         <input
                                                             type="text"
                                                             placeholder="400001"
-                                                            value={
-                                                                formData.pincode
-                                                            }
-                                                            onChange={(e) =>
+                                                            value={formData.pincode}
+                                                            onChange={(e) => {
+                                                                // Only allow digits, max 6
+                                                                const value = e.target.value.replace(/\D/g, "").slice(0, 6);
                                                                 setFormData({
                                                                     ...formData,
-                                                                    pincode:
-                                                                        e.target
-                                                                            .value,
-                                                                })
-                                                            }
+                                                                    pincode: value,
+                                                                });
+                                                                if (errors.pincode) {
+                                                                    setErrors({ ...errors, pincode: "" });
+                                                                }
+                                                            }}
                                                             required
-                                                            className="mt-1.5 w-full rounded-[10px] border border-zinc-200 px-3 py-2.5 sm:py-3 text-sm focus:border-zinc-400 focus:outline-none"
+                                                            className={`mt-1.5 w-full rounded-[10px] border px-3 py-2.5 sm:py-3 text-sm focus:outline-none ${
+                                                                errors.pincode
+                                                                    ? "border-red-500 focus:border-red-500"
+                                                                    : "border-zinc-200 focus:border-zinc-400"
+                                                            }`}
                                                         />
+                                                        {errors.pincode && (
+                                                            <p className="mt-1 text-xs text-red-500">{errors.pincode}</p>
+                                                        )}
                                                     </div>
                                                     <div className="sm:col-span-2">
                                                         <label className="flex items-center gap-3 cursor-pointer">
@@ -931,22 +1029,36 @@ export default function CheckoutPage() {
                                                         <button
                                                             type="button"
                                                             onClick={() => {
-                                                                if (
-                                                                    !formData.firstName ||
-                                                                    !formData.lastName ||
-                                                                    !formData.address ||
-                                                                    !formData.city ||
-                                                                    !formData.state ||
-                                                                    !formData.pincode
-                                                                ) {
-                                                                    toast.error(
-                                                                        "Please fill in all shipping details",
-                                                                    );
+                                                                const newErrors: Record<string, string> = {};
+
+                                                                if (!formData.firstName) {
+                                                                    newErrors.firstName = "First name is required";
+                                                                }
+                                                                if (!formData.lastName) {
+                                                                    newErrors.lastName = "Last name is required";
+                                                                }
+                                                                if (!formData.address) {
+                                                                    newErrors.address = "Address is required";
+                                                                }
+                                                                if (!formData.city) {
+                                                                    newErrors.city = "City is required";
+                                                                }
+                                                                if (!formData.state) {
+                                                                    newErrors.state = "State is required";
+                                                                }
+                                                                if (!formData.pincode) {
+                                                                    newErrors.pincode = "PIN code is required";
+                                                                } else if (!validatePincode(formData.pincode)) {
+                                                                    newErrors.pincode = "Please enter a valid 6-digit PIN code";
+                                                                }
+
+                                                                setErrors(newErrors);
+
+                                                                if (Object.keys(newErrors).length > 0) {
+                                                                    toast.error("Please fix the errors");
                                                                     return;
                                                                 }
-                                                                setCurrentStep(
-                                                                    3,
-                                                                );
+                                                                setCurrentStep(3);
                                                             }}
                                                             className="w-full rounded-[10px] py-3 sm:py-3.5 text-sm font-semibold text-white"
                                                             style={{
@@ -990,70 +1102,26 @@ export default function CheckoutPage() {
                                                 method
                                             </p>
                                             <div className="mt-4 grid grid-cols-2 gap-3">
-                                                <button
-                                                    type="button"
-                                                    onClick={() =>
-                                                        setPaymentMethod(
-                                                            "online",
-                                                        )
-                                                    }
-                                                    className={`flex flex-col items-center justify-center gap-2 rounded-[10px] border-2 p-4 sm:p-5 transition-all min-h-[100px] ${
-                                                        paymentMethod ===
-                                                        "online"
-                                                            ? ""
-                                                            : "border-zinc-200 hover:border-zinc-300 active:bg-zinc-50"
-                                                    }`}
-                                                    style={
-                                                        paymentMethod ===
-                                                        "online"
-                                                            ? {
-                                                                  borderColor:
-                                                                      "#38bdf8",
-                                                                  backgroundColor:
-                                                                      "rgba(104, 91, 199, 0.05)",
-                                                              }
-                                                            : {}
-                                                    }
+                                                {/* Online Payment - Coming Soon */}
+                                                <div
+                                                    className="relative flex flex-col items-center justify-center gap-2 rounded-[10px] border-2 border-zinc-200 p-4 sm:p-5 min-h-[100px] opacity-60 cursor-not-allowed"
                                                 >
-                                                    <div className="flex items-center gap-2">
-                                                        <CreditCard
-                                                            className="h-6 w-6 sm:h-7 sm:w-7"
-                                                            style={{
-                                                                color:
-                                                                    paymentMethod ===
-                                                                    "online"
-                                                                        ? "#38bdf8"
-                                                                        : "#71717a",
-                                                            }}
-                                                        />
-                                                        <Smartphone
-                                                            className="h-6 w-6 sm:h-7 sm:w-7"
-                                                            style={{
-                                                                color:
-                                                                    paymentMethod ===
-                                                                    "online"
-                                                                        ? "#38bdf8"
-                                                                        : "#71717a",
-                                                            }}
-                                                        />
+                                                    <div className="absolute top-2 right-2">
+                                                        <span className="rounded-[6px] bg-amber-100 px-1.5 py-0.5 text-[9px] sm:text-[10px] font-semibold text-amber-700">
+                                                            Coming Soon
+                                                        </span>
                                                     </div>
-                                                    <span
-                                                        className={`text-xs sm:text-sm font-semibold ${paymentMethod === "online" ? "" : "text-zinc-600"}`}
-                                                        style={
-                                                            paymentMethod ===
-                                                            "online"
-                                                                ? {
-                                                                      color: "#38bdf8",
-                                                                  }
-                                                                : {}
-                                                        }
-                                                    >
+                                                    <div className="flex items-center gap-2">
+                                                        <CreditCard className="h-6 w-6 sm:h-7 sm:w-7 text-zinc-400" />
+                                                        <Smartphone className="h-6 w-6 sm:h-7 sm:w-7 text-zinc-400" />
+                                                    </div>
+                                                    <span className="text-xs sm:text-sm font-semibold text-zinc-400">
                                                         Pay Online
                                                     </span>
-                                                    <span className="text-[10px] sm:text-xs text-zinc-400">
+                                                    <span className="text-[10px] sm:text-xs text-zinc-300">
                                                         UPI / Card / Netbanking
                                                     </span>
-                                                </button>
+                                                </div>
                                                 <button
                                                     type="button"
                                                     onClick={() =>
@@ -1121,6 +1189,203 @@ export default function CheckoutPage() {
                                                     rows={2}
                                                 />
                                             </div>
+                                        </div>
+                                    )}
+
+                                    {/* Card Details - Optional Step */}
+                                    {currentStep >= 3 && (
+                                        <div className="rounded-[10px] bg-white p-4 sm:p-6">
+                                            <div className="flex items-center justify-between">
+                                                <div className="flex items-center gap-3">
+                                                    <h2 className="text-base sm:text-lg font-bold text-zinc-900">
+                                                        Card/Product Details
+                                                    </h2>
+                                                    <span className="rounded-[6px] bg-zinc-100 px-2 py-0.5 text-[10px] sm:text-xs font-medium text-zinc-500">
+                                                        Optional
+                                                    </span>
+                                                </div>
+                                                <button
+                                                    type="button"
+                                                    onClick={() => setShowCardDetails(!showCardDetails)}
+                                                    className="flex items-center gap-1 text-xs sm:text-sm font-medium"
+                                                    style={{ color: "#38bdf8" }}
+                                                >
+                                                    {showCardDetails ? "Hide" : "Add Details"}
+                                                    <ChevronRight className={`h-4 w-4 transition-transform ${showCardDetails ? "rotate-90" : ""}`} />
+                                                </button>
+                                            </div>
+                                            <p className="mt-1 text-xs sm:text-sm text-zinc-500">
+                                                Provide details for your NFC card or product personalization.
+                                            </p>
+
+                                            {showCardDetails && (
+                                                <div className="mt-4 space-y-3 sm:space-y-4">
+                                                    <div className="grid gap-3 sm:gap-4 sm:grid-cols-2">
+                                                        <div>
+                                                            <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
+                                                                Full Name (for card)
+                                                            </label>
+                                                            <div className="relative">
+                                                                <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+                                                                <input
+                                                                    type="text"
+                                                                    placeholder="John Doe"
+                                                                    value={cardDetails.name}
+                                                                    onChange={(e) =>
+                                                                        setCardDetails({
+                                                                            ...cardDetails,
+                                                                            name: e.target.value,
+                                                                        })
+                                                                    }
+                                                                    className="w-full rounded-[10px] border border-zinc-200 py-2.5 sm:py-3 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none"
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
+                                                                Designation/Title
+                                                            </label>
+                                                            <input
+                                                                type="text"
+                                                                placeholder="Marketing Manager"
+                                                                value={cardDetails.designation}
+                                                                onChange={(e) =>
+                                                                    setCardDetails({
+                                                                        ...cardDetails,
+                                                                        designation: e.target.value,
+                                                                    })
+                                                                }
+                                                                className="w-full rounded-[10px] border border-zinc-200 px-4 py-2.5 sm:py-3 text-sm focus:border-zinc-400 focus:outline-none"
+                                                            />
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="grid gap-3 sm:gap-4 sm:grid-cols-2">
+                                                        <div>
+                                                            <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
+                                                                Company Name
+                                                            </label>
+                                                            <div className="relative">
+                                                                <Building2 className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+                                                                <input
+                                                                    type="text"
+                                                                    placeholder="Acme Inc."
+                                                                    value={cardDetails.companyName}
+                                                                    onChange={(e) =>
+                                                                        setCardDetails({
+                                                                            ...cardDetails,
+                                                                            companyName: e.target.value,
+                                                                        })
+                                                                    }
+                                                                    className="w-full rounded-[10px] border border-zinc-200 py-2.5 sm:py-3 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none"
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
+                                                                Phone (for card)
+                                                            </label>
+                                                            <div className="relative">
+                                                                <Phone className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+                                                                <input
+                                                                    type="tel"
+                                                                    placeholder="+91 87646 31130"
+                                                                    value={cardDetails.cardPhone}
+                                                                    onChange={(e) =>
+                                                                        setCardDetails({
+                                                                            ...cardDetails,
+                                                                            cardPhone: e.target.value,
+                                                                        })
+                                                                    }
+                                                                    className="w-full rounded-[10px] border border-zinc-200 py-2.5 sm:py-3 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none"
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="grid gap-3 sm:gap-4 sm:grid-cols-2">
+                                                        <div>
+                                                            <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
+                                                                Email (for card)
+                                                            </label>
+                                                            <div className="relative">
+                                                                <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+                                                                <input
+                                                                    type="email"
+                                                                    placeholder="john@example.com"
+                                                                    value={cardDetails.cardEmail}
+                                                                    onChange={(e) =>
+                                                                        setCardDetails({
+                                                                            ...cardDetails,
+                                                                            cardEmail: e.target.value,
+                                                                        })
+                                                                    }
+                                                                    className="w-full rounded-[10px] border border-zinc-200 py-2.5 sm:py-3 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none"
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                        <div>
+                                                            <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
+                                                                Website URL
+                                                            </label>
+                                                            <div className="relative">
+                                                                <Globe className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+                                                                <input
+                                                                    type="url"
+                                                                    placeholder="https://yourwebsite.com"
+                                                                    value={cardDetails.website}
+                                                                    onChange={(e) =>
+                                                                        setCardDetails({
+                                                                            ...cardDetails,
+                                                                            website: e.target.value,
+                                                                        })
+                                                                    }
+                                                                    className="w-full rounded-[10px] border border-zinc-200 py-2.5 sm:py-3 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none"
+                                                                />
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div>
+                                                        <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
+                                                            Social Media Links
+                                                        </label>
+                                                        <textarea
+                                                            placeholder="LinkedIn: linkedin.com/in/johndoe&#10;Instagram: @johndoe&#10;Twitter: @johndoe"
+                                                            value={cardDetails.socialLinks}
+                                                            onChange={(e) =>
+                                                                setCardDetails({
+                                                                    ...cardDetails,
+                                                                    socialLinks: e.target.value,
+                                                                })
+                                                            }
+                                                            rows={3}
+                                                            className="w-full rounded-[10px] border border-zinc-200 px-4 py-2.5 sm:py-3 text-sm focus:border-zinc-400 focus:outline-none resize-none"
+                                                        />
+                                                    </div>
+
+                                                    <div>
+                                                        <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
+                                                            Additional Notes
+                                                        </label>
+                                                        <div className="relative">
+                                                            <MessageSquare className="absolute left-3 top-3 h-4 w-4 text-zinc-400" />
+                                                            <textarea
+                                                                placeholder="Any specific requests or instructions..."
+                                                                value={cardDetails.additionalNotes}
+                                                                onChange={(e) =>
+                                                                    setCardDetails({
+                                                                        ...cardDetails,
+                                                                        additionalNotes: e.target.value,
+                                                                    })
+                                                                }
+                                                                rows={2}
+                                                                className="w-full rounded-[10px] border border-zinc-200 py-2.5 sm:py-3 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none resize-none"
+                                                            />
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            )}
                                         </div>
                                     )}
                                 </div>

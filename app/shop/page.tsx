@@ -15,6 +15,7 @@ interface Product {
   compare_at_price: number | null
   images: string[]
   is_featured: boolean
+  is_popular: boolean
   is_active: boolean
   category_id: string
   created_at: string
@@ -233,7 +234,12 @@ function ShopContent() {
           ) : filteredProducts.length > 0 ? (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 lg:gap-6">
               {filteredProducts.map((product) => (
-                <ProductCard key={product.id} product={product as any} noBg />
+                <ProductCard
+                  key={product.id}
+                  product={product as any}
+                  noBg
+                  tag={product.is_popular ? "Popular" : undefined}
+                />
               ))}
             </div>
           ) : (

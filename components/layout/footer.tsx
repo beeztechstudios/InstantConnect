@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import { useState, useEffect } from "react";
 import {
     Mail,
     MapPin,
@@ -17,13 +18,15 @@ import {
     ShieldCheck,
     Gift,
 } from "lucide-react";
-const productLinks = [
-    { name: "NFC Cards", href: "/shop?category=nfc-cards" },
-    { name: "QR Cards", href: "/shop?category=qr-cards" },
-    { name: "Standees", href: "/shop?category=standees" },
-    { name: "Key Chain", href: "/shop?category=keychains" },
-    { name: "Table Tents", href: "/shop?category=table-tents" },
-];
+import { createClient } from "@/utils/supabase/client";
+
+interface Category {
+    id: string;
+    name: string;
+    slug: string;
+    is_active: boolean;
+    display_order: number;
+}
 
 const exploreLinks = [
     { name: "About Us", href: "/about" },
@@ -42,6 +45,24 @@ const socialLinks = [
 ];
 
 export function Footer() {
+    const [categories, setCategories] = useState<Category[]>([]);
+
+    useEffect(() => {
+        async function fetchCategories() {
+            const supabase = createClient();
+            const { data } = await supabase
+                .from("categories")
+                .select("*")
+                .eq("is_active", true)
+                .order("display_order", { ascending: true });
+
+            if (data) {
+                setCategories(data);
+            }
+        }
+        fetchCategories();
+    }, []);
+
     return (
         <footer className="bg-[#EBEBEB] pt-16 pb-8 text-black font-sans">
             <div className="mx-auto max-w-[95%] px-4 lg:px-10">
@@ -75,13 +96,13 @@ export function Footer() {
                                 Product
                             </h3>
                             <ul className="space-y-4">
-                                {productLinks.map((link) => (
-                                    <li key={link.name}>
+                                {categories.map((category) => (
+                                    <li key={category.id}>
                                         <Link
-                                            href={link.href}
+                                            href={`/shop?category=${category.slug}`}
                                             className="text-sm font-bold text-zinc-600 hover:text-sky-600 transition-colors"
                                         >
-                                            {link.name}
+                                            {category.name}
                                         </Link>
                                     </li>
                                 ))}

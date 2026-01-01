@@ -3,7 +3,6 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Star } from "lucide-react";
 import { formatPrice, calculateDiscount } from "@/lib/utils";
 import type { Product } from "@/types/database";
 
@@ -11,9 +10,10 @@ interface ProductCardProps {
     product: Product;
     categorySlug?: string;
     noBg?: boolean;
+    tag?: "Featured" | "Popular" | "New" | "Bestseller";
 }
 
-export function ProductCard({ product, categorySlug, noBg }: ProductCardProps) {
+export function ProductCard({ product, categorySlug, noBg, tag }: ProductCardProps) {
     const discount = calculateDiscount(product.price, product.compare_at_price);
     const [isHovered, setIsHovered] = useState(false);
 
@@ -24,9 +24,16 @@ export function ProductCard({ product, categorySlug, noBg }: ProductCardProps) {
     const hoverImage = product.images[1] || primaryImage;
     const hasMultipleImages = product.images.length > 1;
 
-    // Mock review data (replace later)
-    const reviewCount = 349;
-    const rating = 4.1;
+    // Determine tag to display
+    const displayTag = tag || (product.is_featured ? "Bestseller" : "New");
+
+    // Tag colors based on type
+    const tagColors: Record<string, string> = {
+        Featured: "bg-sky-500",
+        Popular: "bg-purple-500",
+        New: "bg-emerald-500",
+        Bestseller: "bg-red-500",
+    };
 
     return (
         <Link href={productUrl}>
@@ -68,8 +75,8 @@ export function ProductCard({ product, categorySlug, noBg }: ProductCardProps) {
 
                     {/* BADGE */}
                     <div className="absolute left-3 top-3 z-10">
-                        <span className="rounded-md bg-red-500 px-3 py-1 text-xs font-semibold text-white">
-                            {product.is_featured ? "Bestseller" : "New"}
+                        <span className={`rounded-md ${tagColors[displayTag] || "bg-red-500"} px-3 py-1 text-xs font-semibold text-white`}>
+                            {displayTag}
                         </span>
                     </div>
                 </div>
@@ -107,17 +114,6 @@ export function ProductCard({ product, categorySlug, noBg }: ProductCardProps) {
                         )}
                     </div>
 
-                    {/* REVIEWS */}
-                    <div className="mt-1.5 flex items-center gap-3 text-sm text-zinc-500">
-                        <span>({reviewCount} Reviews)</span>
-
-                        <div className="flex items-center gap-1 rounded-md bg-sky-100 px-2 py-0.5">
-                            <Star className="h-4 w-4 fill-sky-400 text-sky-400" />
-                            <span className="font-semibold text-sky-600">
-                                {rating}
-                            </span>
-                        </div>
-                    </div>
                 </div>
             </div>
         </Link>

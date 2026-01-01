@@ -40,6 +40,7 @@ export default function ProductFormPage() {
     best_for: '',
     is_active: true,
     is_featured: false,
+    is_popular: false,
   })
 
   useEffect(() => {
@@ -83,6 +84,7 @@ export default function ProductFormPage() {
           best_for: data.best_for || '',
           is_active: data.is_active,
           is_featured: data.is_featured,
+          is_popular: data.is_popular || false,
         })
       }
 
@@ -402,6 +404,15 @@ export default function ProductFormPage() {
                   className="h-4 w-4 rounded border-zinc-300"
                 />
                 <span className="text-sm text-zinc-700">Featured</span>
+              </label>
+              <label className="flex items-center gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={formData.is_popular}
+                  onChange={(e) => setFormData({ ...formData, is_popular: e.target.checked })}
+                  className="h-4 w-4 rounded border-zinc-300"
+                />
+                <span className="text-sm text-zinc-700">Popular</span>
               </label>
             </div>
           </div>

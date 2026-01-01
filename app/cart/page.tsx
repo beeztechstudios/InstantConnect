@@ -46,7 +46,7 @@ export default function CartPage() {
     if (items.length === 0) {
         return (
             <div
-                className="min-h-screen pt-20 sm:pt-28 lg:pt-36"
+                className="min-h-screen pt-28 sm:pt-32 lg:pt-36"
                 style={{ backgroundColor: "#F4F4F4" }}
             >
                 <div className="flex min-h-[50vh] flex-col items-center justify-center px-4 text-center">
@@ -75,7 +75,7 @@ export default function CartPage() {
     return (
         <div className="min-h-screen" style={{ backgroundColor: "#F4F4F4" }}>
             {/* Header */}
-            <div className="pt-20 sm:pt-28 lg:pt-36 pb-4 sm:pb-6">
+            <div className="pt-28 sm:pt-32 lg:pt-36 pb-4 sm:pb-6">
                 <div className="mx-auto w-[95%]">
                     {/* Breadcrumb */}
                     <nav className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-zinc-500 mb-3 sm:mb-4">

@@ -125,7 +125,7 @@ export function FeaturedProductsClient({
                                     className="min-w-[calc(25%-12px)] flex-shrink-0"
                                     style={{ scrollSnapAlign: "start" }}
                                 >
-                                    <ProductCard product={product} />
+                                    <ProductCard product={product} tag="Featured" />
                                 </div>
                             ))}
 
@@ -168,7 +168,7 @@ export function FeaturedProductsClient({
                                     key={product.id}
                                     className="min-w-[85%] snap-center flex-shrink-0"
                                 >
-                                    <ProductCard product={product} />
+                                    <ProductCard product={product} tag="Featured" />
                                 </div>
                             ))}
 

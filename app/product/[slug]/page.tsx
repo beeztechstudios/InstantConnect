@@ -503,6 +503,7 @@ export default function ProductPage({ params }: PageProps) {
                                     key={relatedProduct.id}
                                     product={relatedProduct}
                                     noBg
+                                    tag="Popular"
                                 />
                             ))}
                         </div>
