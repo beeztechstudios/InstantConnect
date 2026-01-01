@@ -112,7 +112,7 @@ export default function TermsPage() {
 
                     {/* Content */}
                     <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 sm:px-6">
-                        <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-[10px] bg-white/10 backdrop-blur-sm mb-4">
+                        <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-[10px] bg-white/10 backdrop-blur-sm mb-4 mt-24">
                             <FileText className="h-6 w-6 sm:h-7 sm:w-7 text-white" />
                         </div>
                         <h1 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white">

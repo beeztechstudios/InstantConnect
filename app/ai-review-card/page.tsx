@@ -3,9 +3,10 @@ import Link from 'next/link'
 import { Check, X } from 'lucide-react'
 import { Accordion } from '@/components/ui/accordion'
 import { createClient } from '@/utils/supabase/server'
-import { ProductGrid } from '@/components/products/product-grid'
+import { ProductCard } from '@/components/products/product-card'
 import { HowItWorks } from '@/components/home/how-it-works'
 import { BookDemoCTA } from '@/components/home/book-demo-cta'
+import type { Product } from '@/types/database'
 
 export const metadata: Metadata = {
   title: 'AI Review Card',
@@ -49,24 +50,15 @@ const faqs = [
 export default async function AIReviewCardPage() {
   const supabase = await createClient()
 
-  // Fetch NFC products (assuming they're in the nfc-cards category)
-  const { data: category } = await supabase
-    .from('categories')
-    .select('id')
-    .eq('slug', 'nfc-cards')
-    .single()
+  // Fetch all featured products
+  const { data: featuredProducts } = await supabase
+    .from('products')
+    .select('*')
+    .eq('is_featured', true)
+    .eq('is_active', true)
+    .order('created_at', { ascending: false })
 
-  let products: any[] = []
-  if (category) {
-    const { data } = await supabase
-      .from('products')
-      .select('*')
-      .eq('category_id', category.id)
-      .eq('is_active', true)
-      .limit(4)
-
-    products = data || []
-  }
+  const products: Product[] = featuredProducts || []
 
   return (
     <div className="overflow-x-hidden" style={{ backgroundColor: '#F4F4F4' }}>
@@ -108,18 +100,22 @@ export default async function AIReviewCardPage() {
       <section className="pt-10 pb-12 sm:pt-12 sm:pb-16 lg:pt-16 lg:pb-20">
         <div className="mx-auto w-[95%]">
           {/* Section Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-4 pb-5 sm:pb-6">
+          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 sm:gap-6 pb-6 sm:pb-8">
             <div>
-              <p className="text-xs sm:text-sm text-zinc-500">
-                One tap opens an AI-written review—ready to publish on Google.
-              </p>
-              <h2 className="mt-1 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-zinc-900">
-                Designed for real interactions
+              <div className="flex items-center gap-2 mb-3">
+                <span className="hidden sm:block h-px w-8 bg-sky-400" />
+                <span className="text-xs sm:text-sm font-black uppercase tracking-[0.2em] text-sky-400">
+                  One tap opens an AI-written review
+                </span>
+              </div>
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-black tracking-tighter leading-[0.9]">
+                Designed for{" "}
+                <span className="text-zinc-400">real interactions.</span>
               </h2>
             </div>
             <Link
               href="/shop?category=nfc-cards"
-              className="inline-block rounded-[10px] bg-zinc-900 px-4 py-2 sm:px-5 sm:py-2.5 text-xs sm:text-sm font-semibold text-white hover:bg-zinc-800 whitespace-nowrap w-fit"
+              className="group flex items-center gap-3 rounded-[10px] bg-black px-6 py-3 sm:px-8 sm:py-4 text-sm font-black text-white transition-all hover:bg-sky-500 hover:scale-105 w-fit"
             >
               Try Instant Connect
             </Link>
@@ -191,31 +187,41 @@ export default async function AIReviewCardPage() {
         </div>
       </section>
 
-      {/* Designed for Your Shop */}
-      <section id="products" className="pt-10 pb-6 sm:pt-12 sm:pb-8 lg:pt-16 lg:pb-10">
-        <div className="mx-auto w-[95%]">
-          {/* Section Header */}
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 sm:gap-4 pb-5 sm:pb-6 lg:pb-8">
-            <div>
-              <p className="text-xs sm:text-sm text-zinc-500">
-                Collect reviews while the experience is fresh.
-              </p>
-              <h2 className="mt-1 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-zinc-900">
-                Designed for your shop
-              </h2>
+      {/* You Might Also Like */}
+      {products.length > 0 && (
+        <section id="products" className="pt-10 pb-6 sm:pt-12 sm:pb-8 lg:pt-16 lg:pb-10">
+          <div className="mx-auto w-[95%]">
+            {/* Section Header */}
+            <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 sm:gap-6 mb-6 sm:mb-8">
+              <div>
+                <div className="flex items-center gap-2 mb-3">
+                  <span className="hidden sm:block h-px w-8 bg-sky-400" />
+                  <span className="text-xs sm:text-sm font-black uppercase tracking-[0.2em] text-sky-400">
+                    Featured products
+                  </span>
+                </div>
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-black tracking-tighter leading-[0.9]">
+                  You might{" "}
+                  <span className="text-zinc-400">also like.</span>
+                </h2>
+              </div>
+              <Link
+                href="/shop"
+                className="group flex items-center gap-3 rounded-[10px] bg-black px-6 py-3 sm:px-8 sm:py-4 text-sm font-black text-white transition-all hover:bg-sky-500 hover:scale-105 w-fit"
+              >
+                View all
+              </Link>
             </div>
-            <Link
-              href="/shop?category=nfc-cards"
-              className="inline-block rounded-[10px] bg-zinc-900 px-4 py-2 sm:px-5 sm:py-2.5 text-xs sm:text-sm font-semibold text-white hover:bg-zinc-800 whitespace-nowrap w-fit"
-            >
-              Explore products
-            </Link>
-          </div>
 
-          {/* Products Grid */}
-          <ProductGrid products={products} columns={4} />
-        </div>
-      </section>
+            {/* Products Grid */}
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 lg:gap-6">
+              {products.map((product) => (
+                <ProductCard key={product.id} product={product} noBg />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* How It Works */}
       <div className="pt-8 sm:pt-12 lg:pt-16">
@@ -225,12 +231,20 @@ export default async function AIReviewCardPage() {
       {/* FAQs */}
       <section className="py-8 sm:py-12 lg:py-16">
         <div className="mx-auto w-[95%] max-w-3xl">
-          <div className="text-center">
-            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-zinc-900">
-              Frequently Asked Questions
+          <div className="text-center mb-8 sm:mb-10 lg:mb-12">
+            <div className="flex items-center justify-center gap-2 mb-3">
+              <span className="h-px w-8 bg-sky-400" />
+              <span className="text-xs sm:text-sm font-black uppercase tracking-[0.2em] text-sky-400">
+                Got questions?
+              </span>
+              <span className="h-px w-8 bg-sky-400" />
+            </div>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-black tracking-tighter leading-[0.9]">
+              Frequently{" "}
+              <span className="text-zinc-400">asked questions.</span>
             </h2>
           </div>
-          <div className="mt-6 sm:mt-8 lg:mt-12 space-y-3 sm:space-y-4">
+          <div className="space-y-3 sm:space-y-4">
             {faqs.map((faq, index) => (
               <Accordion key={index} title={faq.question}>
                 <p className="text-sm sm:text-base text-zinc-600">{faq.answer}</p>

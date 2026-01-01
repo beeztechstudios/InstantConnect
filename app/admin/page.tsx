@@ -206,7 +206,7 @@ export default function AdminDashboardPage() {
         );
     }
 
-blueblueblueblueblueblueblueblueblueblueblueblueblueblue    return (
+    return (
         <div className="space-y-6">
             {/* Welcome Header */}
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
@@ -227,7 +227,7 @@ blueblueblueblueblueblueblueblueblueblueblueblueblueblue    return (
                         day: "numeric",
                     })}
                 </div>
-blueblueblueblueblueblueblueblueblueblueblueblueblueblueblueblueblueblueblueblueblue            </div>
+            </div>
 
             {/* Alert Banner */}
             {(stats.pendingOrders > 0 ||
@@ -344,14 +344,14 @@ blueblueblueblueblueblueblueblueblueblueblueblueblueblueblueblueblueblueblueblue
                         In {stats.activeCategories} categories
                     </div>
                 </div>
-blueblueblueblueblueblueblueblueblueblueblueblueblueblue            </div>
+            </div>
 
             {/* Quick Actions */}
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 <Link
                     href="/admin/products/new"
                     className="group flex items-center gap-3 rounded-[10px] border border-zinc-200 bg-white p-4 transition-all hover:border-teal-200 hover:shadow-md"
-blueblueblueblueblueblueblueblueblueblueblueblueblueblueblueblueblueblueblueblueblueblueblueblueblueblueblueblue                >
+                >
                     <div className="flex h-10 w-10 items-center justify-center rounded-[10px] bg-teal-100 text-teal-600 transition-colors group-hover:bg-teal-500 group-hover:text-white">
                         <Plus className="h-5 w-5" />
                     </div>

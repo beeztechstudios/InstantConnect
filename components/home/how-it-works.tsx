@@ -33,11 +33,15 @@ export function HowItWorks() {
                 >
                     {/* Left Side - Content */}
                     <div className="w-full md:w-[40%] p-6 sm:p-8 md:p-12 lg:p-16">
-                        <p className="text-xs sm:text-sm text-white/70">
-                            Collect, share, and collect—instantly.
-                        </p>
-                        <h2 className="mt-2 sm:mt-3 text-2xl font-bold text-white sm:text-3xl md:text-4xl lg:text-5xl">
-                            How it works
+                        <div className="flex items-center gap-2 mb-3">
+                            <span className="hidden sm:block h-px w-8 bg-white/50" />
+                            <span className="text-xs sm:text-sm font-black uppercase tracking-[0.2em] text-white/70">
+                                Collect, share, and grow
+                            </span>
+                        </div>
+                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tighter leading-[0.9]">
+                            How it{" "}
+                            <span className="text-white/60">works.</span>
                         </h2>
 
                         {/* Steps */}

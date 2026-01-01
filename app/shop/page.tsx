@@ -4,12 +4,13 @@ import { useState, useEffect, Suspense } from 'react'
 import { useSearchParams } from 'next/navigation'
 import { ChevronDown } from 'lucide-react'
 import { createClient } from '@/utils/supabase/client'
-import { ShopProductCard } from '@/components/products/shop-product-card'
+import { ProductCard } from '@/components/products/product-card'
 
 interface Product {
   id: string
   name: string
   slug: string
+  short_description: string | null
   price: number
   compare_at_price: number | null
   images: string[]
@@ -100,8 +101,9 @@ function ShopContent() {
         <div className="mx-auto w-[95%]">
           {/* Title Row with Sort on Mobile */}
           <div className="flex items-center justify-between">
-            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-zinc-900">
-              {selectedCategory ? selectedCategory.name : 'Shop'}
+            <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-black tracking-tighter leading-[0.9]">
+              {selectedCategory ? selectedCategory.name : 'Shop'}{" "}
+              <span className="text-zinc-400">collection.</span>
             </h1>
 
             {/* Sort Dropdown - Mobile */}
@@ -219,7 +221,7 @@ function ShopContent() {
       <section className="pt-6 sm:pt-8 pb-12 sm:pb-16 lg:pb-20">
         <div className="mx-auto w-[95%]">
           {loading ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 lg:gap-6">
               {[...Array(8)].map((_, i) => (
                 <div key={i} className="animate-pulse">
                   <div className="aspect-square rounded-[10px] bg-zinc-200" />
@@ -229,9 +231,9 @@ function ShopContent() {
               ))}
             </div>
           ) : filteredProducts.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 lg:gap-6">
               {filteredProducts.map((product) => (
-                <ShopProductCard key={product.id} product={product} />
+                <ProductCard key={product.id} product={product as any} noBg />
               ))}
             </div>
           ) : (

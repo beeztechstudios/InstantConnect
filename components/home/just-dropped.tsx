@@ -22,6 +22,10 @@ const products: Product[] = [
         is_active: true,
         category_id: "1",
         description: "",
+        best_for: null,
+        features: [],
+        specifications: {},
+        stock_quantity: 100,
         created_at: "",
         updated_at: "",
     },
@@ -37,6 +41,10 @@ const products: Product[] = [
         is_active: true,
         category_id: "1",
         description: "",
+        best_for: null,
+        features: [],
+        specifications: {},
+        stock_quantity: 100,
         created_at: "",
         updated_at: "",
     },
@@ -52,6 +60,10 @@ const products: Product[] = [
         is_active: true,
         category_id: "1",
         description: "",
+        best_for: null,
+        features: [],
+        specifications: {},
+        stock_quantity: 100,
         created_at: "",
         updated_at: "",
     },
@@ -152,7 +164,7 @@ export function JustDropped() {
                                     </span>
                                     <span className="text-sm text-zinc-400 line-through">
                                         ₹
-                                        {products[0].compare_at_price.toLocaleString()}
+                                        {products[0].compare_at_price?.toLocaleString()}
                                     </span>
                                     <span className="rounded bg-teal-500 px-2 py-0.5 text-xs font-semibold text-white">
                                         20% OFF

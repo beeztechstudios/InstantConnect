@@ -22,7 +22,7 @@ import { createClient } from "@/utils/supabase/client";
 import { useCart } from "@/contexts/cart-context";
 import { formatPrice } from "@/lib/utils";
 import type { Product, Category } from "@/types/database";
-import { ShopProductCard } from "@/components/products/shop-product-card";
+import { ProductCard } from "@/components/products/product-card";
 
 interface PageProps {
     params: Promise<{ slug: string }>;
@@ -295,21 +295,96 @@ export default function ProductPage({ params }: PageProps) {
 
                             {/* Title & Price */}
                             <div className="mt-2 sm:mt-3">
-                                <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-1 sm:gap-4">
-                                    <h1 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-zinc-900">
-                                        {product.name}
-                                    </h1>
-                                    <p className="text-lg sm:text-xl lg:text-2xl font-semibold text-zinc-900 flex-shrink-0">
+                                <h1 className="text-xl sm:text-2xl lg:text-3xl xl:text-4xl font-bold text-zinc-900">
+                                    {product.name}
+                                </h1>
+                                <div className="flex items-center gap-3 mt-2 sm:mt-3">
+                                    <span className="text-2xl sm:text-3xl lg:text-4xl font-bold text-zinc-900">
                                         {formatPrice(product.price)}
-                                    </p>
+                                    </span>
+                                    {product.compare_at_price && product.compare_at_price > product.price && (
+                                        <>
+                                            <span className="text-lg sm:text-xl text-zinc-400 line-through">
+                                                {formatPrice(product.compare_at_price)}
+                                            </span>
+                                            <span className="rounded-[10px] bg-emerald-500 px-2.5 py-1 text-xs sm:text-sm font-semibold text-white">
+                                                {Math.round(((product.compare_at_price - product.price) / product.compare_at_price) * 100)}% OFF
+                                            </span>
+                                        </>
+                                    )}
                                 </div>
                             </div>
 
-                            {/* Description */}
+                            {/* Short Description */}
                             {product.short_description && (
                                 <p className="mt-3 sm:mt-4 text-sm sm:text-base text-zinc-600 leading-relaxed">
                                     {product.short_description}
                                 </p>
+                            )}
+
+                            {/* Best For */}
+                            {product.best_for && (
+                                <div className="mt-3 sm:mt-4">
+                                    <span className="text-xs sm:text-sm font-medium text-zinc-500">Best for: </span>
+                                    <span className="text-xs sm:text-sm text-zinc-700">{product.best_for}</span>
+                                </div>
+                            )}
+
+                            {/* Stock Status */}
+                            <div className="mt-3 sm:mt-4 flex items-center gap-2">
+                                {product.stock_quantity > 0 ? (
+                                    <>
+                                        <div className="h-2 w-2 rounded-full bg-emerald-500" />
+                                        <span className="text-sm font-medium text-emerald-600">In Stock</span>
+                                        {product.stock_quantity <= 10 && (
+                                            <span className="text-xs text-amber-600">
+                                                (Only {product.stock_quantity} left)
+                                            </span>
+                                        )}
+                                    </>
+                                ) : (
+                                    <>
+                                        <div className="h-2 w-2 rounded-full bg-red-500" />
+                                        <span className="text-sm font-medium text-red-600">Out of Stock</span>
+                                    </>
+                                )}
+                            </div>
+
+                            {/* Features */}
+                            {product.features && product.features.length > 0 && (
+                                <div className="mt-4 sm:mt-6">
+                                    <h3 className="text-sm sm:text-base font-semibold text-zinc-900 mb-2 sm:mb-3">Features</h3>
+                                    <ul className="space-y-1.5 sm:space-y-2">
+                                        {product.features.map((feature, index) => (
+                                            <li key={index} className="flex items-start gap-2 text-sm text-zinc-600">
+                                                <span className="text-emerald-500 mt-1">✓</span>
+                                                {feature}
+                                            </li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
+
+                            {/* Specifications */}
+                            {product.specifications && Object.keys(product.specifications).length > 0 && (
+                                <div className="mt-4 sm:mt-6">
+                                    <h3 className="text-sm sm:text-base font-semibold text-zinc-900 mb-2 sm:mb-3">Specifications</h3>
+                                    <div className="rounded-[10px] border border-zinc-200 overflow-hidden">
+                                        {Object.entries(product.specifications as Record<string, string>).map(([key, value], index) => (
+                                            <div
+                                                key={key}
+                                                className={`flex ${index !== 0 ? 'border-t border-zinc-200' : ''}`}
+                                            >
+                                                <span className="w-1/3 sm:w-2/5 px-3 py-2 text-xs sm:text-sm font-medium text-zinc-500 bg-zinc-50">
+                                                    {key}
+                                                </span>
+                                                <span className="flex-1 px-3 py-2 text-xs sm:text-sm text-zinc-700">
+                                                    {value}
+                                                </span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                </div>
                             )}
 
                             {/* Quantity & Add to Cart (Desktop/Tablet only) */}
@@ -386,6 +461,24 @@ export default function ProductPage({ params }: PageProps) {
                 </div>
             </section>
 
+            {/* Full Description */}
+            {product.description && (
+                <section className="pb-6 sm:pb-10 lg:pb-12">
+                    <div className="mx-auto w-[95%]">
+                        <div className="rounded-[10px] bg-white p-5 sm:p-6 lg:p-8">
+                            <h2 className="text-lg sm:text-xl font-bold text-zinc-900 mb-3 sm:mb-4">
+                                Product Description
+                            </h2>
+                            <div className="prose prose-sm sm:prose-base max-w-none text-zinc-600">
+                                <p className="whitespace-pre-line leading-relaxed">
+                                    {product.description}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            )}
+
             {/* Related Products */}
             {relatedProducts.length > 0 && (
                 <section className="pb-6 sm:pb-10 lg:pb-16">
@@ -406,9 +499,10 @@ export default function ProductPage({ params }: PageProps) {
                         </div>
                         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
                             {relatedProducts.map((relatedProduct) => (
-                                <ShopProductCard
+                                <ProductCard
                                     key={relatedProduct.id}
                                     product={relatedProduct}
+                                    noBg
                                 />
                             ))}
                         </div>

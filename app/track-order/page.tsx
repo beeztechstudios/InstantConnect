@@ -162,59 +162,71 @@ export default function TrackOrderPage() {
         >
             {/* Hero */}
             <section className="pt-[6px] px-[6px] pb-0">
-                <div className="relative h-[45vh] sm:h-[50vh] md:h-[55vh] overflow-hidden rounded-[10px]">
+                <div className="relative h-[55vh] sm:h-[60vh] md:h-[65vh] overflow-hidden rounded-[10px]">
                     {/* Background */}
                     <div
                         className="absolute inset-0 bg-cover bg-center"
                         style={{
-                            backgroundImage: `url('https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?q=80&w=2070&auto=format&fit=crop')`,
+                            backgroundImage: `url('https://images.unsplash.com/photo-1580674285054-bed31e145f59?q=80&w=2070&auto=format&fit=crop')`,
                         }}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/60 to-black/40" />
 
                     {/* Content */}
-                    <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 sm:px-6 pt-16 lg:pt-0">
-                        <p className="text-center text-xs sm:text-sm md:text-base text-white/70 max-w-xs sm:max-w-md md:max-w-2xl">
-                            Enter your order number to check the status of your
-                            delivery.
-                        </p>
-                        <h1 className="mt-3 sm:mt-4 text-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white">
+                    <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 sm:px-6">
+                        {/* Icon Badge */}
+                        <div className="flex h-12 w-12 sm:h-14 sm:w-14 items-center justify-center rounded-[10px] bg-white/10 backdrop-blur-sm mb-4 sm:mb-5 mt-24">
+                            <Package className="h-6 w-6 sm:h-7 sm:w-7 text-white" />
+                        </div>
+
+                        <h1 className="text-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white">
                             Track Your Order
                         </h1>
+                        <p className="mt-3 text-center text-xs sm:text-sm md:text-base text-white/70 max-w-xs sm:max-w-md md:max-w-xl">
+                            Enter your order number to check the real-time status of your delivery
+                        </p>
 
                         {/* Search Form */}
                         <form
                             onSubmit={handleSearch}
                             className="mt-6 sm:mt-8 w-full max-w-xs sm:max-w-md md:max-w-xl"
                         >
-                            <div className="flex flex-col sm:flex-row gap-3">
-                                <div className="relative flex-1">
-                                    <Search className="absolute left-3 sm:left-4 top-1/2 h-4 w-4 sm:h-5 sm:w-5 -translate-y-1/2 text-zinc-400" />
-                                    <input
-                                        type="text"
-                                        placeholder="Enter order number (e.g., IC-XXXX-XXXX)"
-                                        value={orderNumber}
-                                        onChange={(e) =>
-                                            setOrderNumber(e.target.value)
-                                        }
-                                        className="w-full rounded-[10px] sm:rounded-[10px] border-0 py-3 sm:py-3.5 pl-10 sm:pl-12 pr-4 text-xs sm:text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-white/50"
-                                    />
+                            <div className="rounded-[10px] bg-white/10 backdrop-blur-sm p-2 sm:p-2.5">
+                                <div className="flex flex-col sm:flex-row gap-2 sm:gap-2.5">
+                                    <div className="relative flex-1">
+                                        <Search className="absolute left-3 sm:left-4 top-1/2 h-4 w-4 sm:h-5 sm:w-5 -translate-y-1/2 text-zinc-400" />
+                                        <input
+                                            type="text"
+                                            placeholder="Enter order number (e.g., IC-XXXX)"
+                                            value={orderNumber}
+                                            onChange={(e) =>
+                                                setOrderNumber(e.target.value)
+                                            }
+                                            className="w-full rounded-[10px] border-0 bg-white py-3 sm:py-3.5 pl-10 sm:pl-12 pr-4 text-xs sm:text-sm text-zinc-900 placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-900/20"
+                                        />
+                                    </div>
+                                    <button
+                                        type="submit"
+                                        disabled={isLoading}
+                                        className="flex items-center justify-center gap-2 rounded-[10px] bg-zinc-900 px-5 sm:px-6 py-3 sm:py-3.5 text-xs sm:text-sm font-semibold text-white hover:bg-zinc-800 disabled:opacity-50 transition-colors"
+                                    >
+                                        {isLoading ? (
+                                            <div className="flex items-center gap-2">
+                                                <div className="h-4 w-4 animate-spin rounded-full border-2 border-white/30 border-t-white" />
+                                                <span className="hidden sm:inline">Searching...</span>
+                                            </div>
+                                        ) : (
+                                            <>
+                                                <Search className="h-4 w-4" />
+                                                <span>Track</span>
+                                            </>
+                                        )}
+                                    </button>
                                 </div>
-                                <button
-                                    type="submit"
-                                    disabled={isLoading}
-                                    className="flex items-center justify-center gap-2 rounded-[10px] sm:rounded-[10px] bg-white px-5 sm:px-6 py-3 sm:py-3.5 text-xs sm:text-sm font-semibold text-zinc-900 hover:bg-zinc-100 disabled:opacity-50"
-                                >
-                                    {isLoading ? (
-                                        <div className="h-4 w-4 sm:h-5 sm:w-5 animate-spin rounded-[10px] border-2 border-zinc-200 border-t-zinc-600" />
-                                    ) : (
-                                        <>
-                                            <Search className="h-4 w-4" />
-                                            Track Order
-                                        </>
-                                    )}
-                                </button>
                             </div>
+                            <p className="mt-3 text-center text-[10px] sm:text-xs text-white/50">
+                                Find your order number in the confirmation email we sent you
+                            </p>
                         </form>
                     </div>
                 </div>
@@ -337,12 +349,13 @@ export default function TrackOrderPage() {
                                                                 </div>
                                                                 {isCurrent && (
                                                                     <span
-                                                                        className="rounded-[10px] px-2.5 py-1 text-[10px] sm:text-xs font-medium text-white"
+                                                                        className="flex items-center gap-1.5 rounded-[10px] px-2.5 py-1 text-[10px] sm:text-xs font-medium text-white"
                                                                         style={{
                                                                             backgroundColor:
                                                                                 "#38bdf8",
                                                                         }}
                                                                     >
+                                                                        <CheckCircle className="h-3 w-3 sm:h-3.5 sm:w-3.5" />
                                                                         Current
                                                                     </span>
                                                                 )}

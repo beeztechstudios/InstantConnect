@@ -64,11 +64,15 @@ export function FeaturedProductsClient({
                     {/* HEADER */}
                     <div className="mb-6 flex flex-col text-center gap-2 sm:flex-row sm:items-end sm:justify-between">
                         <div>
-                            <p className="text-[10px] md:text-[12px] font-black uppercase tracking-[0.2em] text-sky-400 mb-3">
-                                Our most popular smart products
-                            </p>
-                            <h2 className="text-3xl font-extrabold text-black tracking-tighter leading-[0.9] sm:text-4xl">
-                                This week&apos;s steal deals
+                            <div className="flex items-center justify-center sm:justify-start gap-2 mb-3">
+                                <span className="hidden sm:block h-px w-8 bg-sky-400" />
+                                <span className="text-[10px] md:text-[12px] font-black uppercase tracking-[0.2em] text-sky-400">
+                                    Our most popular smart products
+                                </span>
+                            </div>
+                            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-black tracking-tighter leading-[0.9]">
+                                This week&apos;s{" "}
+                                <span className="text-zinc-400">steal deals.</span>
                             </h2>
                         </div>
 

@@ -59,16 +59,19 @@ export function TestimonialsSection() {
         {/* Header Section */}
         <div className="mb-10 flex flex-col items-center text-center sm:flex-row sm:items-end sm:justify-between sm:text-left">
           <div className="max-w-2xl">
-            <motion.p
+            <motion.div
               initial={{ opacity: 0, y: 10 }}
               whileInView={{ opacity: 1, y: 0 }}
-              className=" text-[10px] md:text-[12px] font-black uppercase tracking-[0.2em] text-sky-400 mb-3"
+              className="flex items-center justify-center sm:justify-start gap-2 mb-3"
             >
-              The Trust Network
-            </motion.p>
-            <h2 className="text-4xl font-black text-black tracking-tighter leading-[0.9] sm:text-5xl md:text-6xl">
-              Loved by creators <br className="hidden sm:block" />
-              <span className="text-zinc-300">everywhere.</span>
+              <span className="hidden sm:block h-px w-8 bg-sky-400" />
+              <span className="text-[10px] md:text-[12px] font-black uppercase tracking-[0.2em] text-sky-400">
+                The Trust Network
+              </span>
+            </motion.div>
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-black tracking-tighter leading-[0.9]">
+              Loved by creators{" "}
+              <span className="text-zinc-400">everywhere.</span>
             </h2>
           </div>
 

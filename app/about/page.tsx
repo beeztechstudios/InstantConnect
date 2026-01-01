@@ -137,16 +137,17 @@ export default function AboutPage() {
             <section className="py-8 sm:py-12 lg:py-16">
                 <div className="mx-auto w-[95%]">
                     {/* Section Header */}
-                    <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 sm:gap-4 pb-6 sm:pb-8">
-                        <div>
-                            <p className="text-xs sm:text-sm text-zinc-500">
-                                From an idea to India&apos;s leading NFC
-                                provider
-                            </p>
-                            <h2 className="mt-1 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-zinc-900">
-                                Our Journey
-                            </h2>
+                    <div className="pb-6 sm:pb-8">
+                        <div className="flex items-center gap-2 mb-3">
+                            <span className="hidden sm:block h-px w-8 bg-sky-400" />
+                            <span className="text-xs sm:text-sm font-black uppercase tracking-[0.2em] text-sky-400">
+                                From an idea to India&apos;s leading NFC provider
+                            </span>
                         </div>
+                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-black tracking-tighter leading-[0.9]">
+                            Our{" "}
+                            <span className="text-zinc-400">journey.</span>
+                        </h2>
                     </div>
 
                     {/* Content Grid */}
@@ -199,11 +200,16 @@ export default function AboutPage() {
                 <div className="mx-auto w-[95%]">
                     {/* Section Header */}
                     <div className="text-center pb-6 sm:pb-8 lg:pb-10">
-                        <p className="text-xs sm:text-sm text-zinc-500">
-                            The principles that guide everything we do
-                        </p>
-                        <h2 className="mt-1 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-zinc-900">
-                            Our Values
+                        <div className="flex items-center justify-center gap-2 mb-3">
+                            <span className="h-px w-8 bg-sky-400" />
+                            <span className="text-xs sm:text-sm font-black uppercase tracking-[0.2em] text-sky-400">
+                                The principles that guide us
+                            </span>
+                            <span className="h-px w-8 bg-sky-400" />
+                        </div>
+                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-black tracking-tighter leading-[0.9]">
+                            Our{" "}
+                            <span className="text-zinc-400">values.</span>
                         </h2>
                     </div>
 
@@ -238,11 +244,16 @@ export default function AboutPage() {
                     >
                         {/* Section Header */}
                         <div className="text-center pb-6 sm:pb-8">
-                            <p className="text-xs sm:text-sm text-white/70">
-                                Passionate individuals dedicated to your success
-                            </p>
-                            <h2 className="mt-1 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white">
-                                Meet Our Team
+                            <div className="flex items-center justify-center gap-2 mb-3">
+                                <span className="h-px w-8 bg-white/50" />
+                                <span className="text-xs sm:text-sm font-black uppercase tracking-[0.2em] text-white/70">
+                                    Passionate individuals
+                                </span>
+                                <span className="h-px w-8 bg-white/50" />
+                            </div>
+                            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white tracking-tighter leading-[0.9]">
+                                Meet our{" "}
+                                <span className="text-white/60">team.</span>
                             </h2>
                         </div>
 

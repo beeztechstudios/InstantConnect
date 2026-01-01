@@ -92,6 +92,15 @@
 }
 
 @layer utilities {
+  /* Hide scrollbar */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
   /* Line clamp utilities */
   .line-clamp-1 {
     display: -webkit-box;

@@ -89,7 +89,7 @@ export default function ContactPage() {
                         style={{
                             backgroundImage: `url('https://images.unsplash.com/photo-1423666639041-f56000c27a9a?q=80&w=2074&auto=format&fit=crop')`,
                         }}
-blueblueblueblueblueblueblueblueblueblueblueblueblueblue                    />
+                    />
                     <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
 
                     {/* Content */}
@@ -143,13 +143,16 @@ blueblueblueblueblueblueblueblueblueblueblueblueblueblue                    />
                         {/* Form */}
                         <div className="w-full lg:w-2/3">
                             <div className="rounded-[10px] bg-white p-5 sm:p-6 lg:p-8">
-                                <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-zinc-900">
-                                    Send us a Message
+                                <div className="flex items-center gap-2 mb-2">
+                                    <span className="hidden sm:block h-px w-8 bg-sky-400" />
+                                    <span className="text-xs sm:text-sm font-black uppercase tracking-[0.2em] text-sky-400">
+                                        We&apos;ll respond within 24 hours
+                                    </span>
+                                </div>
+                                <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-black tracking-tighter leading-[0.9]">
+                                    Send us a{" "}
+                                    <span className="text-zinc-400">message.</span>
                                 </h2>
-                                <p className="mt-1 text-xs sm:text-sm text-zinc-500">
-                                    Fill out the form below and we&apos;ll get
-                                    back to you within 24 hours.
-                                </p>
 
                                 {/* Inquiry Type */}
                                 <div className="mt-5 sm:mt-6">

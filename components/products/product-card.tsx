@@ -10,9 +10,10 @@ import type { Product } from "@/types/database";
 interface ProductCardProps {
     product: Product;
     categorySlug?: string;
+    noBg?: boolean;
 }
 
-export function ProductCard({ product, categorySlug }: ProductCardProps) {
+export function ProductCard({ product, categorySlug, noBg }: ProductCardProps) {
     const discount = calculateDiscount(product.price, product.compare_at_price);
     const [isHovered, setIsHovered] = useState(false);
 
@@ -31,7 +32,7 @@ export function ProductCard({ product, categorySlug }: ProductCardProps) {
         <Link href={productUrl}>
             <div
                 className="group rounded-[10px] p-4 transition"
-                style={{ background: "#ebebeb" }}
+                style={noBg ? undefined : { background: "#ebebeb" }}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
             >

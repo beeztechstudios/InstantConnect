@@ -143,7 +143,6 @@ function OrderSuccessContent() {
                         <Link
                             href="/"
                             className="text-zinc-500 hover:text-zinc-700"
-                            blueblueblueblueblueblueblueblueblueblueblueblueblueblue
                         >
                             Home
                         </Link>
@@ -196,7 +195,6 @@ function OrderSuccessContent() {
                         </div>
                     </div>
                 </div>
-                blueblueblueblueblueblueblueblueblueblueblueblueblueblueblueblueblueblueblueblueblue{" "}
             </div>
 
             <div className="flex justify-center bg-zinc-100 pb-8">

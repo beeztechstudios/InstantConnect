@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { HelpCircle } from "lucide-react";
 import { Accordion } from "@/components/ui/accordion";
 
 export const metadata: Metadata = {
@@ -71,12 +70,16 @@ export default function FAQsPage() {
             <section className="pt-10 pb-8 sm:pt-14 sm:pb-10 lg:pt-20 lg:pb-12">
                 <div className="mx-auto w-[95%]">
                     {/* Section Header */}
-                    <div className="flex items-center gap-3 pb-6 sm:pb-8">
-                        <div className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-[10px] bg-blue-100">
-                            <HelpCircle className="h-5 w-5 text-blue-600" />
+                    <div className="pb-6 sm:pb-8">
+                        <div className="flex items-center gap-2 mb-3">
+                            <span className="hidden sm:block h-px w-8 bg-sky-400" />
+                            <span className="text-xs sm:text-sm font-black uppercase tracking-[0.2em] text-sky-400">
+                                {faqs.length} Questions answered
+                            </span>
                         </div>
-                        <h2 className="text-lg sm:text-xl lg:text-2xl font-bold text-zinc-900">
-                            FAQ ({faqs.length})
+                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-black tracking-tighter leading-[0.9]">
+                            Common{" "}
+                            <span className="text-zinc-400">questions.</span>
                         </h2>
                     </div>
 

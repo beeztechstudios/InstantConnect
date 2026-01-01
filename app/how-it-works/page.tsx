@@ -154,18 +154,22 @@ export default function HowItWorksPage() {
             <section className="pt-10 pb-8 sm:pt-14 sm:pb-10 lg:pt-20 lg:pb-12">
                 <div className="mx-auto w-[95%]">
                     {/* Section Header */}
-                    <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 sm:gap-4 pb-6 sm:pb-8">
+                    <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 sm:gap-6 pb-6 sm:pb-8">
                         <div>
-                            <p className="text-xs sm:text-sm text-zinc-500">
-                                Getting started is quick and easy
-                            </p>
-                            <h2 className="mt-1 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-zinc-900">
-                                Three Simple Steps
+                            <div className="flex items-center gap-2 mb-3">
+                                <span className="hidden sm:block h-px w-8 bg-sky-400" />
+                                <span className="text-xs sm:text-sm font-black uppercase tracking-[0.2em] text-sky-400">
+                                    Getting started is quick and easy
+                                </span>
+                            </div>
+                            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-black tracking-tighter leading-[0.9]">
+                                Three simple{" "}
+                                <span className="text-zinc-400">steps.</span>
                             </h2>
                         </div>
                         <Link
                             href="/shop"
-                            className="inline-block rounded-[10px] bg-zinc-900 px-4 py-2 sm:px-5 sm:py-2.5 text-xs sm:text-sm font-semibold text-white hover:bg-zinc-800 whitespace-nowrap w-fit"
+                            className="group flex items-center gap-3 rounded-[10px] bg-black px-6 py-3 sm:px-8 sm:py-4 text-sm font-black text-white transition-all hover:bg-sky-500 hover:scale-105 w-fit"
                         >
                             Get Started
                         </Link>
@@ -220,11 +224,16 @@ export default function HowItWorksPage() {
                 <div className="mx-auto w-[95%]">
                     {/* Section Header */}
                     <div className="text-center pb-6 sm:pb-8 lg:pb-10">
-                        <p className="text-xs sm:text-sm text-zinc-500">
-                            Everything you need for modern networking
-                        </p>
-                        <h2 className="mt-1 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-zinc-900">
-                            Why Choose Instant Connect?
+                        <div className="flex items-center justify-center gap-2 mb-3">
+                            <span className="h-px w-8 bg-sky-400" />
+                            <span className="text-xs sm:text-sm font-black uppercase tracking-[0.2em] text-sky-400">
+                                Everything you need
+                            </span>
+                            <span className="h-px w-8 bg-sky-400" />
+                        </div>
+                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-black tracking-tighter leading-[0.9]">
+                            Why choose{" "}
+                            <span className="text-zinc-400">Instant Connect?</span>
                         </h2>
                     </div>
 
@@ -321,12 +330,20 @@ export default function HowItWorksPage() {
             {/* FAQ Section */}
             <section className="py-8 sm:py-12 lg:py-16">
                 <div className="mx-auto w-[95%] max-w-3xl">
-                    <div className="text-center">
-                        <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-zinc-900">
-                            Frequently Asked Questions
+                    <div className="text-center mb-8 sm:mb-10 lg:mb-12">
+                        <div className="flex items-center justify-center gap-2 mb-3">
+                            <span className="h-px w-8 bg-sky-400" />
+                            <span className="text-xs sm:text-sm font-black uppercase tracking-[0.2em] text-sky-400">
+                                Got questions?
+                            </span>
+                            <span className="h-px w-8 bg-sky-400" />
+                        </div>
+                        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-black tracking-tighter leading-[0.9]">
+                            Frequently{" "}
+                            <span className="text-zinc-400">asked questions.</span>
                         </h2>
                     </div>
-                    <div className="mt-6 sm:mt-8 lg:mt-10 space-y-3 sm:space-y-4">
+                    <div className="space-y-3 sm:space-y-4">
                         {faqs.map((faq, index) => (
                             <Accordion key={index} title={faq.question}>
                                 <p className="text-sm sm:text-base text-zinc-600">
