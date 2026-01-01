@@ -2,10 +2,24 @@
 
 import Link from "next/link";
 import { useEffect, useRef } from "react";
+import { motion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { ProductCard } from "@/components/products/product-card";
 import { calculateDiscount } from "@/lib/utils";
 import type { Product } from "@/types/database";
+
+const fadeInUp = {
+    hidden: { opacity: 0, y: 30 },
+    visible: { opacity: 1, y: 0 },
+};
+
+const staggerContainer = {
+    hidden: { opacity: 0 },
+    visible: {
+        opacity: 1,
+        transition: { staggerChildren: 0.15 },
+    },
+};
 
 interface JustDroppedClientProps {
     products: Product[];
@@ -62,7 +76,13 @@ export function JustDroppedClient({ products }: JustDroppedClientProps) {
         <section className="bg-slate-100 py-16">
             <div className="mx-auto w-[95%]">
                 {/* Header */}
-                <div className="mb-12 flex flex-col gap-6 md:flex-row items-center md:items-end md:justify-between">
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.5 }}
+                    className="mb-12 flex flex-col gap-6 md:flex-row items-center md:items-end md:justify-between"
+                >
                     <div>
                         <div className="flex items-center gap-2 mb-4">
                             <span className="md:block hidden h-px w-8 bg-sky-400" />
@@ -87,14 +107,21 @@ export function JustDroppedClient({ products }: JustDroppedClientProps) {
                             className="group-hover:translate-x-1 transition-transform"
                         />
                     </Link>
-                </div>
+                </motion.div>
 
                 {/* Products Grid */}
-                <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-4">
+                <motion.div
+                    initial="hidden"
+                    whileInView="visible"
+                    viewport={{ once: true, margin: "-50px" }}
+                    variants={staggerContainer}
+                    className="grid gap-4 sm:grid-cols-2 md:grid-cols-4"
+                >
                     {/* Large Product Card */}
+                    <motion.div variants={fadeInUp} transition={{ duration: 0.5 }} className="sm:col-span-2">
                     <Link
                         href={`/product/${mainProduct.slug}`}
-                        className="group relative h-[350px] overflow-hidden rounded-[10px] sm:h-[500px] sm:col-span-2"
+                        className="group relative block h-[350px] overflow-hidden rounded-[10px] sm:h-[500px]"
                     >
                         <div
                             className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
@@ -129,12 +156,15 @@ export function JustDroppedClient({ products }: JustDroppedClientProps) {
                             </div>
                         </div>
                     </Link>
+                    </motion.div>
 
                     {/* Right Side - Smaller Cards using ProductCard */}
                     {sideProducts.map((product) => (
-                        <ProductCard key={product.id} product={product} tag="New" />
+                        <motion.div key={product.id} variants={fadeInUp} transition={{ duration: 0.5 }}>
+                            <ProductCard product={product} tag="New" />
+                        </motion.div>
                     ))}
-                </div>
+                </motion.div>
 
                 {/* Premium Ticker */}
                 <div className="mt-12 relative h-16 w-full overflow-hidden rounded-[10px] bg-[#e62e39] border border-none flex items-center shadow-2xl">

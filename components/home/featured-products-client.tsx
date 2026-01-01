@@ -2,6 +2,7 @@
 
 import { useState, useRef } from "react";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { ProductCard } from "@/components/products/product-card";
 import type { Product } from "@/types/database";
@@ -62,7 +63,13 @@ export function FeaturedProductsClient({
             <div className="flex justify-center">
                 <section className="relative z-10 w-[95%] rounded-t-[12px] bg-white px-4 py-6 sm:px-6 sm:py-8">
                     {/* HEADER */}
-                    <div className="mb-6 flex flex-col text-center gap-2 sm:flex-row sm:items-end sm:justify-between">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.5 }}
+                        className="mb-6 flex flex-col text-center gap-2 sm:flex-row sm:items-end sm:justify-between"
+                    >
                         <div>
                             <div className="flex items-center justify-center sm:justify-start gap-2 mb-3">
                                 <span className="hidden sm:block h-px w-8 bg-sky-400" />
@@ -106,7 +113,7 @@ export function FeaturedProductsClient({
                                 <ArrowRight className="h-4 w-4" />
                             </Link>
                         </div>
-                    </div>
+                    </motion.div>
 
                     {/* ================= DESKTOP SLIDER ================= */}
                     <div className="hidden sm:block relative">
