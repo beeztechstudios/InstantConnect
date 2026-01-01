@@ -117,13 +117,13 @@ export default function AdminCouponsPage() {
         <div className="flex items-center gap-2">
           <Link
             href={`/admin/coupons/${coupon.id}`}
-            className="rounded-lg p-2 hover:bg-zinc-100"
+            className="rounded-[10px] p-2 hover:bg-zinc-100"
           >
             <Pencil className="h-4 w-4 text-zinc-600" />
           </Link>
           <button
             onClick={() => setDeleteModal({ open: true, coupon })}
-            className="rounded-lg p-2 hover:bg-red-50"
+            className="rounded-[10px] p-2 hover:bg-red-50"
           >
             <Trash2 className="h-4 w-4 text-red-500" />
           </button>
@@ -135,7 +135,7 @@ export default function AdminCouponsPage() {
   if (isLoading) {
     return (
       <div className="flex min-h-[400px] items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-zinc-200 border-t-zinc-900" />
+        <div className="h-8 w-8 animate-spin rounded-[10px] border-4 border-zinc-200 border-t-zinc-900" />
       </div>
     )
   }

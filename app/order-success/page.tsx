@@ -1,474 +1,594 @@
-'use client'
+"use client";
 
-import { Suspense, useState } from 'react'
-import { useSearchParams } from 'next/navigation'
-import Link from 'next/link'
-import { CheckCircle, Package, Truck, CreditCard, Copy, Check, ArrowRight, ChevronRight, User, Building2, Phone, Mail, Globe, MessageSquare } from 'lucide-react'
-import { createClient } from '@/utils/supabase/client'
-import toast from 'react-hot-toast'
+import { Suspense, useState } from "react";
+import { useSearchParams } from "next/navigation";
+import Link from "next/link";
+import {
+    CheckCircle,
+    Package,
+    Truck,
+    CreditCard,
+    Copy,
+    Check,
+    ArrowRight,
+    ChevronRight,
+    User,
+    Building2,
+    Phone,
+    Mail,
+    Globe,
+    MessageSquare,
+} from "lucide-react";
+import { createClient } from "@/utils/supabase/client";
+import toast from "react-hot-toast";
 
 function OrderSuccessContent() {
-  const searchParams = useSearchParams()
-  const orderNumber = searchParams.get('order')
-  const [copied, setCopied] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [submitted, setSubmitted] = useState(false)
+    const searchParams = useSearchParams();
+    const orderNumber = searchParams.get("order");
+    const [copied, setCopied] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [submitted, setSubmitted] = useState(false);
 
-  const [formData, setFormData] = useState({
-    name: '',
-    designation: '',
-    companyName: '',
-    phone: '',
-    email: '',
-    website: '',
-    socialLinks: '',
-    additionalNotes: '',
-  })
+    const [formData, setFormData] = useState({
+        name: "",
+        designation: "",
+        companyName: "",
+        phone: "",
+        email: "",
+        website: "",
+        socialLinks: "",
+        additionalNotes: "",
+    });
 
-  const copyOrderNumber = () => {
-    if (orderNumber) {
-      navigator.clipboard.writeText(orderNumber)
-      setCopied(true)
-      toast.success('Order number copied!')
-      setTimeout(() => setCopied(false), 2000)
+    const copyOrderNumber = () => {
+        if (orderNumber) {
+            navigator.clipboard.writeText(orderNumber);
+            setCopied(true);
+            toast.success("Order number copied!");
+            setTimeout(() => setCopied(false), 2000);
+        }
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        setIsSubmitting(true);
+
+        try {
+            const supabase = createClient();
+
+            const { data: order } = await supabase
+                .from("orders")
+                .select("id")
+                .eq("order_number", orderNumber)
+                .single();
+
+            if (order) {
+                await supabase.from("post_payment_details").insert([
+                    {
+                        order_id: order.id,
+                        detail_type: "card_details",
+                        detail_data: formData,
+                        status: "pending",
+                    },
+                ]);
+            }
+
+            setSubmitted(true);
+            toast.success("Details submitted successfully!");
+        } catch (error) {
+            console.error("Error submitting details:", error);
+            toast.error("Failed to submit details. Please try again.");
+        } finally {
+            setIsSubmitting(false);
+        }
+    };
+
+    if (!orderNumber) {
+        return (
+            <div className="min-h-screen bg-zinc-100 pt-20 sm:pt-28 lg:pt-32">
+                <div className="flex min-h-[60vh] flex-col items-center justify-center px-4 text-center">
+                    <div className="flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-[10px] bg-zinc-200">
+                        <Package className="h-8 w-8 sm:h-10 sm:w-10 text-zinc-400" />
+                    </div>
+                    <h1 className="mt-5 sm:mt-6 text-xl sm:text-2xl font-bold text-zinc-900">
+                        No order found
+                    </h1>
+                    <p className="mt-2 text-sm sm:text-base text-zinc-500">
+                        Please check your order confirmation email.
+                    </p>
+                    <Link
+                        href="/"
+                        className="mt-5 sm:mt-6 rounded-[10px] bg-zinc-900 px-6 py-3 text-sm font-semibold text-white hover:bg-zinc-800 active:opacity-90"
+                    >
+                        Go to Homepage
+                    </Link>
+                </div>
+            </div>
+        );
     }
-  }
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsSubmitting(true)
+    const timelineSteps = [
+        {
+            icon: CheckCircle,
+            title: "Order Confirmed",
+            description: "Your order has been placed successfully",
+            status: "completed",
+        },
+        {
+            icon: CreditCard,
+            title: "Processing",
+            description: "We'll process your order within 24 hours",
+            status: "current",
+        },
+        {
+            icon: Truck,
+            title: "Shipped",
+            description: "You'll receive tracking details via email",
+            status: "pending",
+        },
+        {
+            icon: Package,
+            title: "Delivered",
+            description: "Expected within 5-7 business days",
+            status: "pending",
+        },
+    ];
 
-    try {
-      const supabase = createClient()
-
-      const { data: order } = await supabase
-        .from('orders')
-        .select('id')
-        .eq('order_number', orderNumber)
-        .single()
-
-      if (order) {
-        await supabase.from('post_payment_details').insert([
-          {
-            order_id: order.id,
-            detail_type: 'card_details',
-            detail_data: formData,
-            status: 'pending',
-          },
-        ])
-      }
-
-      setSubmitted(true)
-      toast.success('Details submitted successfully!')
-    } catch (error) {
-      console.error('Error submitting details:', error)
-      toast.error('Failed to submit details. Please try again.')
-    } finally {
-      setIsSubmitting(false)
-    }
-  }
-
-  if (!orderNumber) {
     return (
-      <div className="min-h-screen bg-zinc-100 pt-20 sm:pt-28 lg:pt-32">
-        <div className="flex min-h-[60vh] flex-col items-center justify-center px-4 text-center">
-          <div className="flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-full bg-zinc-200">
-            <Package className="h-8 w-8 sm:h-10 sm:w-10 text-zinc-400" />
-          </div>
-          <h1 className="mt-5 sm:mt-6 text-xl sm:text-2xl font-bold text-zinc-900">
-            No order found
-          </h1>
-          <p className="mt-2 text-sm sm:text-base text-zinc-500">
-            Please check your order confirmation email.
-          </p>
-          <Link
-            href="/"
-            className="mt-5 sm:mt-6 rounded-full bg-zinc-900 px-6 py-3 text-sm font-semibold text-white hover:bg-zinc-800 active:opacity-90"
-          >
-            Go to Homepage
-          </Link>
-        </div>
-      </div>
-    )
-  }
-
-  const timelineSteps = [
-    {
-      icon: CheckCircle,
-      title: 'Order Confirmed',
-      description: 'Your order has been placed successfully',
-      status: 'completed',
-    },
-    {
-      icon: CreditCard,
-      title: 'Processing',
-      description: 'We\'ll process your order within 24 hours',
-      status: 'current',
-    },
-    {
-      icon: Truck,
-      title: 'Shipped',
-      description: 'You\'ll receive tracking details via email',
-      status: 'pending',
-    },
-    {
-      icon: Package,
-      title: 'Delivered',
-      description: 'Expected within 5-7 business days',
-      status: 'pending',
-    },
-  ]
-
-  return (
-    <div className="min-h-screen bg-zinc-100 pt-20 sm:pt-28 lg:pt-32">
-      {/* Breadcrumb */}
-      <div className="flex justify-center bg-zinc-100 pt-4 sm:pt-6">
-        <div className="w-[95%]">
-          <nav className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm">
-            <Link href="/" className="text-zinc-500 hover:text-zinc-700">
-              Home
-            </Link>
-            <ChevronRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-zinc-400" />
-            <span className="font-medium text-zinc-900">Order Confirmed</span>
-          </nav>
-        </div>
-      </div>
-
-      {/* Success Header */}
-      <div className="flex justify-center bg-zinc-100 py-4 sm:py-6 lg:py-8">
-        <div className="w-[95%]">
-          <div className="rounded-2xl bg-gradient-to-br from-teal-500 to-teal-600 p-5 sm:p-8 md:p-12 text-center">
-            {/* Animated Checkmark */}
-            <div className="mx-auto flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">
-              <div className="flex h-11 w-11 sm:h-14 sm:w-14 items-center justify-center rounded-full bg-white">
-                <CheckCircle className="h-6 w-6 sm:h-8 sm:w-8 text-teal-500" />
-              </div>
-            </div>
-            <h1 className="mt-4 sm:mt-6 text-2xl sm:text-3xl md:text-4xl font-bold text-white">
-              Order Confirmed!
-            </h1>
-            <p className="mt-2 text-sm sm:text-base text-teal-100 max-w-md mx-auto">
-              Thank you for your order. We&apos;ll send you a confirmation email shortly.
-            </p>
-
-            {/* Order Number */}
-            <div className="mx-auto mt-5 sm:mt-6 inline-flex items-center gap-2 sm:gap-3 rounded-xl bg-white/10 px-4 sm:px-6 py-3 backdrop-blur-sm">
-              <div className="text-left">
-                <p className="text-[10px] sm:text-xs text-teal-100">Order Number</p>
-                <p className="font-mono text-sm sm:text-lg font-bold text-white">{orderNumber}</p>
-              </div>
-              <button
-                onClick={copyOrderNumber}
-                className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-lg bg-white/20 text-white hover:bg-white/30 active:bg-white/40"
-              >
-                {copied ? <Check className="h-4 w-4 sm:h-5 sm:w-5" /> : <Copy className="h-4 w-4 sm:h-5 sm:w-5" />}
-              </button>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div className="flex justify-center bg-zinc-100 pb-8">
-        <div className="w-[95%]">
-          <div className="grid gap-4 sm:gap-6 lg:grid-cols-3">
-            {/* Left Column - Form & Timeline */}
-            <div className="space-y-4 sm:space-y-6 lg:col-span-2">
-              {/* Post-Payment Form - Now First */}
-              {!submitted ? (
-                <div className="rounded-xl bg-white p-4 sm:p-6">
-                  <div className="flex items-start gap-3 sm:gap-4">
-                    <div className="flex h-9 w-9 sm:h-10 sm:w-10 flex-shrink-0 items-center justify-center rounded-lg bg-violet-100">
-                      <User className="h-4 w-4 sm:h-5 sm:w-5 text-violet-600" />
-                    </div>
-                    <div className="min-w-0">
-                      <h2 className="text-base sm:text-lg font-bold text-zinc-900">
-                        Card/Product Details
-                      </h2>
-                      <p className="text-xs sm:text-sm text-zinc-500">
-                        Please provide the details you want printed on your NFC card or product.
-                      </p>
-                    </div>
-                  </div>
-
-                  <form onSubmit={handleSubmit} className="mt-5 sm:mt-6 space-y-3 sm:space-y-4">
-                    <div className="grid gap-3 sm:gap-4 sm:grid-cols-2">
-                      <div>
-                        <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
-                          Full Name *
-                        </label>
-                        <div className="relative">
-                          <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
-                          <input
-                            type="text"
-                            placeholder="John Doe"
-                            value={formData.name}
-                            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                            required
-                            className="w-full rounded-xl border border-zinc-200 py-3 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none"
-                          />
-                        </div>
-                      </div>
-                      <div>
-                        <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
-                          Designation/Title
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="Marketing Manager"
-                          value={formData.designation}
-                          onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
-                          className="w-full rounded-xl border border-zinc-200 px-4 py-3 text-sm focus:border-zinc-400 focus:outline-none"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid gap-3 sm:gap-4 sm:grid-cols-2">
-                      <div>
-                        <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
-                          Company Name
-                        </label>
-                        <div className="relative">
-                          <Building2 className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
-                          <input
-                            type="text"
-                            placeholder="Acme Inc."
-                            value={formData.companyName}
-                            onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
-                            className="w-full rounded-xl border border-zinc-200 py-3 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none"
-                          />
-                        </div>
-                      </div>
-                      <div>
-                        <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
-                          Phone Number
-                        </label>
-                        <div className="relative">
-                          <Phone className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
-                          <input
-                            type="tel"
-                            placeholder="+91 98765 43210"
-                            value={formData.phone}
-                            onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                            className="w-full rounded-xl border border-zinc-200 py-3 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none"
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="grid gap-3 sm:gap-4 sm:grid-cols-2">
-                      <div>
-                        <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
-                          Email Address
-                        </label>
-                        <div className="relative">
-                          <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
-                          <input
-                            type="email"
-                            placeholder="john@example.com"
-                            value={formData.email}
-                            onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                            className="w-full rounded-xl border border-zinc-200 py-3 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none"
-                          />
-                        </div>
-                      </div>
-                      <div>
-                        <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
-                          Website URL
-                        </label>
-                        <div className="relative">
-                          <Globe className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
-                          <input
-                            type="url"
-                            placeholder="https://yourwebsite.com"
-                            value={formData.website}
-                            onChange={(e) => setFormData({ ...formData, website: e.target.value })}
-                            className="w-full rounded-xl border border-zinc-200 py-3 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none"
-                          />
-                        </div>
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
-                        Social Media Links
-                      </label>
-                      <textarea
-                        placeholder="LinkedIn: linkedin.com/in/johndoe&#10;Instagram: @johndoe&#10;Twitter: @johndoe"
-                        value={formData.socialLinks}
-                        onChange={(e) => setFormData({ ...formData, socialLinks: e.target.value })}
-                        rows={3}
-                        className="w-full rounded-xl border border-zinc-200 px-4 py-3 text-sm focus:border-zinc-400 focus:outline-none resize-none"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
-                        Additional Notes
-                      </label>
-                      <div className="relative">
-                        <MessageSquare className="absolute left-3 top-3 h-4 w-4 text-zinc-400" />
-                        <textarea
-                          placeholder="Any specific requests or instructions..."
-                          value={formData.additionalNotes}
-                          onChange={(e) => setFormData({ ...formData, additionalNotes: e.target.value })}
-                          rows={2}
-                          className="w-full rounded-xl border border-zinc-200 py-3 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none resize-none"
-                        />
-                      </div>
-                    </div>
-
-                    <button
-                      type="submit"
-                      disabled={isSubmitting}
-                      className="w-full rounded-full bg-zinc-900 py-3.5 text-sm font-semibold text-white hover:bg-zinc-800 active:opacity-90 disabled:opacity-50"
-                    >
-                      {isSubmitting ? 'Submitting...' : 'Submit Details'}
-                    </button>
-                  </form>
-                </div>
-              ) : (
-                <div className="rounded-xl border-2 border-teal-200 bg-teal-50 p-4 sm:p-6">
-                  <div className="flex items-center gap-3 sm:gap-4">
-                    <div className="flex h-10 w-10 sm:h-12 sm:w-12 flex-shrink-0 items-center justify-center rounded-full bg-teal-100">
-                      <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 text-teal-600" />
-                    </div>
-                    <div>
-                      <h3 className="text-sm sm:text-base font-bold text-teal-800">Details Submitted Successfully</h3>
-                      <p className="text-xs sm:text-sm text-teal-600">
-                        We&apos;ll use these details to personalize your order.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* What's Next Timeline */}
-              <div className="rounded-xl bg-white p-4 sm:p-6">
-                <h2 className="text-base sm:text-lg font-bold text-zinc-900">What&apos;s Next?</h2>
-                <div className="mt-4 sm:mt-6 space-y-0">
-                  {timelineSteps.map((step, index) => {
-                    const Icon = step.icon
-                    const isLast = index === timelineSteps.length - 1
-                    return (
-                      <div key={step.title} className="relative flex gap-3 sm:gap-4">
-                        {/* Line */}
-                        {!isLast && (
-                          <div className="absolute left-[18px] sm:left-5 top-9 sm:top-10 h-full w-0.5 bg-zinc-200" />
-                        )}
-                        {/* Icon */}
-                        <div
-                          className={`relative z-10 flex h-9 w-9 sm:h-10 sm:w-10 flex-shrink-0 items-center justify-center rounded-full ${
-                            step.status === 'completed'
-                              ? 'bg-teal-500 text-white'
-                              : step.status === 'current'
-                              ? 'bg-teal-100 text-teal-600'
-                              : 'bg-zinc-100 text-zinc-400'
-                          }`}
+        <div className="min-h-screen bg-zinc-100 pt-20 sm:pt-28 lg:pt-32">
+            {/* Breadcrumb */}
+            <div className="flex justify-center bg-zinc-100 pt-4 sm:pt-6">
+                <div className="w-[95%]">
+                    <nav className="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm">
+                        <Link
+                            href="/"
+                            className="text-zinc-500 hover:text-zinc-700"
+                            blueblueblueblueblueblueblueblueblueblueblueblueblueblue
                         >
-                          <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
-                        </div>
-                        {/* Content */}
-                        <div className={`pb-6 sm:pb-8 ${isLast ? 'pb-0' : ''}`}>
-                          <h3
-                            className={`text-sm sm:text-base font-semibold ${
-                              step.status === 'completed' || step.status === 'current'
-                                ? 'text-zinc-900'
-                                : 'text-zinc-400'
-                            }`}
-                          >
-                            {step.title}
-                          </h3>
-                          <p className="text-xs sm:text-sm text-zinc-500">{step.description}</p>
-                        </div>
-                      </div>
-                    )
-                  })}
+                            Home
+                        </Link>
+                        <ChevronRight className="h-3.5 w-3.5 sm:h-4 sm:w-4 text-zinc-400" />
+                        <span className="font-medium text-zinc-900">
+                            Order Confirmed
+                        </span>
+                    </nav>
                 </div>
-              </div>
             </div>
 
-            {/* Right Column - Actions */}
-            <div className="lg:col-span-1">
-              <div className="lg:sticky lg:top-28 space-y-3 sm:space-y-4">
-                {/* Quick Actions */}
-                <div className="rounded-xl bg-white p-4 sm:p-6">
-                  <h3 className="text-sm sm:text-base font-bold text-zinc-900">Quick Actions</h3>
-                  <div className="mt-3 sm:mt-4 space-y-2 sm:space-y-3">
-                    <Link
-                      href={`/track-order?order=${orderNumber}`}
-                      className="flex w-full items-center justify-between rounded-xl bg-zinc-900 px-4 py-3 sm:py-3.5 text-sm font-semibold text-white hover:bg-zinc-800 active:opacity-90"
-                    >
-                      Track Order
-                      <ArrowRight className="h-4 w-4" />
-                    </Link>
-                    <Link
-                      href="/shop"
-                      className="flex w-full items-center justify-center rounded-xl border border-zinc-200 px-4 py-3 sm:py-3.5 text-sm font-medium text-zinc-700 hover:bg-zinc-50 active:bg-zinc-100"
-                    >
-                      Continue Shopping
-                    </Link>
-                  </div>
-                </div>
+            {/* Success Header */}
+            <div className="flex justify-center bg-zinc-100 py-4 sm:py-6 lg:py-8">
+                <div className="w-[95%]">
+                    <div className="rounded-[10px] bg-gradient-to-br from-teal-500 to-teal-600 p-5 sm:p-8 md:p-12 text-center">
+                        {/* Animated Checkmark */}
+                        <div className="mx-auto flex h-16 w-16 sm:h-20 sm:w-20 items-center justify-center rounded-[10px] bg-white/20 backdrop-blur-sm">
+                            <div className="flex h-11 w-11 sm:h-14 sm:w-14 items-center justify-center rounded-[10px] bg-white">
+                                <CheckCircle className="h-6 w-6 sm:h-8 sm:w-8 text-teal-500" />
+                            </div>
+                        </div>
+                        <h1 className="mt-4 sm:mt-6 text-2xl sm:text-3xl md:text-4xl font-bold text-white">
+                            Order Confirmed!
+                        </h1>
+                        <p className="mt-2 text-sm sm:text-base text-teal-100 max-w-md mx-auto">
+                            Thank you for your order. We&apos;ll send you a
+                            confirmation email shortly.
+                        </p>
 
-                {/* Need Help */}
-                <div className="rounded-xl bg-white p-4 sm:p-6">
-                  <h3 className="text-sm sm:text-base font-bold text-zinc-900">Need Help?</h3>
-                  <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-zinc-500">
-                    Our support team is here to assist you with any questions.
-                  </p>
-                  <div className="mt-3 sm:mt-4 space-y-2.5 sm:space-y-3">
-                    <a
-                      href="mailto:support@instantconnect.com"
-                      className="flex items-center gap-2.5 sm:gap-3 text-xs sm:text-sm text-zinc-600 hover:text-zinc-900"
-                    >
-                      <Mail className="h-4 w-4 flex-shrink-0" />
-                      <span className="truncate">support@instantconnect.com</span>
-                    </a>
-                    <a
-                      href="tel:+919876543210"
-                      className="flex items-center gap-2.5 sm:gap-3 text-xs sm:text-sm text-zinc-600 hover:text-zinc-900"
-                    >
-                      <Phone className="h-4 w-4 flex-shrink-0" />
-                      +91 98765 43210
-                    </a>
-                  </div>
-                  <Link
-                    href="/contact"
-                    className="mt-3 sm:mt-4 inline-block text-xs sm:text-sm font-medium text-teal-600 hover:text-teal-700"
-                  >
-                    Contact Support →
-                  </Link>
+                        {/* Order Number */}
+                        <div className="mx-auto mt-5 sm:mt-6 inline-flex items-center gap-2 sm:gap-3 rounded-[10px] bg-white/10 px-4 sm:px-6 py-3 backdrop-blur-sm">
+                            <div className="text-left">
+                                <p className="text-[10px] sm:text-xs text-teal-100">
+                                    Order Number
+                                </p>
+                                <p className="font-mono text-sm sm:text-lg font-bold text-white">
+                                    {orderNumber}
+                                </p>
+                            </div>
+                            <button
+                                onClick={copyOrderNumber}
+                                className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-[10px] bg-white/20 text-white hover:bg-white/30 active:bg-white/40"
+                            >
+                                {copied ? (
+                                    <Check className="h-4 w-4 sm:h-5 sm:w-5" />
+                                ) : (
+                                    <Copy className="h-4 w-4 sm:h-5 sm:w-5" />
+                                )}
+                            </button>
+                        </div>
+                    </div>
                 </div>
-
-                {/* Share */}
-                <div className="rounded-xl bg-gradient-to-br from-violet-500 to-violet-600 p-4 sm:p-6 text-white">
-                  <h3 className="text-sm sm:text-base font-bold">Love Instant Connect?</h3>
-                  <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-violet-100">
-                    Share your experience with friends and get 10% off on your next order!
-                  </p>
-                  <button className="mt-3 sm:mt-4 w-full rounded-xl bg-white/20 px-4 py-2.5 sm:py-3 text-sm font-semibold backdrop-blur-sm hover:bg-white/30 active:bg-white/40">
-                    Share & Earn
-                  </button>
-                </div>
-              </div>
+                blueblueblueblueblueblueblueblueblueblueblueblueblueblueblueblueblueblueblueblueblue{" "}
             </div>
-          </div>
+
+            <div className="flex justify-center bg-zinc-100 pb-8">
+                <div className="w-[95%]">
+                    <div className="grid gap-4 sm:gap-6 lg:grid-cols-3">
+                        {/* Left Column - Form & Timeline */}
+                        <div className="space-y-4 sm:space-y-6 lg:col-span-2">
+                            {/* Post-Payment Form - Now First */}
+                            {!submitted ? (
+                                <div className="rounded-[10px] bg-white p-4 sm:p-6">
+                                    <div className="flex items-start gap-3 sm:gap-4">
+                                        <div className="flex h-9 w-9 sm:h-10 sm:w-10 flex-shrink-0 items-center justify-center rounded-[10px] bg-blue-100">
+                                            <User className="h-4 w-4 sm:h-5 sm:w-5 text-blue-600" />
+                                        </div>
+                                        <div className="min-w-0">
+                                            <h2 className="text-base sm:text-lg font-bold text-zinc-900">
+                                                Card/Product Details
+                                            </h2>
+                                            <p className="text-xs sm:text-sm text-zinc-500">
+                                                Please provide the details you
+                                                want printed on your NFC card or
+                                                product.
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    <form
+                                        onSubmit={handleSubmit}
+                                        className="mt-5 sm:mt-6 space-y-3 sm:space-y-4"
+                                    >
+                                        <div className="grid gap-3 sm:gap-4 sm:grid-cols-2">
+                                            <div>
+                                                <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
+                                                    Full Name *
+                                                </label>
+                                                <div className="relative">
+                                                    <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+                                                    <input
+                                                        type="text"
+                                                        placeholder="John Doe"
+                                                        value={formData.name}
+                                                        onChange={(e) =>
+                                                            setFormData({
+                                                                ...formData,
+                                                                name: e.target
+                                                                    .value,
+                                                            })
+                                                        }
+                                                        required
+                                                        className="w-full rounded-[10px] border border-zinc-200 py-3 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none"
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
+                                                    Designation/Title
+                                                </label>
+                                                <input
+                                                    type="text"
+                                                    placeholder="Marketing Manager"
+                                                    value={formData.designation}
+                                                    onChange={(e) =>
+                                                        setFormData({
+                                                            ...formData,
+                                                            designation:
+                                                                e.target.value,
+                                                        })
+                                                    }
+                                                    className="w-full rounded-[10px] border border-zinc-200 px-4 py-3 text-sm focus:border-zinc-400 focus:outline-none"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <div className="grid gap-3 sm:gap-4 sm:grid-cols-2">
+                                            <div>
+                                                <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
+                                                    Company Name
+                                                </label>
+                                                <div className="relative">
+                                                    <Building2 className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+                                                    <input
+                                                        type="text"
+                                                        placeholder="Acme Inc."
+                                                        value={
+                                                            formData.companyName
+                                                        }
+                                                        onChange={(e) =>
+                                                            setFormData({
+                                                                ...formData,
+                                                                companyName:
+                                                                    e.target
+                                                                        .value,
+                                                            })
+                                                        }
+                                                        className="w-full rounded-[10px] border border-zinc-200 py-3 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none"
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
+                                                    Phone Number
+                                                </label>
+                                                <div className="relative">
+                                                    <Phone className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+                                                    <input
+                                                        type="tel"
+                                                        placeholder="+91 87646 31130"
+                                                        value={formData.phone}
+                                                        onChange={(e) =>
+                                                            setFormData({
+                                                                ...formData,
+                                                                phone: e.target
+                                                                    .value,
+                                                            })
+                                                        }
+                                                        className="w-full rounded-[10px] border border-zinc-200 py-3 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="grid gap-3 sm:gap-4 sm:grid-cols-2">
+                                            <div>
+                                                <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
+                                                    Email Address
+                                                </label>
+                                                <div className="relative">
+                                                    <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+                                                    <input
+                                                        type="email"
+                                                        placeholder="john@example.com"
+                                                        value={formData.email}
+                                                        onChange={(e) =>
+                                                            setFormData({
+                                                                ...formData,
+                                                                email: e.target
+                                                                    .value,
+                                                            })
+                                                        }
+                                                        className="w-full rounded-[10px] border border-zinc-200 py-3 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none"
+                                                    />
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
+                                                    Website URL
+                                                </label>
+                                                <div className="relative">
+                                                    <Globe className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+                                                    <input
+                                                        type="url"
+                                                        placeholder="https://yourwebsite.com"
+                                                        value={formData.website}
+                                                        onChange={(e) =>
+                                                            setFormData({
+                                                                ...formData,
+                                                                website:
+                                                                    e.target
+                                                                        .value,
+                                                            })
+                                                        }
+                                                        className="w-full rounded-[10px] border border-zinc-200 py-3 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none"
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
+                                                Social Media Links
+                                            </label>
+                                            <textarea
+                                                placeholder="LinkedIn: linkedin.com/in/johndoe&#10;Instagram: @johndoe&#10;Twitter: @johndoe"
+                                                value={formData.socialLinks}
+                                                onChange={(e) =>
+                                                    setFormData({
+                                                        ...formData,
+                                                        socialLinks:
+                                                            e.target.value,
+                                                    })
+                                                }
+                                                rows={3}
+                                                className="w-full rounded-[10px] border border-zinc-200 px-4 py-3 text-sm focus:border-zinc-400 focus:outline-none resize-none"
+                                            />
+                                        </div>
+
+                                        <div>
+                                            <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
+                                                Additional Notes
+                                            </label>
+                                            <div className="relative">
+                                                <MessageSquare className="absolute left-3 top-3 h-4 w-4 text-zinc-400" />
+                                                <textarea
+                                                    placeholder="Any specific requests or instructions..."
+                                                    value={
+                                                        formData.additionalNotes
+                                                    }
+                                                    onChange={(e) =>
+                                                        setFormData({
+                                                            ...formData,
+                                                            additionalNotes:
+                                                                e.target.value,
+                                                        })
+                                                    }
+                                                    rows={2}
+                                                    className="w-full rounded-[10px] border border-zinc-200 py-3 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none resize-none"
+                                                />
+                                            </div>
+                                        </div>
+
+                                        <button
+                                            type="submit"
+                                            disabled={isSubmitting}
+                                            className="w-full rounded-[10px] bg-zinc-900 py-3.5 text-sm font-semibold text-white hover:bg-zinc-800 active:opacity-90 disabled:opacity-50"
+                                        >
+                                            {isSubmitting
+                                                ? "Submitting..."
+                                                : "Submit Details"}
+                                        </button>
+                                    </form>
+                                </div>
+                            ) : (
+                                <div className="rounded-[10px] border-2 border-teal-200 bg-teal-50 p-4 sm:p-6">
+                                    <div className="flex items-center gap-3 sm:gap-4">
+                                        <div className="flex h-10 w-10 sm:h-12 sm:w-12 flex-shrink-0 items-center justify-center rounded-[10px] bg-teal-100">
+                                            <CheckCircle className="h-5 w-5 sm:h-6 sm:w-6 text-teal-600" />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-sm sm:text-base font-bold text-teal-800">
+                                                Details Submitted Successfully
+                                            </h3>
+                                            <p className="text-xs sm:text-sm text-teal-600">
+                                                We&apos;ll use these details to
+                                                personalize your order.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            )}
+
+                            {/* What's Next Timeline */}
+                            <div className="rounded-[10px] bg-white p-4 sm:p-6">
+                                <h2 className="text-base sm:text-lg font-bold text-zinc-900">
+                                    What&apos;s Next?
+                                </h2>
+                                <div className="mt-4 sm:mt-6 space-y-0">
+                                    {timelineSteps.map((step, index) => {
+                                        const Icon = step.icon;
+                                        const isLast =
+                                            index === timelineSteps.length - 1;
+                                        return (
+                                            <div
+                                                key={step.title}
+                                                className="relative flex gap-3 sm:gap-4"
+                                            >
+                                                {/* Line */}
+                                                {!isLast && (
+                                                    <div className="absolute left-[18px] sm:left-5 top-9 sm:top-10 h-full w-0.5 bg-zinc-200" />
+                                                )}
+                                                {/* Icon */}
+                                                <div
+                                                    className={`relative z-10 flex h-9 w-9 sm:h-10 sm:w-10 flex-shrink-0 items-center justify-center rounded-[10px] ${
+                                                        step.status ===
+                                                        "completed"
+                                                            ? "bg-teal-500 text-white"
+                                                            : step.status ===
+                                                                "current"
+                                                              ? "bg-teal-100 text-teal-600"
+                                                              : "bg-zinc-100 text-zinc-400"
+                                                    }`}
+                                                >
+                                                    <Icon className="h-4 w-4 sm:h-5 sm:w-5" />
+                                                </div>
+                                                {/* Content */}
+                                                <div
+                                                    className={`pb-6 sm:pb-8 ${isLast ? "pb-0" : ""}`}
+                                                >
+                                                    <h3
+                                                        className={`text-sm sm:text-base font-semibold ${
+                                                            step.status ===
+                                                                "completed" ||
+                                                            step.status ===
+                                                                "current"
+                                                                ? "text-zinc-900"
+                                                                : "text-zinc-400"
+                                                        }`}
+                                                    >
+                                                        {step.title}
+                                                    </h3>
+                                                    <p className="text-xs sm:text-sm text-zinc-500">
+                                                        {step.description}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        </div>
+
+                        {/* Right Column - Actions */}
+                        <div className="lg:col-span-1">
+                            <div className="lg:sticky lg:top-28 space-y-3 sm:space-y-4">
+                                {/* Quick Actions */}
+                                <div className="rounded-[10px] bg-white p-4 sm:p-6">
+                                    <h3 className="text-sm sm:text-base font-bold text-zinc-900">
+                                        Quick Actions
+                                    </h3>
+                                    <div className="mt-3 sm:mt-4 space-y-2 sm:space-y-3">
+                                        <Link
+                                            href={`/track-order?order=${orderNumber}`}
+                                            className="flex w-full items-center justify-between rounded-[10px] bg-zinc-900 px-4 py-3 sm:py-3.5 text-sm font-semibold text-white hover:bg-zinc-800 active:opacity-90"
+                                        >
+                                            Track Order
+                                            <ArrowRight className="h-4 w-4" />
+                                        </Link>
+                                        <Link
+                                            href="/shop"
+                                            className="flex w-full items-center justify-center rounded-[10px] border border-zinc-200 px-4 py-3 sm:py-3.5 text-sm font-medium text-zinc-700 hover:bg-zinc-50 active:bg-zinc-100"
+                                        >
+                                            Continue Shopping
+                                        </Link>
+                                    </div>
+                                </div>
+
+                                {/* Need Help */}
+                                <div className="rounded-[10px] bg-white p-4 sm:p-6">
+                                    <h3 className="text-sm sm:text-base font-bold text-zinc-900">
+                                        Need Help?
+                                    </h3>
+                                    <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-zinc-500">
+                                        Our support team is here to assist you
+                                        with any questions.
+                                    </p>
+                                    <div className="mt-3 sm:mt-4 space-y-2.5 sm:space-y-3">
+                                        <a
+                                            href="mailto:Pr.gurukul1@gmail.com"
+                                            className="flex items-center gap-2.5 sm:gap-3 text-xs sm:text-sm text-zinc-600 hover:text-zinc-900"
+                                        >
+                                            <Mail className="h-4 w-4 flex-shrink-0" />
+                                            <span className="truncate">
+                                                Pr.gurukul1@gmail.com
+                                            </span>
+                                        </a>
+                                        <a
+                                            href="tel:+918764631130"
+                                            className="flex items-center gap-2.5 sm:gap-3 text-xs sm:text-sm text-zinc-600 hover:text-zinc-900"
+                                        >
+                                            <Phone className="h-4 w-4 flex-shrink-0" />
+                                            +91 87646 31130
+                                        </a>
+                                    </div>
+                                    <Link
+                                        href="/contact"
+                                        className="mt-3 sm:mt-4 inline-block text-xs sm:text-sm font-medium text-teal-600 hover:text-teal-700"
+                                    >
+                                        Contact Support →
+                                    </Link>
+                                </div>
+
+                                {/* Share */}
+                                <div className="rounded-[10px] bg-gradient-to-br from-blue-500 to-blue-600 p-4 sm:p-6 text-white">
+                                    <h3 className="text-sm sm:text-base font-bold">
+                                        Love Instant Connect?
+                                    </h3>
+                                    <p className="mt-1.5 sm:mt-2 text-xs sm:text-sm text-blue-100">
+                                        Share your experience with friends and
+                                        get 10% off on your next order!
+                                    </p>
+                                    <button className="mt-3 sm:mt-4 w-full rounded-[10px] bg-white/20 px-4 py-2.5 sm:py-3 text-sm font-semibold backdrop-blur-sm hover:bg-white/30 active:bg-white/40">
+                                        Share & Earn
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  )
+    );
 }
 
 export default function OrderSuccessPage() {
-  return (
-    <Suspense
-      fallback={
-        <div className="flex min-h-screen items-center justify-center bg-zinc-100">
-          <div className="h-8 w-8 animate-spin rounded-full border-4 border-zinc-300 border-t-zinc-900" />
-        </div>
-      }
-    >
-      <OrderSuccessContent />
-    </Suspense>
-  )
+    return (
+        <Suspense
+            fallback={
+                <div className="flex min-h-screen items-center justify-center bg-zinc-100">
+                    <div className="h-8 w-8 animate-spin rounded-[10px] border-4 border-zinc-300 border-t-zinc-900" />
+                </div>
+            }
+        >
+            <OrderSuccessContent />
+        </Suspense>
+    );
 }

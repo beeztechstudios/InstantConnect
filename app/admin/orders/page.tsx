@@ -106,7 +106,7 @@ export default function AdminOrdersPage() {
   if (isLoading) {
     return (
       <div className="flex min-h-[400px] items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-zinc-200 border-t-zinc-900" />
+        <div className="h-8 w-8 animate-spin rounded-[10px] border-4 border-zinc-200 border-t-zinc-900" />
       </div>
     )
   }
@@ -134,7 +134,7 @@ export default function AdminOrdersPage() {
             placeholder="Search orders..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-lg border border-zinc-300 bg-white py-2 pl-9 pr-4 text-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
+            className="w-full rounded-[10px] border border-zinc-300 bg-white py-2 pl-9 pr-4 text-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
           />
         </div>
         <Select
@@ -153,7 +153,7 @@ export default function AdminOrdersPage() {
       </div>
 
       {/* Table */}
-      <div className="overflow-hidden rounded-xl border border-zinc-200 bg-white">
+      <div className="overflow-hidden rounded-[10px] border border-zinc-200 bg-white">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="border-b border-zinc-200 bg-zinc-50">
@@ -220,7 +220,7 @@ export default function AdminOrdersPage() {
                     <td className="px-4 py-3">
                       <Link
                         href={`/admin/orders/${order.id}`}
-                        className="inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-medium text-zinc-600 hover:bg-zinc-100"
+                        className="inline-flex items-center gap-1 rounded-[10px] px-3 py-1.5 text-sm font-medium text-zinc-600 hover:bg-zinc-100"
                       >
                         <Eye className="h-4 w-4" />
                         View

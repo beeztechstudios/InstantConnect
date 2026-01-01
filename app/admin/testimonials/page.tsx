@@ -63,7 +63,7 @@ export default function AdminTestimonialsPage() {
       key: 'image',
       header: 'Image',
       render: (testimonial: Testimonial) => (
-        <div className="relative h-10 w-10 overflow-hidden rounded-full bg-zinc-100">
+        <div className="relative h-10 w-10 overflow-hidden rounded-[10px] bg-zinc-100">
           {testimonial.image_url ? (
             <Image
               src={testimonial.image_url}
@@ -133,13 +133,13 @@ export default function AdminTestimonialsPage() {
         <div className="flex items-center gap-2">
           <Link
             href={`/admin/testimonials/${testimonial.id}`}
-            className="rounded-lg p-2 hover:bg-zinc-100"
+            className="rounded-[10px] p-2 hover:bg-zinc-100"
           >
             <Pencil className="h-4 w-4 text-zinc-600" />
           </Link>
           <button
             onClick={() => setDeleteModal({ open: true, testimonial })}
-            className="rounded-lg p-2 hover:bg-red-50"
+            className="rounded-[10px] p-2 hover:bg-red-50"
           >
             <Trash2 className="h-4 w-4 text-red-500" />
           </button>
@@ -151,7 +151,7 @@ export default function AdminTestimonialsPage() {
   if (isLoading) {
     return (
       <div className="flex min-h-[400px] items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-zinc-200 border-t-zinc-900" />
+        <div className="h-8 w-8 animate-spin rounded-[10px] border-4 border-zinc-200 border-t-zinc-900" />
       </div>
     )
   }

@@ -147,7 +147,7 @@ export default function AdminCardDetailsPage() {
   if (isLoading) {
     return (
       <div className="flex min-h-[400px] items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-zinc-200 border-t-zinc-900" />
+        <div className="h-8 w-8 animate-spin rounded-[10px] border-4 border-zinc-200 border-t-zinc-900" />
       </div>
     )
   }
@@ -172,19 +172,19 @@ export default function AdminCardDetailsPage() {
 
       {/* Stats */}
       <div className="grid gap-4 sm:grid-cols-4">
-        <div className="rounded-xl border border-zinc-200 bg-white p-4">
+        <div className="rounded-[10px] border border-zinc-200 bg-white p-4">
           <p className="text-sm text-zinc-500">Total Submissions</p>
           <p className="mt-1 text-2xl font-bold text-zinc-900">{stats.total}</p>
         </div>
-        <div className="rounded-xl border border-zinc-200 bg-white p-4">
+        <div className="rounded-[10px] border border-zinc-200 bg-white p-4">
           <p className="text-sm text-zinc-500">Pending Review</p>
           <p className="mt-1 text-2xl font-bold text-amber-600">{stats.pending}</p>
         </div>
-        <div className="rounded-xl border border-zinc-200 bg-white p-4">
+        <div className="rounded-[10px] border border-zinc-200 bg-white p-4">
           <p className="text-sm text-zinc-500">Processing</p>
           <p className="mt-1 text-2xl font-bold text-blue-600">{stats.processing}</p>
         </div>
-        <div className="rounded-xl border border-zinc-200 bg-white p-4">
+        <div className="rounded-[10px] border border-zinc-200 bg-white p-4">
           <p className="text-sm text-zinc-500">Completed</p>
           <p className="mt-1 text-2xl font-bold text-green-600">{stats.completed}</p>
         </div>
@@ -199,7 +199,7 @@ export default function AdminCardDetailsPage() {
             placeholder="Search by name, company, order..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full rounded-lg border border-zinc-300 bg-white py-2 pl-9 pr-4 text-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
+            className="w-full rounded-[10px] border border-zinc-300 bg-white py-2 pl-9 pr-4 text-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
           />
         </div>
         <Select
@@ -217,7 +217,7 @@ export default function AdminCardDetailsPage() {
       </div>
 
       {/* Table */}
-      <div className="overflow-hidden rounded-xl border border-zinc-200 bg-white">
+      <div className="overflow-hidden rounded-[10px] border border-zinc-200 bg-white">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="border-b border-zinc-200 bg-zinc-50">
@@ -311,7 +311,7 @@ export default function AdminCardDetailsPage() {
                     <td className="px-4 py-3">
                       <button
                         onClick={() => setViewModal({ open: true, detail })}
-                        className="inline-flex items-center gap-1 rounded-lg px-3 py-1.5 text-sm font-medium text-zinc-600 hover:bg-zinc-100"
+                        className="inline-flex items-center gap-1 rounded-[10px] px-3 py-1.5 text-sm font-medium text-zinc-600 hover:bg-zinc-100"
                       >
                         <Eye className="h-4 w-4" />
                         View
@@ -340,7 +340,7 @@ export default function AdminCardDetailsPage() {
         {viewModal.detail && (
           <div className="space-y-6">
             {/* Order Info */}
-            <div className="flex items-center justify-between rounded-lg bg-zinc-50 p-4">
+            <div className="flex items-center justify-between rounded-[10px] bg-zinc-50 p-4">
               <div>
                 <p className="text-sm text-zinc-500">Order Number</p>
                 <p className="font-mono font-bold text-zinc-900">
@@ -409,7 +409,7 @@ export default function AdminCardDetailsPage() {
             {viewModal.detail.detail_data.socialLinks && (
               <div>
                 <p className="text-sm text-zinc-500">Social Links</p>
-                <p className="mt-1 whitespace-pre-line rounded-lg bg-zinc-50 p-3 text-sm text-zinc-700">
+                <p className="mt-1 whitespace-pre-line rounded-[10px] bg-zinc-50 p-3 text-sm text-zinc-700">
                   {viewModal.detail.detail_data.socialLinks}
                 </p>
               </div>
@@ -419,7 +419,7 @@ export default function AdminCardDetailsPage() {
             {viewModal.detail.detail_data.additionalNotes && (
               <div>
                 <p className="text-sm text-zinc-500">Additional Notes</p>
-                <p className="mt-1 whitespace-pre-line rounded-lg bg-zinc-50 p-3 text-sm text-zinc-700">
+                <p className="mt-1 whitespace-pre-line rounded-[10px] bg-zinc-50 p-3 text-sm text-zinc-700">
                   {viewModal.detail.detail_data.additionalNotes}
                 </p>
               </div>

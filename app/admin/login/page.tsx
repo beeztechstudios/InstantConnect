@@ -64,10 +64,10 @@ export default function AdminLoginPage() {
           Back to Home
         </Link>
 
-        <div className="rounded-xl border border-zinc-200 bg-white p-8 shadow-sm">
+        <div className="rounded-[10px] border border-zinc-200 bg-white p-8 shadow-sm">
           {/* Header */}
           <div className="text-center">
-            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-zinc-900">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-[10px] bg-zinc-900">
               <Lock className="h-6 w-6 text-white" />
             </div>
             <h1 className="mt-4 text-2xl font-bold text-zinc-900">
@@ -92,7 +92,7 @@ export default function AdminLoginPage() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="admin@example.com"
                   required
-                  className="w-full rounded-lg border border-zinc-300 bg-white py-2.5 pl-10 pr-4 text-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
+                  className="w-full rounded-[10px] border border-zinc-300 bg-white py-2.5 pl-10 pr-4 text-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
                 />
               </div>
             </div>
@@ -109,7 +109,7 @@ export default function AdminLoginPage() {
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="••••••••"
                   required
-                  className="w-full rounded-lg border border-zinc-300 bg-white py-2.5 pl-10 pr-4 text-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
+                  className="w-full rounded-[10px] border border-zinc-300 bg-white py-2.5 pl-10 pr-4 text-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
                 />
               </div>
             </div>

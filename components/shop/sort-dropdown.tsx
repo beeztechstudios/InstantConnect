@@ -18,7 +18,7 @@ export function SortDropdown() {
     <select
       value={currentSort}
       onChange={(e) => handleSort(e.target.value)}
-      className="rounded-lg border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-700 focus:border-zinc-400 focus:outline-none"
+      className="rounded-[10px] border border-zinc-200 bg-white px-3 py-2 text-sm text-zinc-700 focus:border-zinc-400 focus:outline-none"
     >
       <option value="newest">Newest</option>
       <option value="featured">Featured</option>

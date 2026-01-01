@@ -73,7 +73,7 @@ export default function AdminProductsPage() {
       key: 'image',
       header: 'Image',
       render: (product: ProductWithCategory) => (
-        <div className="relative h-12 w-12 overflow-hidden rounded-lg bg-zinc-100">
+        <div className="relative h-12 w-12 overflow-hidden rounded-[10px] bg-zinc-100">
           {product.images?.[0] ? (
             <Image
               src={product.images[0]}
@@ -145,13 +145,13 @@ export default function AdminProductsPage() {
         <div className="flex items-center gap-2">
           <Link
             href={`/admin/products/${product.id}`}
-            className="rounded-lg p-2 text-zinc-600 hover:bg-zinc-100"
+            className="rounded-[10px] p-2 text-zinc-600 hover:bg-zinc-100"
           >
             <Pencil className="h-4 w-4" />
           </Link>
           <button
             onClick={() => setDeleteModal({ open: true, product })}
-            className="rounded-lg p-2 text-red-500 hover:bg-red-50"
+            className="rounded-[10px] p-2 text-red-500 hover:bg-red-50"
           >
             <Trash2 className="h-4 w-4" />
           </button>
@@ -163,7 +163,7 @@ export default function AdminProductsPage() {
   if (isLoading) {
     return (
       <div className="flex min-h-[400px] items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-zinc-300 border-t-zinc-900" />
+        <div className="h-8 w-8 animate-spin rounded-[10px] border-4 border-zinc-300 border-t-zinc-900" />
       </div>
     )
   }

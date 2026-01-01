@@ -90,7 +90,7 @@ export default function TestimonialFormPage() {
   if (isLoading) {
     return (
       <div className="flex min-h-[400px] items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-zinc-200 border-t-zinc-900" />
+        <div className="h-8 w-8 animate-spin rounded-[10px] border-4 border-zinc-200 border-t-zinc-900" />
       </div>
     )
   }
@@ -113,7 +113,7 @@ export default function TestimonialFormPage() {
 
       {/* Form */}
       <form onSubmit={handleSubmit} className="max-w-2xl space-y-6">
-        <div className="rounded-xl border border-zinc-200 bg-white p-6">
+        <div className="rounded-[10px] border border-zinc-200 bg-white p-6">
           <div className="space-y-4">
             <div className="grid gap-4 sm:grid-cols-2">
               <Input

@@ -224,7 +224,7 @@ export default function ProductFormPage() {
   if (isLoading) {
     return (
       <div className="flex min-h-[400px] items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-zinc-200 border-t-zinc-900" />
+        <div className="h-8 w-8 animate-spin rounded-[10px] border-4 border-zinc-200 border-t-zinc-900" />
       </div>
     )
   }
@@ -250,7 +250,7 @@ export default function ProductFormPage() {
         {/* Main Content */}
         <div className="space-y-6 lg:col-span-2">
           {/* Basic Info */}
-          <div className="rounded-xl border border-zinc-200 bg-white p-6">
+          <div className="rounded-[10px] border border-zinc-200 bg-white p-6">
             <h2 className="font-semibold text-zinc-900">Basic Information</h2>
             <div className="mt-4 space-y-4">
               <Input
@@ -306,7 +306,7 @@ export default function ProductFormPage() {
           </div>
 
           {/* Pricing */}
-          <div className="rounded-xl border border-zinc-200 bg-white p-6">
+          <div className="rounded-[10px] border border-zinc-200 bg-white p-6">
             <h2 className="font-semibold text-zinc-900">Pricing & Stock</h2>
             <div className="mt-4 grid gap-4 sm:grid-cols-3">
               <Input
@@ -342,7 +342,7 @@ export default function ProductFormPage() {
           </div>
 
           {/* Features */}
-          <div className="rounded-xl border border-zinc-200 bg-white p-6">
+          <div className="rounded-[10px] border border-zinc-200 bg-white p-6">
             <h2 className="font-semibold text-zinc-900">Features</h2>
             <div className="mt-4 space-y-4">
               <div className="flex gap-2">
@@ -361,7 +361,7 @@ export default function ProductFormPage() {
                   {formData.features.map((feature, index) => (
                     <div
                       key={index}
-                      className="flex items-center justify-between rounded-lg bg-zinc-50 px-3 py-2"
+                      className="flex items-center justify-between rounded-[10px] bg-zinc-50 px-3 py-2"
                     >
                       <span className="text-sm">{feature}</span>
                       <button
@@ -382,7 +382,7 @@ export default function ProductFormPage() {
         {/* Sidebar */}
         <div className="space-y-6">
           {/* Status */}
-          <div className="rounded-xl border border-zinc-200 bg-white p-6">
+          <div className="rounded-[10px] border border-zinc-200 bg-white p-6">
             <h2 className="font-semibold text-zinc-900">Status</h2>
             <div className="mt-4 space-y-3">
               <label className="flex items-center gap-3 cursor-pointer">
@@ -407,7 +407,7 @@ export default function ProductFormPage() {
           </div>
 
           {/* Images */}
-          <div className="rounded-xl border border-zinc-200 bg-white p-6">
+          <div className="rounded-[10px] border border-zinc-200 bg-white p-6">
             <h2 className="font-semibold text-zinc-900">Images</h2>
             <div className="mt-4 space-y-4">
               {/* File Upload */}
@@ -423,7 +423,7 @@ export default function ProductFormPage() {
                 />
                 <label
                   htmlFor="image-upload"
-                  className={`flex cursor-pointer flex-col items-center justify-center rounded-lg border-2 border-dashed border-zinc-300 bg-zinc-50 p-4 transition-colors hover:border-zinc-400 hover:bg-zinc-100 ${isUploading ? 'pointer-events-none opacity-50' : ''}`}
+                  className={`flex cursor-pointer flex-col items-center justify-center rounded-[10px] border-2 border-dashed border-zinc-300 bg-zinc-50 p-4 transition-colors hover:border-zinc-400 hover:bg-zinc-100 ${isUploading ? 'pointer-events-none opacity-50' : ''}`}
                 >
                   {isUploading ? (
                     <>
@@ -470,7 +470,7 @@ export default function ProductFormPage() {
                         src={image}
                         alt={`Product ${index + 1}`}
                         fill
-                        className="rounded-lg object-cover"
+                        className="rounded-[10px] object-cover"
                       />
                       <div className="absolute left-1 top-1 rounded bg-black/60 px-1.5 py-0.5 text-xs text-white">
                         {index + 1}
@@ -478,7 +478,7 @@ export default function ProductFormPage() {
                       <button
                         type="button"
                         onClick={() => removeImage(index)}
-                        className="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-white opacity-0 transition-opacity group-hover:opacity-100"
+                        className="absolute -right-2 -top-2 flex h-6 w-6 items-center justify-center rounded-[10px] bg-red-500 text-white opacity-0 transition-opacity group-hover:opacity-100"
                       >
                         <X className="h-3 w-3" />
                       </button>

@@ -53,7 +53,7 @@ export function Modal({ isOpen, onClose, title, children, className, size = 'md'
       {/* Modal */}
       <div
         className={cn(
-          'relative z-10 w-full rounded-xl bg-white p-6 shadow-xl',
+          'relative z-10 w-full rounded-[10px] bg-white p-6 shadow-xl',
           sizes[size],
           className
         )}
@@ -64,7 +64,7 @@ export function Modal({ isOpen, onClose, title, children, className, size = 'md'
             <h2 className="text-lg font-semibold">{title}</h2>
             <button
               onClick={onClose}
-              className="rounded-lg p-1 hover:bg-zinc-100"
+              className="rounded-[10px] p-1 hover:bg-zinc-100"
             >
               <X className="h-5 w-5" />
             </button>

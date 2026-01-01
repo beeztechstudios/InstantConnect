@@ -140,7 +140,7 @@ export default function OrderDetailPage() {
   if (isLoading || !order) {
     return (
       <div className="flex min-h-[400px] items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-zinc-200 border-t-zinc-900" />
+        <div className="h-8 w-8 animate-spin rounded-[10px] border-4 border-zinc-200 border-t-zinc-900" />
       </div>
     )
   }
@@ -180,7 +180,7 @@ export default function OrderDetailPage() {
         {/* Main Content */}
         <div className="space-y-6 lg:col-span-2">
           {/* Order Items */}
-          <div className="rounded-xl border border-zinc-200 bg-white p-6">
+          <div className="rounded-[10px] border border-zinc-200 bg-white p-6">
             <div className="flex items-center gap-2 mb-4">
               <Package className="h-5 w-5 text-zinc-500" />
               <h2 className="font-semibold text-zinc-900">Order Items</h2>
@@ -188,7 +188,7 @@ export default function OrderDetailPage() {
             <div className="divide-y divide-zinc-200">
               {order.order_items.map((item) => (
                 <div key={item.id} className="flex gap-4 py-4 first:pt-0 last:pb-0">
-                  <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-lg bg-zinc-100">
+                  <div className="relative h-16 w-16 flex-shrink-0 overflow-hidden rounded-[10px] bg-zinc-100">
                     {item.product_image ? (
                       <Image
                         src={item.product_image}
@@ -238,7 +238,7 @@ export default function OrderDetailPage() {
 
           {/* Order Notes */}
           {order.notes && (
-            <div className="rounded-xl border border-zinc-200 bg-white p-6">
+            <div className="rounded-[10px] border border-zinc-200 bg-white p-6">
               <h2 className="font-semibold text-zinc-900 mb-2">Order Notes</h2>
               <p className="text-zinc-600">{order.notes}</p>
             </div>
@@ -248,7 +248,7 @@ export default function OrderDetailPage() {
         {/* Sidebar */}
         <div className="space-y-6">
           {/* Customer */}
-          <div className="rounded-xl border border-zinc-200 bg-white p-6">
+          <div className="rounded-[10px] border border-zinc-200 bg-white p-6">
             <div className="flex items-center gap-2 mb-4">
               <User className="h-5 w-5 text-zinc-500" />
               <h2 className="font-semibold text-zinc-900">Customer</h2>
@@ -267,7 +267,7 @@ export default function OrderDetailPage() {
           </div>
 
           {/* Shipping Address */}
-          <div className="rounded-xl border border-zinc-200 bg-white p-6">
+          <div className="rounded-[10px] border border-zinc-200 bg-white p-6">
             <div className="flex items-center gap-2 mb-4">
               <MapPin className="h-5 w-5 text-zinc-500" />
               <h2 className="font-semibold text-zinc-900">Shipping Address</h2>
@@ -285,7 +285,7 @@ export default function OrderDetailPage() {
           </div>
 
           {/* Billing Address */}
-          <div className="rounded-xl border border-zinc-200 bg-white p-6">
+          <div className="rounded-[10px] border border-zinc-200 bg-white p-6">
             <div className="flex items-center gap-2 mb-4">
               <MapPin className="h-5 w-5 text-zinc-500" />
               <h2 className="font-semibold text-zinc-900">Billing Address</h2>
@@ -303,7 +303,7 @@ export default function OrderDetailPage() {
           </div>
 
           {/* Payment */}
-          <div className="rounded-xl border border-zinc-200 bg-white p-6">
+          <div className="rounded-[10px] border border-zinc-200 bg-white p-6">
             <div className="flex items-center gap-2 mb-4">
               <CreditCard className="h-5 w-5 text-zinc-500" />
               <h2 className="font-semibold text-zinc-900">Payment</h2>

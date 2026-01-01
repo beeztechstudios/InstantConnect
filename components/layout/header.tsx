@@ -70,7 +70,7 @@ export function Header() {
       <header className="absolute top-4 left-0 right-0 z-50">
         <div className="mx-auto max-w-5xl px-3">
           {/* ================= DESKTOP ================= */}
-          <div className="hidden lg:flex h-20 items-center justify-between rounded-xl bg-white px-5 shadow-md">
+          <div className="hidden lg:flex h-20 items-center justify-between rounded-[10px] bg-white px-5 shadow-md">
             {/* Logo */}
             <Link href="/">
               <Image
@@ -89,7 +89,7 @@ export function Header() {
                   key={link.href}
                   href={link.href}
                   className={cn(
-                    "flex items-center gap-1.5 px-4 py-2 rounded-lg text-md font-medium transition",
+                    "flex items-center gap-1.5 px-4 py-2 rounded-[10px] text-md font-medium transition",
                     "text-black hover:bg-white hover:text-black",
                     pathname === link.href && "bg-white text-black"
                   )}
@@ -110,7 +110,7 @@ export function Header() {
                 <button
                   onClick={() => setShopOpen((v) => !v)}
                   onMouseEnter={() => setShopOpen(true)}
-                  className="flex items-center gap-1 px-4 py-2 text-md font-medium text-black hover:bg-white hover:text-black rounded-lg"
+                  className="flex items-center gap-1 px-4 py-2 text-md font-medium text-black hover:bg-white hover:text-black rounded-[10px]"
                 >
                   Shop
                   <ChevronDown
@@ -147,7 +147,7 @@ export function Header() {
                 transition={{ duration: 0.25, ease: "easeOut" }}
                 onMouseEnter={() => setShopOpen(true)}
                 onMouseLeave={() => setShopOpen(false)}
-                className="absolute left-0 right-0 top-[calc(100%+8px)] mx-auto max-w-5xl rounded-xl bg-white p-6 shadow-2xl border-none"
+                className="absolute left-0 right-0 top-[calc(100%+8px)] mx-auto max-w-5xl rounded-[10px] bg-white p-6 shadow-2xl border-none"
               >
                 <div className="grid grid-cols-4 gap-6">
                   {categories.map((category, index) => (
@@ -164,14 +164,14 @@ export function Header() {
                       <Link
                         href={category.href}
                         className={cn(
-                          "group block rounded-xl p-4 transition hover:shadow-lg",
+                          "group block rounded-[10px] p-4 transition hover:shadow-lg",
                           category.isAllProducts
                             ? "bg-black text-white"
                             : "bg-zinc-100"
                         )}
                       >
                         {/* Image */}
-                        <div className="overflow-hidden rounded-xl">
+                        <div className="overflow-hidden rounded-[10px]">
                           <div
                             className="aspect-[1/1] bg-cover bg-center transition-transform duration-300 group-hover:scale-105"
                             style={{
@@ -225,7 +225,7 @@ export function Header() {
           </AnimatePresence>
 
           {/* ================= MOBILE / TABLET ================= */}
-          <div className="lg:hidden flex items-center justify-between rounded-xl bg-white px-4 py-3 shadow-md">
+          <div className="lg:hidden flex items-center justify-between rounded-[10px] bg-white px-4 py-3 shadow-md">
             <button onClick={() => setMobileOpen(true)}>
               <Menu className="h-6 w-6 text-black" />
             </button>
@@ -252,78 +252,132 @@ export function Header() {
         </div>
       </header>
 
-      {/* MOBILE DRAWER (UNCHANGED) */}
       {/* MOBILE DRAWER */}
-      {mobileOpen && (
-        <div className="fixed inset-0 z-50">
-          <div
-            className="absolute inset-0 bg-white"
-            onClick={() => setMobileOpen(false)}
-          />
+      <AnimatePresence>
+        {mobileOpen && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.3 }}
+              className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm"
+              onClick={() => setMobileOpen(false)}
+            />
 
-          <div className="absolute left-0 top-0 h-full w-[320px] bg-white shadow-xl flex flex-col">
-            {/* Header */}
-            <div className="flex justify-between items-center px-4 py-4 border-b border-gray-400">
-              <Image src="/Logo_3.svg" alt="Logo" width={100} height={35} />
-              <button onClick={() => setMobileOpen(false)}>
-                <X className="h-6 w-6 text-black" />
-              </button>
-            </div>
-
-            {/* Content */}
-            <div className="flex-1 overflow-y-auto px-4 py-4 space-y-3">
-              {/* Nav Links */}
-              {navLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
+            {/* Drawer */}
+            <motion.div
+              initial={{ x: "-100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "-100%" }}
+              transition={{ type: "spring", damping: 30, stiffness: 300 }}
+              className="fixed left-0 top-0 z-50 h-full w-[300px] bg-white shadow-2xl flex flex-col"
+            >
+              {/* Header */}
+              <div className="flex justify-between items-center px-5 py-4 border-b border-zinc-100">
+                <Image src="/Logo_3.svg" alt="Logo" width={100} height={35} />
+                <button
                   onClick={() => setMobileOpen(false)}
-                  className="block rounded-lg px-4 py-3 text-black font-medium hover:bg-zinc-800"
+                  className="h-10 w-10 flex items-center justify-center rounded-[10px] bg-zinc-100 hover:bg-zinc-200 transition-colors"
                 >
-                  {link.name}
-                </Link>
-              ))}
+                  <X className="h-5 w-5 text-zinc-600" />
+                </button>
+              </div>
 
-              {/* SHOP ACCORDION */}
-              <button
-                onClick={() => setMobileShopOpen((v) => !v)}
-                className="flex w-full items-center justify-between rounded-lg px-4 py-3 text-black font-medium hover:bg-zinc-400"
-              >
-                Shop
-                <ChevronDown
-                  className={cn(
-                    "h-5 w-5 transition-transform",
-                    mobileShopOpen && "rotate-180"
-                  )}
-                />
-              </button>
-
-              <AnimatePresence>
-                {mobileShopOpen && (
-                  <motion.div
-                    initial={{ height: 0, opacity: 0 }}
-                    animate={{ height: "auto", opacity: 1 }}
-                    exit={{ height: 0, opacity: 0 }}
-                    transition={{ duration: 0.25 }}
-                    className="overflow-hidden pl-4 space-y-2"
-                  >
-                    {categories.map((category) => (
+              {/* Content */}
+              <div className="flex-1 overflow-y-auto px-4 py-6">
+                <nav className="space-y-1">
+                  {navLinks.map((link, index) => (
+                    <motion.div
+                      key={link.href}
+                      initial={{ opacity: 0, x: -20 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ delay: index * 0.05 + 0.1 }}
+                    >
                       <Link
-                        key={category.name}
-                        href={category.href}
+                        href={link.href}
                         onClick={() => setMobileOpen(false)}
-                        className="block rounded-lg px-4 py-2 text-sm text-black hover:bg-zinc-800"
+                        className={cn(
+                          "flex items-center gap-3 rounded-[10px] px-4 py-3 text-zinc-700 font-medium transition-colors hover:bg-zinc-100",
+                          pathname === link.href && "bg-zinc-100 text-zinc-900"
+                        )}
                       >
-                        {category.name}
+                        {link.featured && (
+                          <Sparkles className="h-5 w-5 text-sky-400" />
+                        )}
+                        {link.name}
                       </Link>
-                    ))}
+                    </motion.div>
+                  ))}
+
+                  {/* Shop Accordion */}
+                  <motion.div
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: navLinks.length * 0.05 + 0.1 }}
+                  >
+                    <button
+                      onClick={() => setMobileShopOpen((v) => !v)}
+                      className="flex w-full items-center justify-between rounded-[10px] px-4 py-3 text-zinc-700 font-medium transition-colors hover:bg-zinc-100"
+                    >
+                      Shop
+                      <ChevronDown
+                        className={cn(
+                          "h-5 w-5 text-zinc-400 transition-transform duration-300",
+                          mobileShopOpen && "rotate-180"
+                        )}
+                      />
+                    </button>
+
+                    <AnimatePresence>
+                      {mobileShopOpen && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          transition={{ duration: 0.2 }}
+                          className="overflow-hidden"
+                        >
+                          <div className="pt-1 pb-2 pl-4 space-y-1">
+                            {categories.map((category, index) => (
+                              <motion.div
+                                key={category.name}
+                                initial={{ opacity: 0, x: -10 }}
+                                animate={{ opacity: 1, x: 0 }}
+                                transition={{ delay: index * 0.05 }}
+                              >
+                                <Link
+                                  href={category.href}
+                                  onClick={() => setMobileOpen(false)}
+                                  className="flex items-center gap-3 rounded-[10px] px-4 py-2.5 text-sm text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-900"
+                                >
+                                  {category.name}
+                                </Link>
+                              </motion.div>
+                            ))}
+                          </div>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
                   </motion.div>
-                )}
-              </AnimatePresence>
-            </div>
-          </div>
-        </div>
-      )}
+                </nav>
+              </div>
+
+              {/* Footer */}
+              <div className="px-4 py-4 border-t border-zinc-100">
+                <Link
+                  href="/contact"
+                  onClick={() => setMobileOpen(false)}
+                  className="flex items-center justify-center gap-2 w-full rounded-[10px] bg-zinc-900 px-4 py-3 text-white font-medium transition-colors hover:bg-zinc-800"
+                >
+                  Contact Us
+                </Link>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
 
       <SearchModal isOpen={searchOpen} onClose={() => setSearchOpen(false)} />
 

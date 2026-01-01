@@ -1,273 +1,325 @@
-import { Metadata } from 'next'
-import Image from 'next/image'
-import Link from 'next/link'
-import { Target, Users, Zap, Award, Heart, Globe } from 'lucide-react'
-import { BookDemoCTA } from '@/components/home/book-demo-cta'
+import { Metadata } from "next";
+import Image from "next/image";
+import Link from "next/link";
+import { Target, Users, Zap, Award, Heart, Globe } from "lucide-react";
+import { BookDemoCTA } from "@/components/home/book-demo-cta";
 
 export const metadata: Metadata = {
-  title: 'About Us',
-  description: 'Learn about Instant Connect - your partner in digital networking solutions.',
-}
+    title: "About Us",
+    description:
+        "Learn about Instant Connect - your partner in digital networking solutions.",
+};
 
 const stats = [
-  { label: 'Happy Customers', value: '10,000+' },
-  { label: 'Products Delivered', value: '25,000+' },
-  { label: 'Cities Covered', value: '100+' },
-  { label: 'Years of Experience', value: '5+' },
-]
+    { label: "Happy Customers", value: "10,000+" },
+    { label: "Products Delivered", value: "25,000+" },
+    { label: "Cities Covered", value: "100+" },
+    { label: "Years of Experience", value: "5+" },
+];
 
 const values = [
-  {
-    icon: Target,
-    title: 'Innovation First',
-    description: 'We constantly push boundaries to bring you the latest in digital networking technology.',
-  },
-  {
-    icon: Users,
-    title: 'Customer Centric',
-    description: 'Your success is our priority. We design solutions that work for your unique needs.',
-  },
-  {
-    icon: Zap,
-    title: 'Speed & Quality',
-    description: 'Fast delivery without compromising on quality. Every product is crafted with care.',
-  },
-  {
-    icon: Award,
-    title: 'Excellence',
-    description: 'We strive for excellence in everything we do, from product design to customer service.',
-  },
-]
+    {
+        icon: Target,
+        title: "Innovation First",
+        description:
+            "We constantly push boundaries to bring you the latest in digital networking technology.",
+    },
+    {
+        icon: Users,
+        title: "Customer Centric",
+        description:
+            "Your success is our priority. We design solutions that work for your unique needs.",
+    },
+    {
+        icon: Zap,
+        title: "Speed & Quality",
+        description:
+            "Fast delivery without compromising on quality. Every product is crafted with care.",
+    },
+    {
+        icon: Award,
+        title: "Excellence",
+        description:
+            "We strive for excellence in everything we do, from product design to customer service.",
+    },
+];
 
 const team = [
-  {
-    name: 'Rahul Sharma',
-    role: 'Founder & CEO',
-    image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400',
-  },
-  {
-    name: 'Priya Patel',
-    role: 'Head of Design',
-    image: 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400',
-  },
-  {
-    name: 'Amit Kumar',
-    role: 'Tech Lead',
-    image: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400',
-  },
-  {
-    name: 'Neha Singh',
-    role: 'Customer Success',
-    image: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400',
-  },
-]
+    {
+        name: "Rahul Sharma",
+        role: "Founder & CEO",
+        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400",
+    },
+    {
+        name: "Priya Patel",
+        role: "Head of Design",
+        image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400",
+    },
+    {
+        name: "Amit Kumar",
+        role: "Tech Lead",
+        image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+    },
+    {
+        name: "Neha Singh",
+        role: "Customer Success",
+        image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400",
+    },
+];
 
 export default function AboutPage() {
-  return (
-    <div className="overflow-x-hidden" style={{ backgroundColor: '#F4F4F4' }}>
-      {/* Hero */}
-      <section className="pt-[6px] px-[6px] pb-0">
-        <div className="relative h-[50vh] sm:h-[60vh] md:h-[70vh] overflow-hidden rounded-[10px]">
-          {/* Background Image */}
-          <div
-            className="absolute inset-0 bg-cover bg-center"
-            style={{ backgroundImage: `url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070&auto=format&fit=crop')` }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
-
-          {/* Content */}
-          <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 sm:px-6">
-            <p className="text-center text-xs sm:text-sm md:text-base text-white/70 max-w-xs sm:max-w-md md:max-w-2xl">
-              We believe in the power of first impressions and meaningful connections.
-            </p>
-            <h1 className="mt-3 sm:mt-4 text-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white max-w-xs sm:max-w-lg md:max-w-3xl">
-              Revolutionizing Digital Networking
-            </h1>
-            <div className="mt-5 sm:mt-6 md:mt-8 flex flex-col sm:flex-row gap-3">
-              <Link
-                href="/shop"
-                className="rounded-lg bg-white px-5 py-2.5 sm:px-6 sm:py-3 text-xs sm:text-sm font-semibold text-zinc-900 hover:bg-zinc-100"
-              >
-                Shop Now
-              </Link>
-              <Link
-                href="/contact"
-                className="rounded-lg bg-white/20 backdrop-blur-sm px-5 py-2.5 sm:px-6 sm:py-3 text-xs sm:text-sm font-semibold text-white hover:bg-white/30"
-              >
-                Contact Us
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Stats */}
-      <section className="pt-10 pb-8 sm:pt-14 sm:pb-10 lg:pt-20 lg:pb-12">
-        <div className="mx-auto w-[95%]">
-          <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
-            {stats.map((stat) => (
-              <div key={stat.label} className="rounded-[10px] bg-white p-4 sm:p-6 text-center">
-                <p className="text-2xl sm:text-3xl lg:text-4xl font-bold text-zinc-900">{stat.value}</p>
-                <p className="mt-1 text-xs sm:text-sm text-zinc-500">{stat.label}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Our Story */}
-      <section className="py-8 sm:py-12 lg:py-16">
-        <div className="mx-auto w-[95%]">
-          {/* Section Header */}
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 sm:gap-4 pb-6 sm:pb-8">
-            <div>
-              <p className="text-xs sm:text-sm text-zinc-500">
-                From an idea to India&apos;s leading NFC provider
-              </p>
-              <h2 className="mt-1 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-zinc-900">
-                Our Journey
-              </h2>
-            </div>
-          </div>
-
-          {/* Content Grid */}
-          <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
-            {/* Left - Story */}
-            <div className="w-full lg:w-1/2 p-5 sm:p-8 rounded-[10px] bg-white">
-              <div className="space-y-4 text-sm sm:text-base text-zinc-600">
-                <p>
-                  It all started when our founders experienced the frustration of running out of
-                  business cards at a crucial networking event. That moment sparked an idea: what if
-                  we could carry our entire professional identity in a single, smart card?
-                </p>
-                <p>
-                  Today, Instant Connect is India&apos;s leading provider of NFC-enabled networking
-                  solutions. From individual professionals to large enterprises, we help thousands
-                  of people make memorable first impressions every day.
-                </p>
-                <p>
-                  Our product range has expanded to include NFC cards, QR cards, standees, keychains,
-                  and table tents - all designed to help you share your contact information, social
-                  profiles, and business details with just a tap.
-                </p>
-              </div>
-            </div>
-
-            {/* Right - Image */}
-            <div className="w-full lg:w-1/2 relative min-h-[280px] sm:min-h-[350px] lg:min-h-[400px] rounded-[10px] overflow-hidden">
-              <Image
-                src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800"
-                alt="Team collaboration"
-                fill
-                className="object-cover"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Values */}
-      <section className="py-8 sm:py-12 lg:py-16">
-        <div className="mx-auto w-[95%]">
-          {/* Section Header */}
-          <div className="text-center pb-6 sm:pb-8 lg:pb-10">
-            <p className="text-xs sm:text-sm text-zinc-500">
-              The principles that guide everything we do
-            </p>
-            <h2 className="mt-1 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-zinc-900">
-              Our Values
-            </h2>
-          </div>
-
-          {/* Values Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
-            {values.map((value) => (
-              <div key={value.title} className="rounded-[10px] bg-white p-5 sm:p-6">
-                <div className="flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-lg bg-violet-100">
-                  <value.icon className="h-5 w-5 sm:h-6 sm:w-6 text-violet-600" />
-                </div>
-                <h3 className="mt-4 text-base sm:text-lg font-semibold text-zinc-900">
-                  {value.title}
-                </h3>
-                <p className="mt-1.5 text-xs sm:text-sm text-zinc-500">
-                  {value.description}
-                </p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Team */}
-      <section className="py-8 sm:py-12 lg:py-16">
-        <div className="mx-auto w-[95%]">
-          <div className="rounded-[10px] p-5 sm:p-8 lg:p-10" style={{ backgroundColor: '#685BC7' }}>
-            {/* Section Header */}
-            <div className="text-center pb-6 sm:pb-8">
-              <p className="text-xs sm:text-sm text-white/70">
-                Passionate individuals dedicated to your success
-              </p>
-              <h2 className="mt-1 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white">
-                Meet Our Team
-              </h2>
-            </div>
-
-            {/* Team Grid */}
-            <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
-              {team.map((member) => (
-                <div key={member.name} className="overflow-hidden rounded-[10px] bg-white/10 backdrop-blur-sm">
-                  <div className="relative aspect-square">
-                    <Image
-                      src={member.image}
-                      alt={member.name}
-                      fill
-                      className="object-cover"
+    return (
+        <div
+            className="overflow-x-hidden"
+            style={{ backgroundColor: "#F4F4F4" }}
+        >
+            {/* Hero */}
+            <section className="pt-[6px] px-[6px] pb-0">
+                <div className="relative h-[50vh] sm:h-[60vh] md:h-[70vh] overflow-hidden rounded-[10px]">
+                    {/* Background Image */}
+                    <div
+                        className="absolute inset-0 bg-cover bg-center"
+                        style={{
+                            backgroundImage: `url('https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=2070&auto=format&fit=crop')`,
+                        }}
                     />
-                  </div>
-                  <div className="p-3 sm:p-4 text-center">
-                    <h3 className="text-sm sm:text-base font-bold text-white">{member.name}</h3>
-                    <p className="text-xs sm:text-sm text-white/70">{member.role}</p>
-                  </div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-black/20" />
+
+                    {/* Content */}
+                    <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 sm:px-6 pt-16 lg:pt-0">
+                        <p className="text-center text-xs sm:text-sm md:text-base text-white/70 max-w-xs sm:max-w-md md:max-w-2xl">
+                            We believe in the power of first impressions and
+                            meaningful connections.
+                        </p>
+                        <h1 className="mt-3 sm:mt-4 text-center text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white max-w-xs sm:max-w-lg md:max-w-3xl">
+                            Revolutionizing Digital Networking
+                        </h1>
+                        <div className="mt-5 sm:mt-6 md:mt-8 flex flex-col sm:flex-row gap-3">
+                            <Link
+                                href="/shop"
+                                className="rounded-[10px] bg-white px-5 py-2.5 sm:px-6 sm:py-3 text-xs sm:text-sm font-semibold text-zinc-900 hover:bg-zinc-100"
+                            >
+                                Shop Now
+                            </Link>
+                            <Link
+                                href="/contact"
+                                className="rounded-[10px] bg-white/20 backdrop-blur-sm px-5 py-2.5 sm:px-6 sm:py-3 text-xs sm:text-sm font-semibold text-white hover:bg-white/30"
+                            >
+                                Contact Us
+                            </Link>
+                        </div>
+                    </div>
                 </div>
-              ))}
-            </div>
-          </div>
+            </section>
+
+            {/* Stats */}
+            <section className="pt-10 pb-8 sm:pt-14 sm:pb-10 lg:pt-20 lg:pb-12">
+                <div className="mx-auto w-[95%]">
+                    <div className="grid grid-cols-2 gap-3 sm:gap-4 lg:grid-cols-4">
+                        {stats.map((stat) => (
+                            <div
+                                key={stat.label}
+                                className="rounded-[10px] bg-white p-4 sm:p-6 text-center"
+                            >
+                                <p className="text-2xl sm:text-3xl lg:text-4xl font-bold text-zinc-900">
+                                    {stat.value}
+                                </p>
+                                <p className="mt-1 text-xs sm:text-sm text-zinc-500">
+                                    {stat.label}
+                                </p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* Our Story */}
+            <section className="py-8 sm:py-12 lg:py-16">
+                <div className="mx-auto w-[95%]">
+                    {/* Section Header */}
+                    <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 sm:gap-4 pb-6 sm:pb-8">
+                        <div>
+                            <p className="text-xs sm:text-sm text-zinc-500">
+                                From an idea to India&apos;s leading NFC
+                                provider
+                            </p>
+                            <h2 className="mt-1 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-zinc-900">
+                                Our Journey
+                            </h2>
+                        </div>
+                    </div>
+
+                    {/* Content Grid */}
+                    <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
+                        {/* Left - Story */}
+                        <div className="w-full lg:w-1/2 p-5 sm:p-8 rounded-[10px] bg-white">
+                            <div className="space-y-4 text-sm sm:text-base text-zinc-600">
+                                <p>
+                                    It all started when our founders experienced
+                                    the frustration of running out of business
+                                    cards at a crucial networking event. That
+                                    moment sparked an idea: what if we could
+                                    carry our entire professional identity in a
+                                    single, smart card?
+                                </p>
+                                <p>
+                                    Today, Instant Connect is India&apos;s
+                                    leading provider of NFC-enabled networking
+                                    solutions. From individual professionals to
+                                    large enterprises, we help thousands of
+                                    people make memorable first impressions
+                                    every day.
+                                </p>
+                                <p>
+                                    Our product range has expanded to include
+                                    NFC cards, QR cards, standees, keychains,
+                                    and table tents - all designed to help you
+                                    share your contact information, social
+                                    profiles, and business details with just a
+                                    tap.
+                                </p>
+                            </div>
+                        </div>
+
+                        {/* Right - Image */}
+                        <div className="w-full lg:w-1/2 relative min-h-[280px] sm:min-h-[350px] lg:min-h-[400px] rounded-[10px] overflow-hidden">
+                            <Image
+                                src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800"
+                                alt="Team collaboration"
+                                fill
+                                className="object-cover"
+                            />
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Values */}
+            <section className="py-8 sm:py-12 lg:py-16">
+                <div className="mx-auto w-[95%]">
+                    {/* Section Header */}
+                    <div className="text-center pb-6 sm:pb-8 lg:pb-10">
+                        <p className="text-xs sm:text-sm text-zinc-500">
+                            The principles that guide everything we do
+                        </p>
+                        <h2 className="mt-1 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-zinc-900">
+                            Our Values
+                        </h2>
+                    </div>
+
+                    {/* Values Grid */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
+                        {values.map((value) => (
+                            <div
+                                key={value.title}
+                                className="rounded-[10px] bg-white p-5 sm:p-6"
+                            >
+                                <div className="flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-[10px] bg-blue-100">
+                                    <value.icon className="h-5 w-5 sm:h-6 sm:w-6 text-blue-600" />
+                                </div>
+                                <h3 className="mt-4 text-base sm:text-lg font-semibold text-zinc-900">
+                                    {value.title}
+                                </h3>
+                                <p className="mt-1.5 text-xs sm:text-sm text-zinc-500">
+                                    {value.description}
+                                </p>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
+
+            {/* Team */}
+            <section className="py-8 sm:py-12 lg:py-16">
+                <div className="mx-auto w-[95%]">
+                    <div
+                        className="rounded-[10px] p-5 sm:p-8 lg:p-10"
+                        style={{ backgroundColor: "#38bdf8" }}
+                    >
+                        {/* Section Header */}
+                        <div className="text-center pb-6 sm:pb-8">
+                            <p className="text-xs sm:text-sm text-white/70">
+                                Passionate individuals dedicated to your success
+                            </p>
+                            <h2 className="mt-1 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-white">
+                                Meet Our Team
+                            </h2>
+                        </div>
+
+                        {/* Team Grid */}
+                        <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
+                            {team.map((member) => (
+                                <div
+                                    key={member.name}
+                                    className="overflow-hidden rounded-[10px] bg-white/10 backdrop-blur-sm"
+                                >
+                                    <div className="relative aspect-square">
+                                        <Image
+                                            src={member.image}
+                                            alt={member.name}
+                                            fill
+                                            className="object-cover"
+                                        />
+                                    </div>
+                                    <div className="p-3 sm:p-4 text-center">
+                                        <h3 className="text-sm sm:text-base font-bold text-white">
+                                            {member.name}
+                                        </h3>
+                                        <p className="text-xs sm:text-sm text-white/70">
+                                            {member.role}
+                                        </p>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Mission & Vision */}
+            <section className="py-8 sm:py-12 lg:py-16">
+                <div className="mx-auto w-[95%]">
+                    <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
+                        {/* Mission */}
+                        <div className="w-full lg:w-1/2 p-5 sm:p-8 rounded-[10px] bg-white">
+                            <div className="flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-[10px] bg-teal-100">
+                                <Heart className="h-5 w-5 sm:h-6 sm:w-6 text-teal-600" />
+                            </div>
+                            <h3 className="mt-4 text-lg sm:text-xl font-bold text-zinc-900">
+                                Our Mission
+                            </h3>
+                            <p className="mt-3 text-sm sm:text-base text-zinc-600">
+                                To empower professionals and businesses with
+                                innovative digital networking solutions that
+                                make meaningful connections effortless and
+                                memorable.
+                            </p>
+                        </div>
+
+                        {/* Vision */}
+                        <div
+                            className="w-full lg:w-1/2 p-5 sm:p-8 rounded-[10px]"
+                            style={{ backgroundColor: "#F5A623" }}
+                        >
+                            <div className="flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-[10px] bg-black/10">
+                                <Globe className="h-5 w-5 sm:h-6 sm:w-6 text-black" />
+                            </div>
+                            <h3 className="mt-4 text-lg sm:text-xl font-bold text-black">
+                                Our Vision
+                            </h3>
+                            <p className="mt-3 text-sm sm:text-base text-black/80">
+                                To become the global leader in smart networking
+                                products, making paper business cards obsolete
+                                and contributing to a more sustainable,
+                                connected world.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            {/* Footer CTA */}
+            <BookDemoCTA />
         </div>
-      </section>
-
-      {/* Mission & Vision */}
-      <section className="py-8 sm:py-12 lg:py-16">
-        <div className="mx-auto w-[95%]">
-          <div className="flex flex-col lg:flex-row gap-4 sm:gap-6">
-            {/* Mission */}
-            <div className="w-full lg:w-1/2 p-5 sm:p-8 rounded-[10px] bg-white">
-              <div className="flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-lg bg-teal-100">
-                <Heart className="h-5 w-5 sm:h-6 sm:w-6 text-teal-600" />
-              </div>
-              <h3 className="mt-4 text-lg sm:text-xl font-bold text-zinc-900">Our Mission</h3>
-              <p className="mt-3 text-sm sm:text-base text-zinc-600">
-                To empower professionals and businesses with innovative digital networking solutions
-                that make meaningful connections effortless and memorable.
-              </p>
-            </div>
-
-            {/* Vision */}
-            <div className="w-full lg:w-1/2 p-5 sm:p-8 rounded-[10px]" style={{ backgroundColor: '#F5A623' }}>
-              <div className="flex h-11 w-11 sm:h-12 sm:w-12 items-center justify-center rounded-lg bg-black/10">
-                <Globe className="h-5 w-5 sm:h-6 sm:w-6 text-black" />
-              </div>
-              <h3 className="mt-4 text-lg sm:text-xl font-bold text-black">Our Vision</h3>
-              <p className="mt-3 text-sm sm:text-base text-black/80">
-                To become the global leader in smart networking products, making paper business cards
-                obsolete and contributing to a more sustainable, connected world.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Footer CTA */}
-      <BookDemoCTA />
-    </div>
-  )
+    );
 }

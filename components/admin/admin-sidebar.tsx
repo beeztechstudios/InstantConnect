@@ -90,7 +90,7 @@ export function AdminSidebar({ isCollapsed, onToggle, isMobileOpen, onMobileClos
         )}>
           {(!isCollapsed || isMobileOpen) && (
             <Link href="/admin" className="flex items-center gap-2" onClick={handleNavClick}>
-              <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-900 text-xs font-bold text-white">
+              <div className="flex h-8 w-8 items-center justify-center rounded-[10px] bg-zinc-900 text-xs font-bold text-white">
                 IC
               </div>
               <span className="font-bold text-zinc-900">Admin</span>
@@ -99,7 +99,7 @@ export function AdminSidebar({ isCollapsed, onToggle, isMobileOpen, onMobileClos
           {/* Desktop toggle */}
           <button
             onClick={onToggle}
-            className="hidden lg:block rounded-lg p-2 text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900"
+            className="hidden lg:block rounded-[10px] p-2 text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900"
           >
             {isCollapsed ? (
               <Menu className="h-5 w-5" />
@@ -111,7 +111,7 @@ export function AdminSidebar({ isCollapsed, onToggle, isMobileOpen, onMobileClos
           {isMobileOpen && (
             <button
               onClick={onMobileClose}
-              className="lg:hidden rounded-lg p-2 text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900"
+              className="lg:hidden rounded-[10px] p-2 text-zinc-500 hover:bg-zinc-100 hover:text-zinc-900"
             >
               <X className="h-5 w-5" />
             </button>
@@ -132,7 +132,7 @@ export function AdminSidebar({ isCollapsed, onToggle, isMobileOpen, onMobileClos
                     href={item.href}
                     onClick={handleNavClick}
                     className={cn(
-                      'flex items-center rounded-lg py-2.5 text-sm font-medium transition-colors',
+                      'flex items-center rounded-[10px] py-2.5 text-sm font-medium transition-colors',
                       isCollapsed && !isMobileOpen ? 'justify-center px-2' : 'gap-3 px-3',
                       isActive
                         ? 'bg-zinc-900 text-white'
@@ -155,7 +155,7 @@ export function AdminSidebar({ isCollapsed, onToggle, isMobileOpen, onMobileClos
             href="/"
             target="_blank"
             className={cn(
-              'flex w-full items-center rounded-lg py-2.5 text-sm font-medium text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-900',
+              'flex w-full items-center rounded-[10px] py-2.5 text-sm font-medium text-zinc-600 transition-colors hover:bg-zinc-100 hover:text-zinc-900',
               isCollapsed && !isMobileOpen ? 'justify-center px-2' : 'gap-3 px-3'
             )}
             title={isCollapsed && !isMobileOpen ? 'View Store' : undefined}
@@ -166,7 +166,7 @@ export function AdminSidebar({ isCollapsed, onToggle, isMobileOpen, onMobileClos
           <button
             onClick={handleLogout}
             className={cn(
-              'flex w-full items-center rounded-lg py-2.5 text-sm font-medium text-red-600 transition-colors hover:bg-red-50',
+              'flex w-full items-center rounded-[10px] py-2.5 text-sm font-medium text-red-600 transition-colors hover:bg-red-50',
               isCollapsed && !isMobileOpen ? 'justify-center px-2' : 'gap-3 px-3'
             )}
             title={isCollapsed && !isMobileOpen ? 'Logout' : undefined}

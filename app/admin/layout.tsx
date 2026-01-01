@@ -94,7 +94,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   if (isLoading) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-zinc-100">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-zinc-300 border-t-zinc-900" />
+        <div className="h-8 w-8 animate-spin rounded-[10px] border-4 border-zinc-300 border-t-zinc-900" />
       </div>
     )
   }
@@ -103,7 +103,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   if (!isAuthenticated) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-zinc-100">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-zinc-300 border-t-zinc-900" />
+        <div className="h-8 w-8 animate-spin rounded-[10px] border-4 border-zinc-300 border-t-zinc-900" />
       </div>
     )
   }
@@ -121,12 +121,12 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       <header className="fixed top-0 left-0 right-0 z-30 flex h-16 items-center justify-between border-b border-zinc-200 bg-white px-4 lg:hidden">
         <button
           onClick={() => setIsMobileOpen(true)}
-          className="rounded-lg p-2 text-zinc-600 hover:bg-zinc-100"
+          className="rounded-[10px] p-2 text-zinc-600 hover:bg-zinc-100"
         >
           <Menu className="h-6 w-6" />
         </button>
         <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-zinc-900 text-xs font-bold text-white">
+          <div className="flex h-8 w-8 items-center justify-center rounded-[10px] bg-zinc-900 text-xs font-bold text-white">
             IC
           </div>
           <span className="font-bold text-zinc-900">Admin</span>

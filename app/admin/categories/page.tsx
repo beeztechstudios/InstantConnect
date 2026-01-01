@@ -62,7 +62,7 @@ export default function AdminCategoriesPage() {
       key: 'image',
       header: 'Image',
       render: (category: Category) => (
-        <div className="relative h-12 w-12 overflow-hidden rounded-lg bg-zinc-100">
+        <div className="relative h-12 w-12 overflow-hidden rounded-[10px] bg-zinc-100">
           {category.image_url ? (
             <Image
               src={category.image_url}
@@ -107,7 +107,7 @@ export default function AdminCategoriesPage() {
       header: 'Status',
       render: (category: Category) => (
         <span
-          className={`inline-flex rounded-full px-2 py-1 text-xs font-medium ${
+          className={`inline-flex rounded-[10px] px-2 py-1 text-xs font-medium ${
             category.is_active
               ? 'bg-green-100 text-green-700'
               : 'bg-zinc-100 text-zinc-700'
@@ -124,13 +124,13 @@ export default function AdminCategoriesPage() {
         <div className="flex items-center gap-2">
           <Link
             href={`/admin/categories/${category.id}`}
-            className="rounded-lg p-2 hover:bg-zinc-100"
+            className="rounded-[10px] p-2 hover:bg-zinc-100"
           >
             <Pencil className="h-4 w-4 text-zinc-600" />
           </Link>
           <button
             onClick={() => setDeleteModal({ open: true, category })}
-            className="rounded-lg p-2 hover:bg-red-50"
+            className="rounded-[10px] p-2 hover:bg-red-50"
           >
             <Trash2 className="h-4 w-4 text-red-500" />
           </button>
@@ -142,7 +142,7 @@ export default function AdminCategoriesPage() {
   if (isLoading) {
     return (
       <div className="flex min-h-[400px] items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-zinc-200 border-t-zinc-900" />
+        <div className="h-8 w-8 animate-spin rounded-[10px] border-4 border-zinc-200 border-t-zinc-900" />
       </div>
     )
   }

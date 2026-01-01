@@ -76,13 +76,13 @@ export function TestimonialsSection() {
           <div className="mt-8 flex gap-3 sm:mt-0">
             <button
               onClick={() => scroll("left")}
-              className="group flex h-14 w-14 items-center justify-center rounded-full border border-zinc-100 bg-white hover:border-sky-400 transition-all"
+              className="group flex h-14 w-14 items-center justify-center rounded-[10px] border border-zinc-100 bg-white hover:border-sky-400 transition-all"
             >
               <ChevronLeft className="h-6 w-6 text-zinc-400 group-hover:text-sky-400" />
             </button>
             <button
               onClick={() => scroll("right")}
-              className="group flex h-14 w-14 items-center justify-center rounded-full bg-black hover:bg-sky-400 transition-all shadow-xl shadow-sky-400/10"
+              className="group flex h-14 w-14 items-center justify-center rounded-[10px] bg-black hover:bg-sky-400 transition-all shadow-xl shadow-sky-400/10"
             >
               <ChevronRight className="h-6 w-6 text-white" />
             </button>
@@ -97,7 +97,7 @@ export function TestimonialsSection() {
           {testimonials.map((testimonial) => (
             <motion.div
               key={testimonial.id}
-              className="relative flex-none w-[85%] sm:w-[45%] lg:w-[30.5%] aspect-square snap-center overflow-hidden rounded-3xl group"
+              className="relative flex-none w-[85%] sm:w-[45%] lg:w-[30.5%] aspect-square snap-center overflow-hidden rounded-[10px] group"
             >
               {/* Image with Darkening Overlay */}
               <Image
@@ -113,7 +113,7 @@ export function TestimonialsSection() {
               {/* Content Overlay */}
               <div className="absolute  inset-0 p-6 flex flex-col justify-between z-10">
                 <div className="flex justify-between items-start">
-                  <div className="bg-sky-400 p-2 rounded-xl">
+                  <div className="bg-sky-400 p-2 rounded-[10px]">
                     <Quote size={16} className="text-white fill-white" />
                   </div>
                   {/* Floating Brand Mark */}
@@ -125,8 +125,8 @@ export function TestimonialsSection() {
                     &ldquo;{testimonial.quote}&rdquo;
                   </p>
 
-                  <div className="pt-4 border-t backdrop-blur-xl border-none rounded-lg pb-2 flex items-center gap-3">
-                    <div className="w-1 h-8 bg-sky-400 rounded-full" />
+                  <div className="pt-4 border-t backdrop-blur-xl border-none rounded-[10px] pb-2 flex items-center gap-3">
+                    <div className="w-1 h-8 bg-sky-400 rounded-[10px]" />
                     <div>
                       <p className="text-sm font-bold text-white uppercase tracking-widest">
                         {testimonial.name}

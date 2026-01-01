@@ -15,29 +15,34 @@ export const metadata: Metadata = {
 
 const faqs = [
   {
-    question: 'How does the AI Review Card work?',
+    question: 'What is Instant Connect?',
     answer:
-      'When a customer taps their phone on the card, they are taken directly to your Google Business review page. If enabled, our AI first asks them about their experience - positive experiences go to Google, while negative ones are routed to private feedback.',
+      'Instant Connect is an NFC-based digital solution that allows you to instantly share your business details, contact information, social media links, payment links, and more by simply tapping the card or scanning a QR code.',
   },
   {
-    question: 'Is it compatible with all phones?',
+    question: 'Which devices support Instant Connect?',
     answer:
-      'Yes! The card uses both NFC (tap) and QR code technology. NFC works with most modern smartphones, and the QR code provides a fallback for older devices.',
+      'Instant Connect works on all NFC-enabled Android phones and iPhones (XR and above). For devices without NFC, the QR code on the product can be scanned to access the details.',
   },
   {
-    question: 'Can I use it for multiple locations?',
+    question: 'Can I update my information after purchase?',
     answer:
-      'Absolutely! Each card can be linked to a specific location. We offer bulk pricing for businesses with multiple locations.',
+      'Yes, your digital information can be updated even after purchase. Updates depend on the plan selected and may be free or chargeable as per the service terms.',
   },
   {
-    question: 'How do I set up my Google review link?',
+    question: 'Do I need an internet connection to use Instant Connect?',
     answer:
-      'After purchase, you\'ll receive instructions to set up your card. Simply provide your Google Business profile link and we\'ll configure the card for you.',
+      'Internet is required only to open the digital profile. The NFC card itself does not require charging, battery, or any app installation.',
   },
   {
-    question: 'What materials are the cards made of?',
+    question: 'Is the NFC card reusable and shareable?',
     answer:
-      'Our review cards are made from premium PVC plastic with embedded NFC chip. They are waterproof, durable, and designed to withstand daily use.',
+      'Yes, the NFC card is reusable and long-lasting. You can tap it unlimited times and share your details with anyone without any physical wear for digital data.',
+  },
+  {
+    question: 'What happens if my card gets damaged or lost?',
+    answer:
+      'Physical damage or loss is not covered under warranty. However, you can reorder a replacement card and link it to your existing digital profile.',
   },
 ]
 
@@ -91,7 +96,7 @@ export default async function AIReviewCardPage() {
             {/* CTA Button */}
             <Link
               href="#products"
-              className="mt-5 sm:mt-6 md:mt-8 rounded-lg bg-white px-5 py-2.5 sm:px-6 sm:py-3 text-xs sm:text-sm font-semibold text-zinc-900 hover:bg-zinc-100"
+              className="mt-5 sm:mt-6 md:mt-8 rounded-[10px] bg-white px-5 py-2.5 sm:px-6 sm:py-3 text-xs sm:text-sm font-semibold text-zinc-900 hover:bg-zinc-100"
             >
               See How It Works
             </Link>
@@ -114,7 +119,7 @@ export default async function AIReviewCardPage() {
             </div>
             <Link
               href="/shop?category=nfc-cards"
-              className="inline-block rounded-lg bg-zinc-900 px-4 py-2 sm:px-5 sm:py-2.5 text-xs sm:text-sm font-semibold text-white hover:bg-zinc-800 whitespace-nowrap w-fit"
+              className="inline-block rounded-[10px] bg-zinc-900 px-4 py-2 sm:px-5 sm:py-2.5 text-xs sm:text-sm font-semibold text-white hover:bg-zinc-800 whitespace-nowrap w-fit"
             >
               Try Instant Connect
             </Link>
@@ -128,20 +133,20 @@ export default async function AIReviewCardPage() {
               <div>
                 <h3 className="text-base sm:text-lg font-semibold text-black">The problem with reviews today</h3>
                 <div className="mt-3 sm:mt-4 space-y-2 sm:space-y-3">
-                  <div className="flex items-center gap-2 sm:gap-3 rounded-full bg-white/40 px-3 sm:px-4 py-2 sm:py-2.5">
-                    <div className="flex h-5 w-5 sm:h-6 sm:w-6 flex-shrink-0 items-center justify-center rounded-full border-2 border-black/60">
+                  <div className="flex items-center gap-2 sm:gap-3 rounded-[10px] bg-white/40 px-3 sm:px-4 py-2 sm:py-2.5">
+                    <div className="flex h-5 w-5 sm:h-6 sm:w-6 flex-shrink-0 items-center justify-center rounded-[10px] border-2 border-black/60">
                       <X className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-black/60" />
                     </div>
                     <span className="text-xs sm:text-sm text-black">Customers forget to leave reviews</span>
                   </div>
-                  <div className="flex items-center gap-2 sm:gap-3 rounded-full bg-white/40 px-3 sm:px-4 py-2 sm:py-2.5">
-                    <div className="flex h-5 w-5 sm:h-6 sm:w-6 flex-shrink-0 items-center justify-center rounded-full border-2 border-black/60">
+                  <div className="flex items-center gap-2 sm:gap-3 rounded-[10px] bg-white/40 px-3 sm:px-4 py-2 sm:py-2.5">
+                    <div className="flex h-5 w-5 sm:h-6 sm:w-6 flex-shrink-0 items-center justify-center rounded-[10px] border-2 border-black/60">
                       <X className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-black/60" />
                     </div>
                     <span className="text-xs sm:text-sm text-black">Review links are ignored</span>
                   </div>
-                  <div className="flex items-center gap-2 sm:gap-3 rounded-full bg-white/40 px-3 sm:px-4 py-2 sm:py-2.5">
-                    <div className="flex h-5 w-5 sm:h-6 sm:w-6 flex-shrink-0 items-center justify-center rounded-full border-2 border-black/60">
+                  <div className="flex items-center gap-2 sm:gap-3 rounded-[10px] bg-white/40 px-3 sm:px-4 py-2 sm:py-2.5">
+                    <div className="flex h-5 w-5 sm:h-6 sm:w-6 flex-shrink-0 items-center justify-center rounded-[10px] border-2 border-black/60">
                       <X className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-black/60" />
                     </div>
                     <span className="text-xs sm:text-sm text-black">Feedback is short or low quality</span>
@@ -153,20 +158,20 @@ export default async function AIReviewCardPage() {
               <div className="mt-5 sm:mt-6 lg:mt-8">
                 <h3 className="text-base sm:text-lg font-semibold text-black">The AI Review Card fixes this</h3>
                 <div className="mt-3 sm:mt-4 space-y-2 sm:space-y-3">
-                  <div className="flex items-center gap-2 sm:gap-3 rounded-full bg-white/40 px-3 sm:px-4 py-2 sm:py-2.5">
-                    <div className="flex h-5 w-5 sm:h-6 sm:w-6 flex-shrink-0 items-center justify-center rounded-full border-2 border-black/60">
+                  <div className="flex items-center gap-2 sm:gap-3 rounded-[10px] bg-white/40 px-3 sm:px-4 py-2 sm:py-2.5">
+                    <div className="flex h-5 w-5 sm:h-6 sm:w-6 flex-shrink-0 items-center justify-center rounded-[10px] border-2 border-black/60">
                       <Check className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-black/60" />
                     </div>
                     <span className="text-xs sm:text-sm text-black">One tap → instant AI review</span>
                   </div>
-                  <div className="flex items-center gap-2 sm:gap-3 rounded-full bg-white/40 px-3 sm:px-4 py-2 sm:py-2.5">
-                    <div className="flex h-5 w-5 sm:h-6 sm:w-6 flex-shrink-0 items-center justify-center rounded-full border-2 border-black/60">
+                  <div className="flex items-center gap-2 sm:gap-3 rounded-[10px] bg-white/40 px-3 sm:px-4 py-2 sm:py-2.5">
+                    <div className="flex h-5 w-5 sm:h-6 sm:w-6 flex-shrink-0 items-center justify-center rounded-[10px] border-2 border-black/60">
                       <Check className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-black/60" />
                     </div>
                     <span className="text-xs sm:text-sm text-black">Smart feedback beyond stars</span>
                   </div>
-                  <div className="flex items-center gap-2 sm:gap-3 rounded-full bg-white/40 px-3 sm:px-4 py-2 sm:py-2.5">
-                    <div className="flex h-5 w-5 sm:h-6 sm:w-6 flex-shrink-0 items-center justify-center rounded-full border-2 border-black/60">
+                  <div className="flex items-center gap-2 sm:gap-3 rounded-[10px] bg-white/40 px-3 sm:px-4 py-2 sm:py-2.5">
+                    <div className="flex h-5 w-5 sm:h-6 sm:w-6 flex-shrink-0 items-center justify-center rounded-[10px] border-2 border-black/60">
                       <Check className="h-2.5 w-2.5 sm:h-3 sm:w-3 text-black/60" />
                     </div>
                     <span className="text-xs sm:text-sm text-black">Actionable business insights</span>
@@ -201,7 +206,7 @@ export default async function AIReviewCardPage() {
             </div>
             <Link
               href="/shop?category=nfc-cards"
-              className="inline-block rounded-lg bg-zinc-900 px-4 py-2 sm:px-5 sm:py-2.5 text-xs sm:text-sm font-semibold text-white hover:bg-zinc-800 whitespace-nowrap w-fit"
+              className="inline-block rounded-[10px] bg-zinc-900 px-4 py-2 sm:px-5 sm:py-2.5 text-xs sm:text-sm font-semibold text-white hover:bg-zinc-800 whitespace-nowrap w-fit"
             >
               Explore products
             </Link>

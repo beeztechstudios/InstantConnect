@@ -98,10 +98,50 @@ function ShopContent() {
       {/* Header + Filters */}
       <section className="pt-28 sm:pt-32 lg:pt-36">
         <div className="mx-auto w-[95%]">
-          {/* Title */}
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-zinc-900">
-            {selectedCategory ? selectedCategory.name : 'Shop'}
-          </h1>
+          {/* Title Row with Sort on Mobile */}
+          <div className="flex items-center justify-between">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold text-zinc-900">
+              {selectedCategory ? selectedCategory.name : 'Shop'}
+            </h1>
+
+            {/* Sort Dropdown - Mobile */}
+            <div className="relative flex-shrink-0 sm:hidden">
+              <button
+                onClick={() => setShowSortDropdown(!showSortDropdown)}
+                className="flex items-center gap-1.5 text-xs text-zinc-500 hover:text-zinc-900"
+              >
+                {currentSort}
+                <ChevronDown className={`h-4 w-4 transition-transform ${showSortDropdown ? 'rotate-180' : ''}`} />
+              </button>
+
+              {showSortDropdown && (
+                <>
+                  <div
+                    className="fixed inset-0 z-10"
+                    onClick={() => setShowSortDropdown(false)}
+                  />
+                  <div className="absolute right-0 top-full mt-2 z-20 w-44 rounded-[10px] bg-white shadow-lg border border-zinc-200 py-1">
+                    {sortOptions.map((option) => (
+                      <button
+                        key={option.value}
+                        onClick={() => {
+                          setSortBy(option.value)
+                          setShowSortDropdown(false)
+                        }}
+                        className={`w-full text-left px-4 py-2 text-sm ${
+                          sortBy === option.value
+                            ? 'bg-zinc-100 text-zinc-900 font-medium'
+                            : 'text-zinc-600 hover:bg-zinc-50'
+                        }`}
+                      >
+                        {option.label}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+            </div>
+          </div>
 
           {/* Filters Row */}
           <div className="flex items-center justify-between gap-4 mt-6 sm:mt-8 pb-4 sm:pb-5 border-b border-zinc-300">
@@ -110,7 +150,7 @@ function ShopContent() {
               <button
                 type="button"
                 onClick={() => setSelectedCategorySlug(null)}
-                className={`flex-shrink-0 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium transition-colors cursor-pointer ${
+                className={`flex-shrink-0 rounded-[10px] px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium transition-colors cursor-pointer ${
                   !selectedCategorySlug
                     ? 'bg-zinc-900 text-white'
                     : 'text-zinc-600 hover:bg-zinc-200'
@@ -123,7 +163,7 @@ function ShopContent() {
                   type="button"
                   key={cat.id}
                   onClick={() => setSelectedCategorySlug(cat.slug)}
-                  className={`flex-shrink-0 rounded-full px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium transition-colors cursor-pointer ${
+                  className={`flex-shrink-0 rounded-[10px] px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium transition-colors cursor-pointer ${
                     selectedCategorySlug === cat.slug
                       ? 'bg-zinc-900 text-white'
                       : 'text-zinc-600 hover:bg-zinc-200'
@@ -134,11 +174,11 @@ function ShopContent() {
               ))}
             </div>
 
-            {/* Sort Dropdown */}
-            <div className="relative flex-shrink-0">
+            {/* Sort Dropdown - Desktop */}
+            <div className="relative flex-shrink-0 hidden sm:block">
               <button
                 onClick={() => setShowSortDropdown(!showSortDropdown)}
-                className="flex items-center gap-1.5 text-xs sm:text-sm text-zinc-500 hover:text-zinc-900"
+                className="flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-900"
               >
                 {currentSort}
                 <ChevronDown className={`h-4 w-4 transition-transform ${showSortDropdown ? 'rotate-180' : ''}`} />

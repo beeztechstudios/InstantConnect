@@ -59,13 +59,13 @@ export function DataTable<T extends { id: string }>({
               setSearch(e.target.value)
               setCurrentPage(1)
             }}
-            className="w-full rounded-lg border border-zinc-300 bg-white py-2 pl-9 pr-4 text-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
+            className="w-full rounded-[10px] border border-zinc-300 bg-white py-2 pl-9 pr-4 text-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
           />
         </div>
       )}
 
       {/* Table */}
-      <div className="overflow-hidden rounded-xl border border-zinc-200 bg-white">
+      <div className="overflow-hidden rounded-[10px] border border-zinc-200 bg-white">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="border-b border-zinc-200 bg-zinc-50">
@@ -129,7 +129,7 @@ export function DataTable<T extends { id: string }>({
             <button
               onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
               disabled={currentPage === 1}
-              className="rounded-lg p-2 hover:bg-zinc-100 disabled:opacity-50"
+              className="rounded-[10px] p-2 hover:bg-zinc-100 disabled:opacity-50"
             >
               <ChevronLeft className="h-4 w-4" />
             </button>
@@ -139,7 +139,7 @@ export function DataTable<T extends { id: string }>({
             <button
               onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
               disabled={currentPage === totalPages}
-              className="rounded-lg p-2 hover:bg-zinc-100 disabled:opacity-50"
+              className="rounded-[10px] p-2 hover:bg-zinc-100 disabled:opacity-50"
             >
               <ChevronRight className="h-4 w-4" />
             </button>

@@ -29,7 +29,7 @@ const Select = forwardRef<HTMLSelectElement, SelectProps>(
           <select
             id={selectId}
             className={cn(
-              'flex h-10 w-full appearance-none rounded-lg border border-zinc-300 bg-white px-3 py-2 pr-10 text-sm focus:border-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500/20 disabled:cursor-not-allowed disabled:opacity-50',
+              'flex h-10 w-full appearance-none rounded-[10px] border border-zinc-300 bg-white px-3 py-2 pr-10 text-sm focus:border-zinc-500 focus:outline-none focus:ring-2 focus:ring-zinc-500/20 disabled:cursor-not-allowed disabled:opacity-50',
               error && 'border-red-500 focus:border-red-500 focus:ring-red-500/20',
               className
             )}

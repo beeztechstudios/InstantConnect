@@ -153,7 +153,7 @@ export default function AdminPaymentsPage() {
   if (isLoading) {
     return (
       <div className="flex min-h-[400px] items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-zinc-200 border-t-zinc-900" />
+        <div className="h-8 w-8 animate-spin rounded-[10px] border-4 border-zinc-200 border-t-zinc-900" />
       </div>
     )
   }
@@ -200,7 +200,7 @@ export default function AdminPaymentsPage() {
             <button
               key={filter}
               onClick={() => setTimeFilter(filter)}
-              className={`rounded-full px-3 py-1.5 text-sm font-medium transition-colors ${
+              className={`rounded-[10px] px-3 py-1.5 text-sm font-medium transition-colors ${
                 timeFilter === filter
                   ? 'bg-zinc-900 text-white'
                   : 'bg-zinc-100 text-zinc-600 hover:bg-zinc-200'
@@ -216,14 +216,14 @@ export default function AdminPaymentsPage() {
               type="date"
               value={customStartDate}
               onChange={(e) => setCustomStartDate(e.target.value)}
-              className="rounded-lg border border-zinc-300 px-3 py-1.5 text-sm focus:border-zinc-500 focus:outline-none"
+              className="rounded-[10px] border border-zinc-300 px-3 py-1.5 text-sm focus:border-zinc-500 focus:outline-none"
             />
             <span className="text-zinc-400">to</span>
             <input
               type="date"
               value={customEndDate}
               onChange={(e) => setCustomEndDate(e.target.value)}
-              className="rounded-lg border border-zinc-300 px-3 py-1.5 text-sm focus:border-zinc-500 focus:outline-none"
+              className="rounded-[10px] border border-zinc-300 px-3 py-1.5 text-sm focus:border-zinc-500 focus:outline-none"
             />
           </div>
         )}
@@ -231,40 +231,40 @@ export default function AdminPaymentsPage() {
 
       {/* Stats Cards */}
       <div className="grid gap-4 sm:grid-cols-3">
-        <div className="rounded-xl border border-zinc-200 bg-white p-5">
+        <div className="rounded-[10px] border border-zinc-200 bg-white p-5">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-zinc-500">Total Received</p>
               <p className="mt-1 text-2xl font-bold text-zinc-900">{formatPrice(stats.totalReceived)}</p>
               <p className="mt-1 text-xs text-zinc-400">{stats.totalCount} payments • {getTimeFilterLabel()}</p>
             </div>
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+            <div className="flex h-12 w-12 items-center justify-center rounded-[10px] bg-green-100">
               <CreditCard className="h-6 w-6 text-green-600" />
             </div>
           </div>
         </div>
 
-        <div className="rounded-xl border border-zinc-200 bg-white p-5">
+        <div className="rounded-[10px] border border-zinc-200 bg-white p-5">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-zinc-500">Cash on Delivery</p>
               <p className="mt-1 text-2xl font-bold text-amber-600">{formatPrice(stats.totalCOD)}</p>
               <p className="mt-1 text-xs text-zinc-400">{stats.codCount} payments</p>
             </div>
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-amber-100">
+            <div className="flex h-12 w-12 items-center justify-center rounded-[10px] bg-amber-100">
               <Banknote className="h-6 w-6 text-amber-600" />
             </div>
           </div>
         </div>
 
-        <div className="rounded-xl border border-zinc-200 bg-white p-5">
+        <div className="rounded-[10px] border border-zinc-200 bg-white p-5">
           <div className="flex items-center justify-between">
             <div>
               <p className="text-sm text-zinc-500">Online Payments</p>
               <p className="mt-1 text-2xl font-bold text-blue-600">{formatPrice(stats.totalOnline)}</p>
               <p className="mt-1 text-xs text-zinc-400">{stats.onlineCount} payments</p>
             </div>
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-blue-100">
+            <div className="flex h-12 w-12 items-center justify-center rounded-[10px] bg-blue-100">
               <Smartphone className="h-6 w-6 text-blue-600" />
             </div>
           </div>
@@ -272,7 +272,7 @@ export default function AdminPaymentsPage() {
       </div>
 
       {/* Table */}
-      <div className="overflow-hidden rounded-xl border border-zinc-200 bg-white">
+      <div className="overflow-hidden rounded-[10px] border border-zinc-200 bg-white">
         <div className="overflow-x-auto">
           <table className="w-full">
             <thead className="border-b border-zinc-200 bg-zinc-50">
@@ -325,7 +325,7 @@ export default function AdminPaymentsPage() {
                       {formatPrice(payment.amount)}
                     </td>
                     <td className="px-4 py-3">
-                      <span className="inline-flex items-center gap-1 rounded-full bg-zinc-100 px-2 py-1 text-xs font-medium text-zinc-700 uppercase">
+                      <span className="inline-flex items-center gap-1 rounded-[10px] bg-zinc-100 px-2 py-1 text-xs font-medium text-zinc-700 uppercase">
                         {payment.method}
                       </span>
                     </td>

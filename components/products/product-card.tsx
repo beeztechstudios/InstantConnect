@@ -8,111 +8,117 @@ import { formatPrice, calculateDiscount } from "@/lib/utils";
 import type { Product } from "@/types/database";
 
 interface ProductCardProps {
-  product: Product;
-  categorySlug?: string;
+    product: Product;
+    categorySlug?: string;
 }
 
 export function ProductCard({ product, categorySlug }: ProductCardProps) {
-  const discount = calculateDiscount(product.price, product.compare_at_price);
-  const [isHovered, setIsHovered] = useState(false);
+    const discount = calculateDiscount(product.price, product.compare_at_price);
+    const [isHovered, setIsHovered] = useState(false);
 
-  const productUrl = `/product/${product.slug}`;
+    const productUrl = `/product/${product.slug}`;
 
-  // Get primary and hover images
-  const primaryImage = product.images[0] || "/placeholder-product.jpg";
-  const hoverImage = product.images[1] || primaryImage;
-  const hasMultipleImages = product.images.length > 1;
+    // Get primary and hover images
+    const primaryImage = product.images[0] || "/placeholder-product.jpg";
+    const hoverImage = product.images[1] || primaryImage;
+    const hasMultipleImages = product.images.length > 1;
 
-  // Mock review data (replace later)
-  const reviewCount = 349;
-  const rating = 4.1;
+    // Mock review data (replace later)
+    const reviewCount = 349;
+    const rating = 4.1;
 
-  return (
-    <Link href={productUrl}>
-      <div
-        className="group rounded-2xl p-4 transition"
-        style={{ background: "#ebebeb" }}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-      >
-        {/* IMAGE */}
-        <div className="relative aspect-[4/5] overflow-hidden rounded-[10px] bg-white">
-          {/* Primary Image */}
-          <Image
-            src={primaryImage}
-            alt={product.name}
-            fill
-            className={`object-cover transition-all duration-500 ${
-              hasMultipleImages && isHovered ? "opacity-0 scale-105" : "opacity-100 scale-100"
-            }`}
-            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-          />
+    return (
+        <Link href={productUrl}>
+            <div
+                className="group rounded-[10px] p-4 transition"
+                style={{ background: "#ebebeb" }}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+            >
+                {/* IMAGE */}
+                <div className="relative aspect-[4/5] overflow-hidden rounded-[10px] bg-white">
+                    {/* Primary Image */}
+                    <Image
+                        src={primaryImage}
+                        alt={product.name}
+                        fill
+                        className={`object-cover transition-all duration-500 ${
+                            hasMultipleImages && isHovered
+                                ? "opacity-0 scale-105"
+                                : "opacity-100 scale-100"
+                        }`}
+                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    />
 
-          {/* Hover Image (only if multiple images exist) */}
-          {hasMultipleImages && (
-            <Image
-              src={hoverImage}
-              alt={`${product.name} - alternate view`}
-              fill
-              className={`object-cover transition-all duration-500 ${
-                isHovered ? "opacity-100 scale-100" : "opacity-0 scale-95"
-              }`}
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-            />
-          )}
+                    {/* Hover Image (only if multiple images exist) */}
+                    {hasMultipleImages && (
+                        <Image
+                            src={hoverImage}
+                            alt={`${product.name} - alternate view`}
+                            fill
+                            className={`object-cover transition-all duration-500 ${
+                                isHovered
+                                    ? "opacity-100 scale-100"
+                                    : "opacity-0 scale-95"
+                            }`}
+                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                        />
+                    )}
 
-          {/* BADGE */}
-          <div className="absolute left-3 top-3 z-10">
-            <span className="rounded-md bg-red-500 px-3 py-1 text-xs font-semibold text-white">
-              {product.is_featured ? "Bestseller" : "New"}
-            </span>
-          </div>
-        </div>
+                    {/* BADGE */}
+                    <div className="absolute left-3 top-3 z-10">
+                        <span className="rounded-md bg-red-500 px-3 py-1 text-xs font-semibold text-white">
+                            {product.is_featured ? "Bestseller" : "New"}
+                        </span>
+                    </div>
+                </div>
 
-        {/* INFO */}
-        <div className="mt-4 space-y-1.5">
-          {/* TITLE */}
-          <h3 className="text-lg font-bold leading-snug text-zinc-900 line-clamp-2">
-            {product.name}
-          </h3>
+                {/* INFO */}
+                <div className="mt-4 space-y-1.5">
+                    {/* TITLE */}
+                    <h3 className="text-lg font-bold leading-snug text-zinc-900 line-clamp-2">
+                        {product.name}
+                    </h3>
 
-          {/* DESCRIPTION */}
-          {product.short_description && (
-            <p className="text-sm text-zinc-500 max-w-[150px] line-clamp-2">
-              {product.short_description}
-            </p>
-          )}
+                    {/* DESCRIPTION */}
+                    {product.short_description && (
+                        <p className="text-sm text-zinc-500 max-w-[150px] line-clamp-2">
+                            {product.short_description}
+                        </p>
+                    )}
 
-          {/* PRICE */}
-          <div className="mt-2 flex flex-wrap items-center gap-2">
-            <span className="text-xl font-extrabold text-zinc-900">
-              {formatPrice(product.price)}
-            </span>
+                    {/* PRICE */}
+                    <div className="mt-2 flex flex-wrap items-center gap-2">
+                        <span className="text-xl font-extrabold text-zinc-900">
+                            {formatPrice(product.price)}
+                        </span>
 
-            {product.compare_at_price && (
-              <span className="text-md text-zinc-600 line-through">
-                {formatPrice(product.compare_at_price)}
-              </span>
-            )}
+                        {product.compare_at_price && (
+                            <span className="text-md text-zinc-600 line-through">
+                                {formatPrice(product.compare_at_price)}
+                            </span>
+                        )}
 
-            {discount > 0 && (
-              <span className="rounded-md bg-emerald-500 px-2 py-0.5 text-[14px] font-semibold text-white">
-                {discount}% OFF
-              </span>
-            )}
-          </div>
+                        {discount > 0 && (
+                            <span className="rounded-md bg-emerald-500 px-2 py-0.5 text-[14px] font-semibold text-white">
+                                {discount}% OFF
+                            </span>
+                        )}
+                    </div>
 
-          {/* REVIEWS */}
-          <div className="mt-1.5 flex items-center gap-3 text-sm text-zinc-500">
-            <span>({reviewCount} Reviews)</span>
+                    {/* REVIEWS */}
+                    <div className="mt-1.5 flex items-center gap-3 text-sm text-zinc-500">
+                        <span>({reviewCount} Reviews)</span>
 
-            <div className="flex items-center gap-1 rounded-md bg-sky-100 px-2 py-0.5">
-              <Star className="h-4 w-4 fill-sky-400 text-sky-400" />
-              <span className="font-semibold text-sky-600">{rating}</span>
+                        <div className="flex items-center gap-1 rounded-md bg-sky-100 px-2 py-0.5">
+                            <Star className="h-4 w-4 fill-sky-400 text-sky-400" />
+                            <span className="font-semibold text-sky-600">
+                                {rating}
+                            </span>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-    </Link>
-  );
+        </Link>
+    );
 }

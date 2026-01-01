@@ -27,7 +27,7 @@ export function Accordion({ title, children, defaultOpen = false, className }: A
   const [isOpen, setIsOpen] = useState(defaultOpen)
 
   return (
-    <div className={cn('rounded-lg border border-zinc-200', className)}>
+    <div className={cn('rounded-[10px] border border-zinc-200', className)}>
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="flex w-full items-center justify-between p-4 text-left"

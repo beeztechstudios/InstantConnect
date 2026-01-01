@@ -31,8 +31,8 @@ export function HeroBanner() {
       <motion.div className="relative w-full md:w-[95%] mx-2 md:mx-6 my-4 min-h-[auto] md:min-h-[750px] rounded-3xl overflow-hidden bg-[#592fe5] flex flex-col justify-center">
         {/* --- PREMIUM MESH BACKGROUND --- */}
         <div className="absolute inset-0 z-0 pointer-events-none">
-          <div className="absolute top-[-10%] left-[-10%] w-[70%] h-[70%] bg-sky-400/20 rounded-full blur-[120px] md:blur-[190px]" />
-          <div className="absolute bottom-[10%] right-[-10%] w-[60%] h-[60%] bg-blue-400/40 rounded-full blur-[80px] md:blur-[100px]" />
+          <div className="absolute top-[-10%] left-[-10%] w-[70%] h-[70%] bg-sky-400/20 rounded-[10px] blur-[120px] md:blur-[190px]" />
+          <div className="absolute bottom-[10%] right-[-10%] w-[60%] h-[60%] bg-blue-400/40 rounded-[10px] blur-[80px] md:blur-[100px]" />
 
           <motion.div
             style={{ y: y2 }}
@@ -91,7 +91,7 @@ export function HeroBanner() {
                   transition={{ delay: 0.5 + i * 0.1 }}
                   className="group flex flex-col items-center gap-2 md:gap-3"
                 >
-                  <div className="relative h-14 w-14 md:h-18 md:w-18 rounded-full border-2 md:border-4 border-white/20 flex items-center justify-center bg-white text-black transition-all group-hover:border-indigo-400">
+                  <div className="relative h-14 w-14 md:h-18 md:w-18 rounded-[10px] border-2 md:border-4 border-white/20 flex items-center justify-center bg-white text-black transition-all group-hover:border-indigo-400">
                     <step.icon size={20} className="md:w-6 md:h-6" />
                   </div>
                   <span className="text-[10px] md:text-xs font-bold uppercase tracking-widest text-white/80">
@@ -109,7 +109,7 @@ export function HeroBanner() {
             >
               <Link
                 href="/ai-review-card"
-                className="group relative inline-flex items-center justify-center gap-4 bg-white text-black px-8 md:px-10 py-4 md:py-5 rounded-full font-black text-xs md:text-sm uppercase tracking-widest transition-all hover:bg-sky-400 hover:text-white w-full sm:w-auto"
+                className="group relative inline-flex items-center justify-center gap-4 bg-white text-black px-8 md:px-10 py-4 md:py-5 rounded-[10px] font-black text-xs md:text-sm uppercase tracking-widest transition-all hover:bg-sky-400 hover:text-white w-full sm:w-auto"
               >
                 Start Growing
                 <ArrowRight
@@ -129,7 +129,7 @@ export function HeroBanner() {
           >
             <div className="relative w-full max-w-[320px] md:max-w-[450px] aspect-square">
               {/* Glow effect slightly smaller on mobile */}
-              <div className="absolute inset-0 bg-sky-500/20 blur-[80px] md:blur-[150px] rounded-full" />
+              <div className="absolute inset-0 bg-sky-500/20 blur-[80px] md:blur-[150px] rounded-[10px]" />
 
               <Image
                 src="/hero-mockup.png"
