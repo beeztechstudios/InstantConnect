@@ -3,6 +3,8 @@
 import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { ShoppingCart } from "lucide-react";
+import { useCart } from "@/contexts/cart-context";
 import { formatPrice, calculateDiscount } from "@/lib/utils";
 import type { Product } from "@/types/database";
 
@@ -14,6 +16,7 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, categorySlug, noBg, tag }: ProductCardProps) {
+    const { addItem } = useCart();
     const discount = calculateDiscount(product.price, product.compare_at_price);
     const [isHovered, setIsHovered] = useState(false);
 
@@ -33,6 +36,19 @@ export function ProductCard({ product, categorySlug, noBg, tag }: ProductCardPro
         Popular: "bg-purple-500",
         New: "bg-emerald-500",
         Bestseller: "bg-red-500",
+    };
+
+    const handleAddToCart = (e: React.MouseEvent) => {
+        e.preventDefault();
+        e.stopPropagation();
+        addItem({
+            productId: product.id,
+            name: product.name,
+            slug: product.slug,
+            price: product.price,
+            compareAtPrice: product.compare_at_price,
+            image: primaryImage,
+        });
     };
 
     return (
@@ -78,6 +94,29 @@ export function ProductCard({ product, categorySlug, noBg, tag }: ProductCardPro
                         <span className={`rounded-md ${tagColors[displayTag] || "bg-red-500"} px-3 py-1 text-xs font-semibold text-white`}>
                             {displayTag}
                         </span>
+                    </div>
+
+                    {/* Mobile: Cart Icon Button (always visible) */}
+                    <button
+                        onClick={handleAddToCart}
+                        className="sm:hidden absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-full bg-black text-white z-10 active:scale-95 transition-transform shadow-lg"
+                    >
+                        <ShoppingCart className="h-4 w-4" />
+                    </button>
+
+                    {/* Desktop: Hover Add to Cart */}
+                    <div
+                        className={`hidden sm:flex absolute inset-x-0 bottom-0 justify-center pb-4 transition-all duration-300 ${
+                            isHovered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
+                        }`}
+                    >
+                        <button
+                            onClick={handleAddToCart}
+                            className="flex items-center gap-2 rounded-full bg-black px-5 py-2.5 text-sm font-semibold text-white shadow-lg hover:bg-zinc-800 transition-colors"
+                        >
+                            <ShoppingCart className="h-4 w-4" />
+                            Add to Cart
+                        </button>
                     </div>
                 </div>
 
