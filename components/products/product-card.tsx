@@ -72,9 +72,9 @@ export function ProductCard({ product, categorySlug, noBg, tag }: ProductCardPro
     };
 
     return (
-        <Link href={productUrl} className="h-full block">
+        <Link href={productUrl} className="block lg:h-full">
             <div
-                className="group rounded-[10px] p-3 sm:p-4 transition h-full flex flex-col"
+                className="group rounded-[10px] p-3 sm:p-4 transition lg:h-full lg:flex lg:flex-col"
                 style={{ background: noBg ? "#f4f4f4" : "#ebebeb" }}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
@@ -130,7 +130,7 @@ export function ProductCard({ product, categorySlug, noBg, tag }: ProductCardPro
                 </div>
 
                 {/* INFO */}
-                <div className="mt-3 sm:mt-4 flex flex-col flex-grow">
+                <div className="mt-3 sm:mt-4 lg:flex lg:flex-col lg:flex-grow">
                     {/* TITLE */}
                     <h3 className="text-lg font-bold leading-snug text-zinc-900 line-clamp-2">
                         {product.name}
@@ -144,7 +144,7 @@ export function ProductCard({ product, categorySlug, noBg, tag }: ProductCardPro
                     )}
 
                     {/* PRICE */}
-                    <div className="mt-auto pt-2 sm:pt-3 flex flex-wrap items-center gap-2">
+                    <div className="mt-2 lg:mt-auto lg:pt-3 flex flex-wrap items-center gap-2">
                         <span className="text-xl font-extrabold text-zinc-900">
                             {formatPrice(product.price)}
                         </span>
