@@ -71,10 +71,10 @@ export function Footer() {
                     {/* Email & Address (Left) */}
                     <div className="md:col-span-4 space-y-6">
                         <a
-                            href="mailto:instax@fujifilm.com"
+                            href="mailto:support@inconnect.in"
                             className="text-2xl font-bold border-b-2 border-black pb-1 hover:opacity-70 transition-opacity"
                         >
-                            hello@iconnect.com
+                            support@inconnect.in
                         </a>
 
                         <div className="flex items-start gap-4 pt-4">
