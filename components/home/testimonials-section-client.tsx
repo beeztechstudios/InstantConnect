@@ -74,7 +74,7 @@ export function TestimonialsSectionClient({ testimonials }: TestimonialsSectionC
                     {testimonials.map((testimonial) => (
                         <motion.div
                             key={testimonial.id}
-                            className="relative flex-none w-[85%] sm:w-[45%] lg:w-[30.5%] aspect-square snap-center overflow-hidden rounded-[10px] group"
+                            className="relative flex-none w-[85%] sm:w-[45%] lg:w-[30.5%] aspect-[3/4] sm:aspect-square snap-center overflow-hidden rounded-[10px] group"
                         >
                             {/* Image with Darkening Overlay */}
                             <Image
@@ -88,25 +88,25 @@ export function TestimonialsSectionClient({ testimonials }: TestimonialsSectionC
                             <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent opacity-80" />
 
                             {/* Content Overlay */}
-                            <div className="absolute inset-0 p-6 flex flex-col justify-between z-10">
+                            <div className="absolute inset-0 p-4 sm:p-6 flex flex-col justify-between z-10">
                                 <div className="flex justify-between items-start">
-                                    <div className="bg-sky-400 p-2 rounded-[10px]">
-                                        <Quote size={16} className="text-white fill-white" />
+                                    <div className="bg-sky-400 p-1.5 sm:p-2 rounded-[10px]">
+                                        <Quote size={14} className="text-white fill-white sm:w-4 sm:h-4" />
                                     </div>
                                 </div>
 
                                 <div>
-                                    <p className="text-lg sm:text-xl font-medium text-white leading-snug tracking-tight mb-4">
+                                    <p className="text-sm sm:text-lg lg:text-xl font-medium text-white leading-snug tracking-tight mb-3 sm:mb-4 line-clamp-5 sm:line-clamp-none">
                                         &ldquo;{testimonial.content}&rdquo;
                                     </p>
 
-                                    <div className="pt-4 border-t backdrop-blur-xl border-none rounded-[10px] pb-2 flex items-center gap-3">
-                                        <div className="w-1 h-8 bg-sky-400 rounded-[10px]" />
+                                    <div className="pt-3 sm:pt-4 border-t backdrop-blur-xl border-none rounded-[10px] pb-1 sm:pb-2 flex items-center gap-2 sm:gap-3">
+                                        <div className="w-1 h-6 sm:h-8 bg-sky-400 rounded-[10px]" />
                                         <div>
-                                            <p className="text-sm font-bold text-white uppercase tracking-widest">
+                                            <p className="text-xs sm:text-sm font-bold text-white uppercase tracking-widest">
                                                 {testimonial.name}
                                             </p>
-                                            <p className="text-xs text-zinc-400">
+                                            <p className="text-[10px] sm:text-xs text-zinc-400">
                                                 {testimonial.role || testimonial.company || "Customer"}
                                             </p>
                                         </div>
