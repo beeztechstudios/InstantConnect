@@ -96,7 +96,7 @@ function ShopContent() {
   const currentSort = sortOptions.find(o => o.value === sortBy)?.label || 'Newest'
 
   return (
-    <div className="overflow-x-hidden min-h-screen" style={{ backgroundColor: '#F4F4F4' }}>
+    <div className="overflow-x-hidden min-h-screen" style={{ backgroundColor: '#fff' }}>
       {/* Header + Filters */}
       <section className="pt-28 sm:pt-32 lg:pt-36">
         <div className="mx-auto w-[95%]">
@@ -265,7 +265,7 @@ function ShopContent() {
 export default function ShopPage() {
   return (
     <Suspense fallback={
-      <div className="overflow-x-hidden min-h-screen pt-28 sm:pt-32 lg:pt-36" style={{ backgroundColor: '#F4F4F4' }}>
+      <div className="overflow-x-hidden min-h-screen pt-28 sm:pt-32 lg:pt-36" style={{ backgroundColor: '#fff' }}>
         <div className="mx-auto w-[95%]">
           <div className="h-12 w-32 bg-zinc-200 rounded animate-pulse" />
           <div className="mt-8 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6">
