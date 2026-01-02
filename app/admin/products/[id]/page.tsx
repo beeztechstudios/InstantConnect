@@ -41,7 +41,11 @@ export default function ProductFormPage() {
     is_active: true,
     is_featured: false,
     is_popular: false,
+    is_just_dropped_hero: false,
+    hero_video_url: '',
   })
+  const [isUploadingVideo, setIsUploadingVideo] = useState(false)
+  const videoInputRef = useRef<HTMLInputElement>(null)
 
   useEffect(() => {
     const fetchData = async () => {
@@ -85,6 +89,8 @@ export default function ProductFormPage() {
           is_active: data.is_active,
           is_featured: data.is_featured,
           is_popular: data.is_popular || false,
+          is_just_dropped_hero: data.is_just_dropped_hero || false,
+          hero_video_url: data.hero_video_url || '',
         })
       }
 
@@ -185,6 +191,47 @@ export default function ProductFormPage() {
       setIsUploading(false)
       if (fileInputRef.current) {
         fileInputRef.current.value = ''
+      }
+    }
+  }
+
+  const handleVideoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setIsUploadingVideo(true)
+    const supabase = createClient()
+
+    try {
+      const fileExt = file.name.split('.').pop()
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`
+      const filePath = `hero-videos/${fileName}`
+
+      const { error: uploadError } = await supabase.storage
+        .from('product-images')
+        .upload(filePath, file)
+
+      if (uploadError) {
+        console.error('Upload error:', uploadError)
+        toast.error('Failed to upload video')
+        return
+      }
+
+      const { data: urlData } = supabase.storage
+        .from('product-images')
+        .getPublicUrl(filePath)
+
+      if (urlData?.publicUrl) {
+        setFormData({ ...formData, hero_video_url: urlData.publicUrl })
+        toast.success('Video uploaded successfully')
+      }
+    } catch (error) {
+      console.error('Upload error:', error)
+      toast.error('Failed to upload video')
+    } finally {
+      setIsUploadingVideo(false)
+      if (videoInputRef.current) {
+        videoInputRef.current.value = ''
       }
     }
   }
@@ -414,8 +461,94 @@ export default function ProductFormPage() {
                 />
                 <span className="text-sm text-zinc-700">Popular</span>
               </label>
+              <div className="pt-3 mt-3 border-t border-zinc-200">
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={formData.is_just_dropped_hero}
+                    onChange={(e) => setFormData({ ...formData, is_just_dropped_hero: e.target.checked })}
+                    className="h-4 w-4 rounded border-zinc-300"
+                  />
+                  <span className="text-sm text-zinc-700 font-medium">Just Dropped Hero</span>
+                </label>
+                <p className="mt-1 text-xs text-zinc-500 ml-7">Only one product can have this tag. Displays as hero in Just Dropped section with video background.</p>
+              </div>
             </div>
           </div>
+
+          {/* Hero Video - Only shown when Just Dropped Hero is checked */}
+          {formData.is_just_dropped_hero && (
+            <div className="rounded-[10px] border border-zinc-200 bg-white p-6">
+              <h2 className="font-semibold text-zinc-900">Hero Video</h2>
+              <p className="mt-1 text-xs text-zinc-500">Upload a video for the Just Dropped hero background</p>
+              <div className="mt-4 space-y-4">
+                {/* Video Upload */}
+                <div>
+                  <input
+                    ref={videoInputRef}
+                    type="file"
+                    accept="video/mp4,video/webm"
+                    onChange={handleVideoUpload}
+                    className="hidden"
+                    id="video-upload"
+                  />
+                  <label
+                    htmlFor="video-upload"
+                    className={`flex cursor-pointer flex-col items-center justify-center rounded-[10px] border-2 border-dashed border-zinc-300 bg-zinc-50 p-4 transition-colors hover:border-zinc-400 hover:bg-zinc-100 ${isUploadingVideo ? 'pointer-events-none opacity-50' : ''}`}
+                  >
+                    {isUploadingVideo ? (
+                      <>
+                        <Loader2 className="h-6 w-6 animate-spin text-zinc-500" />
+                        <span className="mt-2 text-sm text-zinc-500">Uploading video...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Upload className="h-6 w-6 text-zinc-500" />
+                        <span className="mt-2 text-sm text-zinc-500">Click to upload video</span>
+                        <span className="text-xs text-zinc-400">MP4, WEBM</span>
+                      </>
+                    )}
+                  </label>
+                </div>
+
+                {/* Video URL Input */}
+                <div className="relative">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-zinc-200" />
+                  </div>
+                  <div className="relative flex justify-center">
+                    <span className="bg-white px-2 text-xs text-zinc-400">or add by URL</span>
+                  </div>
+                </div>
+                <Input
+                  placeholder="Video URL (e.g., https://example.com/video.mp4)"
+                  value={formData.hero_video_url}
+                  onChange={(e) => setFormData({ ...formData, hero_video_url: e.target.value })}
+                />
+
+                {/* Video Preview */}
+                {formData.hero_video_url && (
+                  <div className="relative aspect-video rounded-[10px] overflow-hidden bg-black">
+                    <video
+                      src={formData.hero_video_url}
+                      className="h-full w-full object-cover"
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                    />
+                    <button
+                      type="button"
+                      onClick={() => setFormData({ ...formData, hero_video_url: '' })}
+                      className="absolute top-2 right-2 flex h-6 w-6 items-center justify-center rounded-full bg-red-500 text-white hover:bg-red-600"
+                    >
+                      <X className="h-3 w-3" />
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          )}
 
           {/* Images */}
           <div className="rounded-[10px] border border-zinc-200 bg-white p-6">
