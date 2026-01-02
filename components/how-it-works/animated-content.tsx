@@ -140,86 +140,64 @@ const staggerContainer = {
 export function HowItWorksAnimatedContent() {
     return (
         <div className="overflow-x-hidden bg-slate-100">
-            {/* Hero with Background Image */}
-            <section className="pt-28 sm:pt-32 lg:pt-36 px-[6px]">
-                <div className="mx-auto w-[95%]">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.6 }}
-                        className="relative rounded-[10px] overflow-hidden min-h-[400px] sm:min-h-[450px] lg:min-h-[500px]"
-                    >
-                        {/* Animated Background */}
-                        <div className="absolute inset-0">
-                            <motion.div
-                                animate={{
-                                    scale: [1, 1.05, 1],
-                                }}
-                                transition={{
-                                    duration: 20,
-                                    repeat: Infinity,
-                                    repeatType: "reverse",
-                                }}
-                                className="absolute inset-0 bg-cover bg-center"
-                                style={{
-                                    backgroundImage: `url('https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=2000&auto=format&fit=crop')`,
-                                }}
-                            />
-                            <div className="absolute inset-0 bg-black/80" />
-                        </div>
+            {/* Hero - Same style as homepage and AI Review */}
+            <section className="pt-[6px] px-[6px] pb-0">
+                <motion.div
+                    initial={{ opacity: 0, scale: 0.98 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.6 }}
+                    className="relative h-[60vh] sm:h-[70vh] md:h-[80vh] lg:h-[90vh] overflow-hidden rounded-[10px]"
+                >
+                    {/* Background Image */}
+                    <div
+                        className="absolute inset-0 bg-cover bg-center"
+                        style={{
+                            backgroundImage: `url('https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=2000&auto=format&fit=crop')`,
+                        }}
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20" />
 
-                        {/* Content */}
-                        <div className="relative z-10 p-6 sm:p-10 md:p-16 lg:p-20">
-                            <div className="max-w-3xl">
-                                <motion.span
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    transition={{ delay: 0.2 }}
-                                    className="text-xs sm:text-sm font-medium text-sky-400 uppercase tracking-wide"
-                                >
-                                    How It Works
-                                </motion.span>
-                                <motion.h1
-                                    initial={{ opacity: 0, y: 20 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.3, duration: 0.5 }}
-                                    className="mt-4 text-4xl sm:text-5xl lg:text-6xl xl:text-7xl font-black text-white tracking-tighter leading-[0.95]"
-                                >
-                                    Networking made<br />
-                                    <span className="text-zinc-500">effortless.</span>
-                                </motion.h1>
-                                <motion.p
-                                    initial={{ opacity: 0 }}
-                                    animate={{ opacity: 1 }}
-                                    transition={{ delay: 0.5 }}
-                                    className="mt-5 text-sm sm:text-base lg:text-lg text-zinc-400 max-w-xl"
-                                >
-                                    Say goodbye to paper business cards. Share your professional identity with just one tap.
-                                </motion.p>
-                                <motion.div
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    transition={{ delay: 0.6 }}
-                                    className="mt-8 flex flex-wrap gap-3"
-                                >
-                                    <Link
-                                        href="/shop"
-                                        className="inline-flex items-center gap-2 rounded-[10px] bg-sky-400 px-6 py-3 text-sm font-semibold text-white hover:bg-sky-500 transition-colors"
-                                    >
-                                        Shop Now
-                                        <ArrowRight className="h-4 w-4" />
-                                    </Link>
-                                    <Link
-                                        href="/book-demo"
-                                        className="inline-flex items-center gap-2 rounded-[10px] bg-white/10 backdrop-blur-sm px-6 py-3 text-sm font-semibold text-white hover:bg-white/20 transition-colors"
-                                    >
-                                        Book a Demo
-                                    </Link>
-                                </motion.div>
-                            </div>
-                        </div>
-                    </motion.div>
-                </div>
+                    {/* Content */}
+                    <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 sm:px-6">
+                        <motion.p
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.2 }}
+                            className="text-center text-xs sm:text-sm md:text-base text-white/70 max-w-xs sm:max-w-md md:max-w-2xl"
+                        >
+                            Share your professional identity with just one tap. No apps needed.
+                        </motion.p>
+
+                        <motion.h1
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.3 }}
+                            className="mt-3 sm:mt-4 text-center text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-white max-w-xs sm:max-w-lg md:max-w-2xl"
+                        >
+                            Networking made effortless.
+                        </motion.h1>
+
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.5 }}
+                            className="mt-5 sm:mt-6 md:mt-8 flex flex-wrap justify-center gap-3"
+                        >
+                            <Link
+                                href="/shop"
+                                className="rounded-[10px] bg-white px-5 py-2.5 sm:px-6 sm:py-3 text-xs sm:text-sm font-semibold text-zinc-900 hover:bg-zinc-100 transition-colors"
+                            >
+                                Shop Now
+                            </Link>
+                            <Link
+                                href="/book-demo"
+                                className="rounded-[10px] bg-white/10 backdrop-blur-sm border border-white/20 px-5 py-2.5 sm:px-6 sm:py-3 text-xs sm:text-sm font-semibold text-white hover:bg-white/20 transition-colors"
+                            >
+                                Book a Demo
+                            </Link>
+                        </motion.div>
+                    </div>
+                </motion.div>
             </section>
 
             {/* Steps Section with Images */}
