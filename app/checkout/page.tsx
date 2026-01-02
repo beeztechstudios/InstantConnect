@@ -22,7 +22,6 @@ import {
     Mail,
     Globe,
     MessageSquare,
-    ChevronRight,
 } from "lucide-react";
 import { useCart } from "@/contexts/cart-context";
 import { formatPrice, generateOrderNumber } from "@/lib/utils";
@@ -70,8 +69,8 @@ interface RazorpayResponse {
 const steps = [
     { id: 1, name: "Contact" },
     { id: 2, name: "Shipping" },
-    { id: 3, name: "Payment" },
-    { id: 4, name: "Card Details", optional: true },
+    { id: 3, name: "Card Details" },
+    { id: 4, name: "Payment" },
 ];
 
 export default function CheckoutPage() {
@@ -136,7 +135,6 @@ export default function CheckoutPage() {
         socialLinks: "",
         additionalNotes: "",
     });
-    const [showCardDetails, setShowCardDetails] = useState(false);
 
     // Validation errors
     const [errors, setErrors] = useState<Record<string, string>>({});
@@ -240,17 +238,15 @@ export default function CheckoutPage() {
             throw new Error(`Order items failed: ${itemsError.message}`);
         }
 
-        // Save card details if provided
-        if (showCardDetails && cardDetails.name) {
-            await supabase.from("post_payment_details").insert([
-                {
-                    order_id: order.id,
-                    detail_type: "card_details",
-                    detail_data: cardDetails,
-                    status: "pending",
-                },
-            ]);
-        }
+        // Save card details (mandatory)
+        await supabase.from("post_payment_details").insert([
+            {
+                order_id: order.id,
+                detail_type: "card_details",
+                detail_data: cardDetails,
+                status: "pending",
+            },
+        ]);
 
         return { order, orderNumber, customer };
     };
@@ -504,18 +500,11 @@ export default function CheckoutPage() {
                                                 step.id
                                             )}
                                         </div>
-                                        <div className="flex flex-col items-center sm:items-start">
-                                            <span
-                                                className={`text-[10px] sm:text-sm font-medium ${currentStep >= step.id ? "text-zinc-900" : "text-zinc-400"}`}
-                                            >
-                                                {step.name}
-                                            </span>
-                                            {"optional" in step && step.optional && (
-                                                <span className="text-[8px] sm:text-[10px] text-zinc-400">
-                                                    (Optional)
-                                                </span>
-                                            )}
-                                        </div>
+                                        <span
+                                            className={`text-[10px] sm:text-sm font-medium ${currentStep >= step.id ? "text-zinc-900" : "text-zinc-400"}`}
+                                        >
+                                            {step.name}
+                                        </span>
                                     </div>
                                     {index < steps.length - 1 && (
                                         <div
@@ -1066,7 +1055,7 @@ export default function CheckoutPage() {
                                                                     "#38bdf8",
                                                             }}
                                                         >
-                                                            Continue to Payment
+                                                            Continue to Card Details
                                                         </button>
                                                     </div>
                                                 </div>
@@ -1091,15 +1080,234 @@ export default function CheckoutPage() {
                                         </div>
                                     )}
 
-                                    {/* Payment */}
+                                    {/* Card Details - Step 3 (Mandatory) */}
                                     {currentStep >= 3 && (
+                                        <div className="rounded-[10px] bg-white p-4 sm:p-6">
+                                            <div className="flex items-center justify-between">
+                                                <h2 className="text-base sm:text-lg font-bold text-zinc-900">
+                                                    Card/Product Details
+                                                </h2>
+                                                {currentStep > 3 && (
+                                                    <button
+                                                        type="button"
+                                                        onClick={() => setCurrentStep(3)}
+                                                        className="text-xs sm:text-sm font-medium"
+                                                        style={{ color: "#38bdf8" }}
+                                                    >
+                                                        Edit
+                                                    </button>
+                                                )}
+                                            </div>
+                                            {currentStep === 3 ? (
+                                                <>
+                                                    <p className="mt-1 text-xs sm:text-sm text-zinc-500">
+                                                        Provide details for your NFC card or product personalization.
+                                                    </p>
+                                                    <div className="mt-4 space-y-3 sm:space-y-4">
+                                                        <div className="grid gap-3 sm:gap-4 sm:grid-cols-2">
+                                                            <div>
+                                                                <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
+                                                                    Full Name (for card) <span className="text-red-500">*</span>
+                                                                </label>
+                                                                <div className="relative">
+                                                                    <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+                                                                    <input
+                                                                        type="text"
+                                                                        placeholder="John Doe"
+                                                                        value={cardDetails.name}
+                                                                        onChange={(e) =>
+                                                                            setCardDetails({
+                                                                                ...cardDetails,
+                                                                                name: e.target.value,
+                                                                            })
+                                                                        }
+                                                                        required
+                                                                        className="w-full rounded-[10px] border border-zinc-200 py-2.5 sm:py-3 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none"
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
+                                                                    Designation/Title
+                                                                </label>
+                                                                <input
+                                                                    type="text"
+                                                                    placeholder="Marketing Manager"
+                                                                    value={cardDetails.designation}
+                                                                    onChange={(e) =>
+                                                                        setCardDetails({
+                                                                            ...cardDetails,
+                                                                            designation: e.target.value,
+                                                                        })
+                                                                    }
+                                                                    className="w-full rounded-[10px] border border-zinc-200 px-4 py-2.5 sm:py-3 text-sm focus:border-zinc-400 focus:outline-none"
+                                                                />
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="grid gap-3 sm:gap-4 sm:grid-cols-2">
+                                                            <div>
+                                                                <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
+                                                                    Company Name
+                                                                </label>
+                                                                <div className="relative">
+                                                                    <Building2 className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+                                                                    <input
+                                                                        type="text"
+                                                                        placeholder="Acme Inc."
+                                                                        value={cardDetails.companyName}
+                                                                        onChange={(e) =>
+                                                                            setCardDetails({
+                                                                                ...cardDetails,
+                                                                                companyName: e.target.value,
+                                                                            })
+                                                                        }
+                                                                        className="w-full rounded-[10px] border border-zinc-200 py-2.5 sm:py-3 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none"
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
+                                                                    Phone (for card) <span className="text-red-500">*</span>
+                                                                </label>
+                                                                <div className="relative">
+                                                                    <Phone className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+                                                                    <input
+                                                                        type="tel"
+                                                                        placeholder="+91 87646 31130"
+                                                                        value={cardDetails.cardPhone}
+                                                                        onChange={(e) =>
+                                                                            setCardDetails({
+                                                                                ...cardDetails,
+                                                                                cardPhone: e.target.value,
+                                                                            })
+                                                                        }
+                                                                        required
+                                                                        className="w-full rounded-[10px] border border-zinc-200 py-2.5 sm:py-3 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none"
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div className="grid gap-3 sm:gap-4 sm:grid-cols-2">
+                                                            <div>
+                                                                <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
+                                                                    Email (for card)
+                                                                </label>
+                                                                <div className="relative">
+                                                                    <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+                                                                    <input
+                                                                        type="email"
+                                                                        placeholder="john@example.com"
+                                                                        value={cardDetails.cardEmail}
+                                                                        onChange={(e) =>
+                                                                            setCardDetails({
+                                                                                ...cardDetails,
+                                                                                cardEmail: e.target.value,
+                                                                            })
+                                                                        }
+                                                                        className="w-full rounded-[10px] border border-zinc-200 py-2.5 sm:py-3 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none"
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                            <div>
+                                                                <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
+                                                                    Website URL
+                                                                </label>
+                                                                <div className="relative">
+                                                                    <Globe className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
+                                                                    <input
+                                                                        type="url"
+                                                                        placeholder="https://yourwebsite.com"
+                                                                        value={cardDetails.website}
+                                                                        onChange={(e) =>
+                                                                            setCardDetails({
+                                                                                ...cardDetails,
+                                                                                website: e.target.value,
+                                                                            })
+                                                                        }
+                                                                        className="w-full rounded-[10px] border border-zinc-200 py-2.5 sm:py-3 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none"
+                                                                    />
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div>
+                                                            <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
+                                                                Social Media Links
+                                                            </label>
+                                                            <textarea
+                                                                placeholder="LinkedIn: linkedin.com/in/johndoe&#10;Instagram: @johndoe&#10;Twitter: @johndoe"
+                                                                value={cardDetails.socialLinks}
+                                                                onChange={(e) =>
+                                                                    setCardDetails({
+                                                                        ...cardDetails,
+                                                                        socialLinks: e.target.value,
+                                                                    })
+                                                                }
+                                                                rows={3}
+                                                                className="w-full rounded-[10px] border border-zinc-200 px-4 py-2.5 sm:py-3 text-sm focus:border-zinc-400 focus:outline-none resize-none"
+                                                            />
+                                                        </div>
+
+                                                        <div>
+                                                            <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
+                                                                Additional Notes
+                                                            </label>
+                                                            <div className="relative">
+                                                                <MessageSquare className="absolute left-3 top-3 h-4 w-4 text-zinc-400" />
+                                                                <textarea
+                                                                    placeholder="Any specific requests or instructions..."
+                                                                    value={cardDetails.additionalNotes}
+                                                                    onChange={(e) =>
+                                                                        setCardDetails({
+                                                                            ...cardDetails,
+                                                                            additionalNotes: e.target.value,
+                                                                        })
+                                                                    }
+                                                                    rows={2}
+                                                                    className="w-full rounded-[10px] border border-zinc-200 py-2.5 sm:py-3 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none resize-none"
+                                                                />
+                                                            </div>
+                                                        </div>
+
+                                                        <button
+                                                            type="button"
+                                                            onClick={() => {
+                                                                if (!cardDetails.name.trim()) {
+                                                                    toast.error("Please enter name for the card");
+                                                                    return;
+                                                                }
+                                                                if (!cardDetails.cardPhone.trim()) {
+                                                                    toast.error("Please enter phone number for the card");
+                                                                    return;
+                                                                }
+                                                                setCurrentStep(4);
+                                                            }}
+                                                            className="w-full rounded-[10px] py-3 sm:py-3.5 text-sm font-semibold text-white"
+                                                            style={{ backgroundColor: "#38bdf8" }}
+                                                        >
+                                                            Continue to Payment
+                                                        </button>
+                                                    </div>
+                                                </>
+                                            ) : (
+                                                <p className="mt-2 text-xs sm:text-sm text-zinc-500">
+                                                    {cardDetails.name || "No name"} • {cardDetails.cardPhone || "No phone"}
+                                                    {cardDetails.companyName && ` • ${cardDetails.companyName}`}
+                                                </p>
+                                            )}
+                                        </div>
+                                    )}
+
+                                    {/* Payment - Step 4 */}
+                                    {currentStep >= 4 && (
                                         <div className="rounded-[10px] bg-white p-4 sm:p-6">
                                             <h2 className="text-base sm:text-lg font-bold text-zinc-900">
                                                 Payment Method
                                             </h2>
                                             <p className="mt-2 text-xs sm:text-sm text-zinc-500">
-                                                Choose your preferred payment
-                                                method
+                                                Choose your preferred payment method
                                             </p>
                                             <div className="mt-4 grid grid-cols-2 gap-3">
                                                 {/* Online Payment - Coming Soon */}
@@ -1124,9 +1332,7 @@ export default function CheckoutPage() {
                                                 </div>
                                                 <button
                                                     type="button"
-                                                    onClick={() =>
-                                                        setPaymentMethod("cod")
-                                                    }
+                                                    onClick={() => setPaymentMethod("cod")}
                                                     className={`flex flex-col items-center justify-center gap-2 rounded-[10px] border-2 p-4 sm:p-5 transition-all min-h-[100px] ${
                                                         paymentMethod === "cod"
                                                             ? ""
@@ -1135,10 +1341,8 @@ export default function CheckoutPage() {
                                                     style={
                                                         paymentMethod === "cod"
                                                             ? {
-                                                                  borderColor:
-                                                                      "#38bdf8",
-                                                                  backgroundColor:
-                                                                      "rgba(104, 91, 199, 0.05)",
+                                                                  borderColor: "#38bdf8",
+                                                                  backgroundColor: "rgba(104, 91, 199, 0.05)",
                                                               }
                                                             : {}
                                                     }
@@ -1146,23 +1350,12 @@ export default function CheckoutPage() {
                                                     <Building
                                                         className="h-6 w-6 sm:h-7 sm:w-7"
                                                         style={{
-                                                            color:
-                                                                paymentMethod ===
-                                                                "cod"
-                                                                    ? "#38bdf8"
-                                                                    : "#71717a",
+                                                            color: paymentMethod === "cod" ? "#38bdf8" : "#71717a",
                                                         }}
                                                     />
                                                     <span
                                                         className={`text-xs sm:text-sm font-semibold ${paymentMethod === "cod" ? "" : "text-zinc-600"}`}
-                                                        style={
-                                                            paymentMethod ===
-                                                            "cod"
-                                                                ? {
-                                                                      color: "#38bdf8",
-                                                                  }
-                                                                : {}
-                                                        }
+                                                        style={paymentMethod === "cod" ? { color: "#38bdf8" } : {}}
                                                     >
                                                         Cash on Delivery
                                                     </span>
@@ -1181,211 +1374,13 @@ export default function CheckoutPage() {
                                                     onChange={(e) =>
                                                         setFormData({
                                                             ...formData,
-                                                            notes: e.target
-                                                                .value,
+                                                            notes: e.target.value,
                                                         })
                                                     }
                                                     className="mt-1.5 w-full rounded-[10px] border border-zinc-200 px-3 py-2.5 sm:py-3 text-sm focus:border-zinc-400 focus:outline-none resize-none"
                                                     rows={2}
                                                 />
                                             </div>
-                                        </div>
-                                    )}
-
-                                    {/* Card Details - Optional Step */}
-                                    {currentStep >= 3 && (
-                                        <div className="rounded-[10px] bg-white p-4 sm:p-6">
-                                            <div className="flex items-center justify-between">
-                                                <div className="flex items-center gap-3">
-                                                    <h2 className="text-base sm:text-lg font-bold text-zinc-900">
-                                                        Card/Product Details
-                                                    </h2>
-                                                    <span className="rounded-[6px] bg-zinc-100 px-2 py-0.5 text-[10px] sm:text-xs font-medium text-zinc-500">
-                                                        Optional
-                                                    </span>
-                                                </div>
-                                                <button
-                                                    type="button"
-                                                    onClick={() => setShowCardDetails(!showCardDetails)}
-                                                    className="flex items-center gap-1 text-xs sm:text-sm font-medium"
-                                                    style={{ color: "#38bdf8" }}
-                                                >
-                                                    {showCardDetails ? "Hide" : "Add Details"}
-                                                    <ChevronRight className={`h-4 w-4 transition-transform ${showCardDetails ? "rotate-90" : ""}`} />
-                                                </button>
-                                            </div>
-                                            <p className="mt-1 text-xs sm:text-sm text-zinc-500">
-                                                Provide details for your NFC card or product personalization.
-                                            </p>
-
-                                            {showCardDetails && (
-                                                <div className="mt-4 space-y-3 sm:space-y-4">
-                                                    <div className="grid gap-3 sm:gap-4 sm:grid-cols-2">
-                                                        <div>
-                                                            <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
-                                                                Full Name (for card)
-                                                            </label>
-                                                            <div className="relative">
-                                                                <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
-                                                                <input
-                                                                    type="text"
-                                                                    placeholder="John Doe"
-                                                                    value={cardDetails.name}
-                                                                    onChange={(e) =>
-                                                                        setCardDetails({
-                                                                            ...cardDetails,
-                                                                            name: e.target.value,
-                                                                        })
-                                                                    }
-                                                                    className="w-full rounded-[10px] border border-zinc-200 py-2.5 sm:py-3 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none"
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                        <div>
-                                                            <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
-                                                                Designation/Title
-                                                            </label>
-                                                            <input
-                                                                type="text"
-                                                                placeholder="Marketing Manager"
-                                                                value={cardDetails.designation}
-                                                                onChange={(e) =>
-                                                                    setCardDetails({
-                                                                        ...cardDetails,
-                                                                        designation: e.target.value,
-                                                                    })
-                                                                }
-                                                                className="w-full rounded-[10px] border border-zinc-200 px-4 py-2.5 sm:py-3 text-sm focus:border-zinc-400 focus:outline-none"
-                                                            />
-                                                        </div>
-                                                    </div>
-
-                                                    <div className="grid gap-3 sm:gap-4 sm:grid-cols-2">
-                                                        <div>
-                                                            <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
-                                                                Company Name
-                                                            </label>
-                                                            <div className="relative">
-                                                                <Building2 className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
-                                                                <input
-                                                                    type="text"
-                                                                    placeholder="Acme Inc."
-                                                                    value={cardDetails.companyName}
-                                                                    onChange={(e) =>
-                                                                        setCardDetails({
-                                                                            ...cardDetails,
-                                                                            companyName: e.target.value,
-                                                                        })
-                                                                    }
-                                                                    className="w-full rounded-[10px] border border-zinc-200 py-2.5 sm:py-3 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none"
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                        <div>
-                                                            <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
-                                                                Phone (for card)
-                                                            </label>
-                                                            <div className="relative">
-                                                                <Phone className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
-                                                                <input
-                                                                    type="tel"
-                                                                    placeholder="+91 87646 31130"
-                                                                    value={cardDetails.cardPhone}
-                                                                    onChange={(e) =>
-                                                                        setCardDetails({
-                                                                            ...cardDetails,
-                                                                            cardPhone: e.target.value,
-                                                                        })
-                                                                    }
-                                                                    className="w-full rounded-[10px] border border-zinc-200 py-2.5 sm:py-3 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none"
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div className="grid gap-3 sm:gap-4 sm:grid-cols-2">
-                                                        <div>
-                                                            <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
-                                                                Email (for card)
-                                                            </label>
-                                                            <div className="relative">
-                                                                <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
-                                                                <input
-                                                                    type="email"
-                                                                    placeholder="john@example.com"
-                                                                    value={cardDetails.cardEmail}
-                                                                    onChange={(e) =>
-                                                                        setCardDetails({
-                                                                            ...cardDetails,
-                                                                            cardEmail: e.target.value,
-                                                                        })
-                                                                    }
-                                                                    className="w-full rounded-[10px] border border-zinc-200 py-2.5 sm:py-3 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none"
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                        <div>
-                                                            <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
-                                                                Website URL
-                                                            </label>
-                                                            <div className="relative">
-                                                                <Globe className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-400" />
-                                                                <input
-                                                                    type="url"
-                                                                    placeholder="https://yourwebsite.com"
-                                                                    value={cardDetails.website}
-                                                                    onChange={(e) =>
-                                                                        setCardDetails({
-                                                                            ...cardDetails,
-                                                                            website: e.target.value,
-                                                                        })
-                                                                    }
-                                                                    className="w-full rounded-[10px] border border-zinc-200 py-2.5 sm:py-3 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none"
-                                                                />
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div>
-                                                        <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
-                                                            Social Media Links
-                                                        </label>
-                                                        <textarea
-                                                            placeholder="LinkedIn: linkedin.com/in/johndoe&#10;Instagram: @johndoe&#10;Twitter: @johndoe"
-                                                            value={cardDetails.socialLinks}
-                                                            onChange={(e) =>
-                                                                setCardDetails({
-                                                                    ...cardDetails,
-                                                                    socialLinks: e.target.value,
-                                                                })
-                                                            }
-                                                            rows={3}
-                                                            className="w-full rounded-[10px] border border-zinc-200 px-4 py-2.5 sm:py-3 text-sm focus:border-zinc-400 focus:outline-none resize-none"
-                                                        />
-                                                    </div>
-
-                                                    <div>
-                                                        <label className="mb-1 sm:mb-1.5 block text-xs sm:text-sm font-medium text-zinc-700">
-                                                            Additional Notes
-                                                        </label>
-                                                        <div className="relative">
-                                                            <MessageSquare className="absolute left-3 top-3 h-4 w-4 text-zinc-400" />
-                                                            <textarea
-                                                                placeholder="Any specific requests or instructions..."
-                                                                value={cardDetails.additionalNotes}
-                                                                onChange={(e) =>
-                                                                    setCardDetails({
-                                                                        ...cardDetails,
-                                                                        additionalNotes: e.target.value,
-                                                                    })
-                                                                }
-                                                                rows={2}
-                                                                className="w-full rounded-[10px] border border-zinc-200 py-2.5 sm:py-3 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none resize-none"
-                                                            />
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            )}
                                         </div>
                                     )}
                                 </div>
@@ -1549,7 +1544,7 @@ export default function CheckoutPage() {
                                                 {formatPrice(total)}
                                             </span>
                                         </div>
-                                        {currentStep === 3 && (
+                                        {currentStep === 4 && (
                                             <button
                                                 type="submit"
                                                 disabled={
@@ -1583,12 +1578,12 @@ export default function CheckoutPage() {
                 </form>
 
                 {/* Mobile spacer for sticky footer */}
-                {currentStep === 3 && (
+                {currentStep === 4 && (
                     <div className="h-32 lg:hidden" aria-hidden="true" />
                 )}
 
                 {/* Mobile Sticky Footer */}
-                {currentStep === 3 && (
+                {currentStep === 4 && (
                     <div className="lg:hidden fixed bottom-0 left-0 right-0 z-50 border-t border-zinc-200 bg-white p-4 shadow-[0_-4px_20px_rgba(0,0,0,0.1)]">
                         <div className="flex items-center justify-between mb-3">
                             <div>
