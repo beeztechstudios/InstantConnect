@@ -61,6 +61,8 @@ export interface Database {
           is_featured: boolean
           is_popular: boolean
           is_active: boolean
+          is_just_dropped_hero: boolean
+          hero_video_url: string | null
           stock_quantity: number
           created_at: string
           updated_at: string
@@ -81,6 +83,8 @@ export interface Database {
           is_featured?: boolean
           is_popular?: boolean
           is_active?: boolean
+          is_just_dropped_hero?: boolean
+          hero_video_url?: string | null
           stock_quantity?: number
           created_at?: string
           updated_at?: string
@@ -101,6 +105,8 @@ export interface Database {
           is_featured?: boolean
           is_popular?: boolean
           is_active?: boolean
+          is_just_dropped_hero?: boolean
+          hero_video_url?: string | null
           stock_quantity?: number
           created_at?: string
           updated_at?: string

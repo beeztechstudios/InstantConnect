@@ -22,6 +22,7 @@ const staggerContainer = {
 };
 
 interface JustDroppedClientProps {
+    heroProduct: Product | null;
     products: Product[];
 }
 
@@ -43,7 +44,7 @@ const announcements = [
     },
 ];
 
-export function JustDroppedClient({ products }: JustDroppedClientProps) {
+export function JustDroppedClient({ heroProduct, products }: JustDroppedClientProps) {
     const scrollRef = useRef<HTMLDivElement>(null);
 
     useEffect(() => {
@@ -61,16 +62,18 @@ export function JustDroppedClient({ products }: JustDroppedClientProps) {
         return () => cancelAnimationFrame(animationId);
     }, []);
 
-    if (!products || products.length === 0) {
+    // If no hero product and no products, don't render
+    if (!heroProduct && (!products || products.length === 0)) {
         return null;
     }
 
-    // Make sure we have at least 3 products for the layout
-    const displayProducts = products.slice(0, 3);
-    const mainProduct = displayProducts[0];
-    const sideProducts = displayProducts.slice(1);
+    // Use hero product for the main card, or fall back to first product
+    const mainProduct = heroProduct || products[0];
+    // Side products are the passed products (already excludes hero from server)
+    const sideProducts = heroProduct ? products.slice(0, 2) : products.slice(1, 3);
 
     const discount = calculateDiscount(mainProduct.price, mainProduct.compare_at_price);
+    const hasVideo = mainProduct.hero_video_url;
 
     return (
         <section className="bg-slate-100 py-16">
@@ -117,18 +120,32 @@ export function JustDroppedClient({ products }: JustDroppedClientProps) {
                     variants={staggerContainer}
                     className="grid gap-4 sm:grid-cols-2 md:grid-cols-4"
                 >
-                    {/* Large Product Card */}
+                    {/* Large Product Card - Hero with Video */}
                     <motion.div variants={fadeInUp} transition={{ duration: 0.5 }} className="sm:col-span-2 h-full">
                     <Link
                         href={`/product/${mainProduct.slug}`}
                         className="group relative block aspect-square sm:aspect-auto h-full sm:min-h-[500px] overflow-hidden rounded-[10px]"
                     >
-                        <div
-                            className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
-                            style={{
-                                backgroundImage: `url('${mainProduct.images[0] || "/placeholder-product.jpg"}')`,
-                            }}
-                        />
+                        {/* Video or Image Background */}
+                        {hasVideo ? (
+                            <video
+                                className="absolute inset-0 h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                                autoPlay
+                                loop
+                                muted
+                                playsInline
+                                preload="metadata"
+                            >
+                                <source src={mainProduct.hero_video_url!} type="video/mp4" />
+                            </video>
+                        ) : (
+                            <div
+                                className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
+                                style={{
+                                    backgroundImage: `url('${mainProduct.images[0] || "/placeholder-product.jpg"}')`,
+                                }}
+                            />
+                        )}
                         {/* Gradient overlay */}
                         <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                         {/* Product Info Overlay */}
