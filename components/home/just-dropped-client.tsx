@@ -121,7 +121,7 @@ export function JustDroppedClient({ products }: JustDroppedClientProps) {
                     <motion.div variants={fadeInUp} transition={{ duration: 0.5 }} className="sm:col-span-2 h-full">
                     <Link
                         href={`/product/${mainProduct.slug}`}
-                        className="group relative block h-full min-h-[350px] overflow-hidden rounded-[10px] sm:min-h-[500px]"
+                        className="group relative block aspect-square sm:aspect-auto h-full sm:min-h-[500px] overflow-hidden rounded-[10px]"
                     >
                         <div
                             className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
@@ -129,21 +129,23 @@ export function JustDroppedClient({ products }: JustDroppedClientProps) {
                                 backgroundImage: `url('${mainProduct.images[0] || "/placeholder-product.jpg"}')`,
                             }}
                         />
+                        {/* Gradient overlay */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                         {/* Product Info Overlay */}
-                        <div className="absolute bottom-4 left-4 right-4 flex items-center gap-3 rounded-[10px] bg-white/95 p-3 shadow-lg backdrop-blur-sm sm:right-auto">
-                            <div className="min-w-0 flex-1">
-                                <h3 className="truncate font-semibold text-zinc-900">
+                        <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
+                            <div className="rounded-[10px] bg-black/50 backdrop-blur-md p-4">
+                                <h3 className="truncate font-semibold text-white text-lg">
                                     {mainProduct.name}
                                 </h3>
-                                <p className="hidden text-xs text-zinc-500 sm:block">
+                                <p className="hidden text-sm text-white/70 sm:block mt-1">
                                     {mainProduct.short_description}
                                 </p>
-                                <div className="mt-1 flex flex-wrap items-center gap-2">
-                                    <span className="font-bold text-zinc-900">
+                                <div className="mt-2 flex flex-wrap items-center gap-2">
+                                    <span className="font-bold text-white text-lg">
                                         ₹{mainProduct.price.toLocaleString()}
                                     </span>
                                     {mainProduct.compare_at_price && (
-                                        <span className="text-sm text-zinc-400 line-through">
+                                        <span className="text-sm text-white/50 line-through">
                                             ₹{mainProduct.compare_at_price.toLocaleString()}
                                         </span>
                                     )}
