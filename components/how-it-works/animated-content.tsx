@@ -203,7 +203,7 @@ export function HowItWorksAnimatedContent() {
             {/* Steps Section with Images - Overlapping Hero (same as FeaturedProducts on homepage) */}
             <div className="bg-white -mt-24 sm:-mt-24 relative z-10">
                 <div className="flex justify-center">
-                    <section className="w-[95%] rounded-t-[12px] bg-white px-4 py-6 sm:px-6 sm:py-8">
+                    <section className="w-[90%] rounded-t-[12px] bg-white px-4 py-6 sm:px-6 sm:py-8">
                     {/* Section Header */}
                     <motion.div
                         initial="hidden"
