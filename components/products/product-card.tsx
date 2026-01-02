@@ -55,7 +55,7 @@ export function ProductCard({ product, categorySlug, noBg, tag }: ProductCardPro
         <Link href={productUrl}>
             <div
                 className="group rounded-[10px] p-4 transition"
-                style={{ background: noBg ? "#f4f4f4" : "#ebebeb" }}
+                style={{ background: "#f4f4f4" }}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
             >
