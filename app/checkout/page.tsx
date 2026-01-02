@@ -239,7 +239,7 @@ export default function CheckoutPage() {
         }
 
         // Save card details (mandatory)
-        await supabase.from("post_payment_details").insert([
+        const { error: cardDetailsError } = await supabase.from("post_payment_details").insert([
             {
                 order_id: order.id,
                 detail_type: "card_details",
@@ -247,6 +247,10 @@ export default function CheckoutPage() {
                 status: "pending",
             },
         ]);
+        if (cardDetailsError) {
+            console.error("Card details error:", cardDetailsError);
+            // Don't throw - order is already created, just log the error
+        }
 
         return { order, orderNumber, customer };
     };
