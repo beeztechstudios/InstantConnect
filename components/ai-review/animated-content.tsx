@@ -318,6 +318,51 @@ export function AIReviewAnimatedContent({ products }: AIReviewAnimatedContentPro
                 </div>
             </section>
 
+            {/* Featured Products */}
+            {products.length > 0 && (
+                <section id="products" className="py-12 sm:py-16 lg:py-20 bg-white">
+                    <div className="mx-auto w-[95%]">
+                        <motion.div
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true, margin: "-100px" }}
+                            variants={fadeInUp}
+                            transition={{ duration: 0.5 }}
+                            className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 sm:gap-6 mb-8 sm:mb-10"
+                        >
+                            <div>
+                                <span className="text-xs sm:text-sm font-medium text-sky-400 uppercase tracking-wide">
+                                    Featured Products
+                                </span>
+                                <h2 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-black text-black tracking-tighter">
+                                    You might <span className="text-zinc-400">also like.</span>
+                                </h2>
+                            </div>
+                            <Link
+                                href="/shop"
+                                className="group flex items-center gap-3 rounded-[10px] bg-black px-6 py-3 sm:px-8 sm:py-4 text-sm font-bold text-white transition-all hover:bg-sky-500 w-fit"
+                            >
+                                View All
+                            </Link>
+                        </motion.div>
+
+                        <motion.div
+                            initial="hidden"
+                            whileInView="visible"
+                            viewport={{ once: true }}
+                            variants={staggerContainer}
+                            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 lg:gap-6"
+                        >
+                            {products.map((product, index) => (
+                                <motion.div key={product.id} variants={fadeInUp} transition={{ duration: 0.3 }}>
+                                    <ProductCard product={product} noBg tag="Featured" />
+                                </motion.div>
+                            ))}
+                        </motion.div>
+                    </div>
+                </section>
+            )}
+
             {/* Benefits Grid */}
             <section className="py-12 sm:py-16 lg:py-20">
                 <div className="mx-auto w-[95%]">
@@ -366,51 +411,6 @@ export function AIReviewAnimatedContent({ products }: AIReviewAnimatedContentPro
                     </motion.div>
                 </div>
             </section>
-
-            {/* Featured Products */}
-            {products.length > 0 && (
-                <section id="products" className="py-12 sm:py-16 lg:py-20 bg-white">
-                    <div className="mx-auto w-[95%]">
-                        <motion.div
-                            initial="hidden"
-                            whileInView="visible"
-                            viewport={{ once: true, margin: "-100px" }}
-                            variants={fadeInUp}
-                            transition={{ duration: 0.5 }}
-                            className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 sm:gap-6 mb-8 sm:mb-10"
-                        >
-                            <div>
-                                <span className="text-xs sm:text-sm font-medium text-sky-400 uppercase tracking-wide">
-                                    Featured Products
-                                </span>
-                                <h2 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-black text-black tracking-tighter">
-                                    You might <span className="text-zinc-400">also like.</span>
-                                </h2>
-                            </div>
-                            <Link
-                                href="/shop"
-                                className="group flex items-center gap-3 rounded-[10px] bg-black px-6 py-3 sm:px-8 sm:py-4 text-sm font-bold text-white transition-all hover:bg-sky-500 w-fit"
-                            >
-                                View All
-                            </Link>
-                        </motion.div>
-
-                        <motion.div
-                            initial="hidden"
-                            whileInView="visible"
-                            viewport={{ once: true }}
-                            variants={staggerContainer}
-                            className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2 sm:gap-4 lg:gap-6"
-                        >
-                            {products.map((product, index) => (
-                                <motion.div key={product.id} variants={fadeInUp} transition={{ duration: 0.3 }}>
-                                    <ProductCard product={product} noBg tag="Featured" />
-                                </motion.div>
-                            ))}
-                        </motion.div>
-                    </div>
-                </section>
-            )}
 
             {/* FAQs */}
             <section className="py-12 sm:py-16 lg:py-20">
