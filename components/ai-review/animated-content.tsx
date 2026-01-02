@@ -138,27 +138,28 @@ export function AIReviewAnimatedContent({ products }: AIReviewAnimatedContentPro
                     transition={{ duration: 0.6 }}
                     className="relative h-[60vh] sm:h-[70vh] md:h-[80vh] lg:h-[90vh] overflow-hidden rounded-b-[10px]"
                 >
-                    <div
-                        className="absolute inset-0 bg-cover bg-center"
-                        style={{ backgroundImage: `url('/aireviewhero.png')` }}
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+                    {/* Video Background */}
+                    <video
+                        className="absolute inset-0 h-full w-full object-cover"
+                        autoPlay
+                        loop
+                        muted
+                        playsInline
+                        preload="metadata"
+                    >
+                        <source
+                            src="https://cdn.prod.website-files.com/692fdf1af547dec7a0d29950%2F692fe974875d60f098fedeb7_Instax%20_%20hero_mp4.mp4"
+                            type="video/mp4"
+                        />
+                    </video>
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/30 to-transparent" />
 
                     <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 sm:px-6">
-                        <motion.p
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.2 }}
-                            className="text-center text-xs sm:text-sm md:text-base text-white/70 max-w-xs sm:max-w-md md:max-w-2xl"
-                        >
-                            AI-powered review cards that help businesses collect better reviews, understand feedback, and grow trust — instantly.
-                        </motion.p>
-
                         <motion.h1
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.3 }}
-                            className="mt-3 sm:mt-4 text-center text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-white max-w-xs sm:max-w-lg md:max-w-2xl"
+                            className="text-center text-xl sm:text-2xl md:text-3xl lg:text-4xl xl:text-5xl font-bold text-white max-w-xs sm:max-w-lg md:max-w-2xl"
                         >
                             Turn customer visits into powerful reviews.
                         </motion.h1>
