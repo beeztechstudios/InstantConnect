@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { ShoppingCart } from "lucide-react";
@@ -19,13 +19,33 @@ export function ProductCard({ product, categorySlug, noBg, tag }: ProductCardPro
     const { addItem } = useCart();
     const discount = calculateDiscount(product.price, product.compare_at_price);
     const [isHovered, setIsHovered] = useState(false);
+    const [currentImageIndex, setCurrentImageIndex] = useState(0);
+    const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
     const productUrl = `/product/${product.slug}`;
 
-    // Get primary and hover images
-    const primaryImage = product.images[0] || "/placeholder-product.jpg";
-    const hoverImage = product.images[1] || primaryImage;
-    const hasMultipleImages = product.images.length > 1;
+    const images = product.images.length > 0 ? product.images : ["/placeholder-product.jpg"];
+    const hasMultipleImages = images.length > 1;
+
+    // Cycle through images on hover
+    useEffect(() => {
+        if (isHovered && hasMultipleImages) {
+            intervalRef.current = setInterval(() => {
+                setCurrentImageIndex((prev) => (prev + 1) % images.length);
+            }, 1000);
+        } else {
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
+            }
+            setCurrentImageIndex(0);
+        }
+
+        return () => {
+            if (intervalRef.current) {
+                clearInterval(intervalRef.current);
+            }
+        };
+    }, [isHovered, hasMultipleImages, images.length]);
 
     // Determine tag to display
     const displayTag = tag || (product.is_featured ? "Bestseller" : "New");
@@ -47,7 +67,7 @@ export function ProductCard({ product, categorySlug, noBg, tag }: ProductCardPro
             slug: product.slug,
             price: product.price,
             compareAtPrice: product.compare_at_price,
-            image: primaryImage,
+            image: images[0],
         });
     };
 
@@ -61,33 +81,22 @@ export function ProductCard({ product, categorySlug, noBg, tag }: ProductCardPro
             >
                 {/* IMAGE */}
                 <div className="relative aspect-square sm:aspect-[4/5] overflow-hidden rounded-[10px] bg-white">
-                    {/* Primary Image */}
-                    <Image
-                        src={primaryImage}
-                        alt={product.name}
-                        fill
-                        className={`object-cover transition-all duration-500 ${
-                            hasMultipleImages && isHovered
-                                ? "opacity-0 scale-105"
-                                : "opacity-100 scale-100"
-                        }`}
-                        sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
-                    />
-
-                    {/* Hover Image (only if multiple images exist) */}
-                    {hasMultipleImages && (
+                    {/* All Images - stacked, only current one visible */}
+                    {images.map((image, index) => (
                         <Image
-                            src={hoverImage}
-                            alt={`${product.name} - alternate view`}
+                            key={index}
+                            src={image}
+                            alt={`${product.name}${index > 0 ? ` - view ${index + 1}` : ""}`}
                             fill
                             className={`object-cover transition-all duration-500 ${
-                                isHovered
+                                index === currentImageIndex
                                     ? "opacity-100 scale-100"
-                                    : "opacity-0 scale-95"
+                                    : "opacity-0 scale-105"
                             }`}
                             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                            priority={index === 0}
                         />
-                    )}
+                    ))}
 
                     {/* BADGE */}
                     <div className="absolute left-3 top-3 z-10">
