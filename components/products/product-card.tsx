@@ -52,9 +52,9 @@ export function ProductCard({ product, categorySlug, noBg, tag }: ProductCardPro
     };
 
     return (
-        <Link href={productUrl}>
+        <Link href={productUrl} className="h-full block">
             <div
-                className="group rounded-[10px] p-4 transition"
+                className="group rounded-[10px] p-4 transition h-full flex flex-col"
                 style={{ background: noBg ? "#f4f4f4" : "#ebebeb" }}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
@@ -121,21 +121,19 @@ export function ProductCard({ product, categorySlug, noBg, tag }: ProductCardPro
                 </div>
 
                 {/* INFO */}
-                <div className="mt-4 space-y-1.5">
+                <div className="mt-4 flex flex-col flex-grow">
                     {/* TITLE */}
-                    <h3 className="text-lg font-bold leading-snug text-zinc-900 line-clamp-2">
+                    <h3 className="text-lg font-bold leading-snug text-zinc-900 line-clamp-2 min-h-[3.5rem]">
                         {product.name}
                     </h3>
 
                     {/* DESCRIPTION */}
-                    {product.short_description && (
-                        <p className="text-sm text-zinc-500 max-w-[150px] line-clamp-2">
-                            {product.short_description}
-                        </p>
-                    )}
+                    <p className="text-sm text-zinc-500 max-w-[150px] line-clamp-2 min-h-[2.5rem] mt-1.5">
+                        {product.short_description || ""}
+                    </p>
 
                     {/* PRICE */}
-                    <div className="mt-2 flex flex-wrap items-center gap-2">
+                    <div className="mt-auto pt-2 flex flex-wrap items-center gap-2">
                         <span className="text-xl font-extrabold text-zinc-900">
                             {formatPrice(product.price)}
                         </span>
