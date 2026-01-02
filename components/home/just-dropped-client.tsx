@@ -118,13 +118,13 @@ export function JustDroppedClient({ heroProduct, products }: JustDroppedClientPr
                     whileInView="visible"
                     viewport={{ once: true, margin: "-50px" }}
                     variants={staggerContainer}
-                    className="grid gap-4 sm:grid-cols-2 md:grid-cols-4"
+                    className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4"
                 >
                     {/* Large Product Card - Hero with Video */}
                     <motion.div variants={fadeInUp} transition={{ duration: 0.5 }} className="sm:col-span-2 h-full">
                     <Link
                         href={`/product/${mainProduct.slug}`}
-                        className="group relative block aspect-square sm:aspect-auto h-full sm:min-h-[500px] overflow-hidden rounded-[10px]"
+                        className="group relative block aspect-[4/5] lg:aspect-auto h-full overflow-hidden rounded-[10px]"
                     >
                         {/* Video or Image Background */}
                         {hasVideo ? (

@@ -27,7 +27,6 @@ export function ProductCard({ product, categorySlug, noBg, tag }: ProductCardPro
     const images = product.images.length > 0 ? product.images : ["/placeholder-product.jpg"];
     const hasMultipleImages = images.length > 1;
 
-    // Cycle through images on hover
     useEffect(() => {
         if (isHovered && hasMultipleImages) {
             intervalRef.current = setInterval(() => {
@@ -47,10 +46,8 @@ export function ProductCard({ product, categorySlug, noBg, tag }: ProductCardPro
         };
     }, [isHovered, hasMultipleImages, images.length]);
 
-    // Determine tag to display
     const displayTag = tag || (product.is_featured ? "Bestseller" : "New");
 
-    // Tag colors based on type
     const tagColors: Record<string, string> = {
         Featured: "bg-sky-500",
         Popular: "bg-purple-500",
@@ -72,16 +69,15 @@ export function ProductCard({ product, categorySlug, noBg, tag }: ProductCardPro
     };
 
     return (
-        <Link href={productUrl} className="block lg:h-full">
+        <Link href={productUrl} className="block h-full">
             <div
-                className="group rounded-[10px] p-3 sm:p-4 transition lg:h-full lg:flex lg:flex-col"
+                className="group h-full flex flex-col rounded-[10px] p-3 sm:p-4 transition"
                 style={{ background: noBg ? "#f4f4f4" : "#ebebeb" }}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
             >
-                {/* IMAGE */}
-                <div className="relative aspect-square sm:aspect-[4/5] overflow-hidden rounded-[10px] bg-white">
-                    {/* All Images - stacked, only current one visible */}
+                {/* IMAGE - Square using padding trick */}
+                <div className="relative w-full rounded-[10px] bg-white overflow-hidden" style={{ paddingBottom: '100%' }}>
                     {images.map((image, index) => (
                         <Image
                             key={index}
@@ -105,7 +101,7 @@ export function ProductCard({ product, categorySlug, noBg, tag }: ProductCardPro
                         </span>
                     </div>
 
-                    {/* Mobile: Cart Icon Button (always visible) */}
+                    {/* Mobile Cart Button */}
                     <button
                         onClick={handleAddToCart}
                         className="sm:hidden absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-full bg-black text-white z-10 active:scale-95 transition-transform shadow-lg"
@@ -113,7 +109,7 @@ export function ProductCard({ product, categorySlug, noBg, tag }: ProductCardPro
                         <ShoppingCart className="h-4 w-4" />
                     </button>
 
-                    {/* Desktop: Hover Add to Cart */}
+                    {/* Desktop Hover Cart */}
                     <div
                         className={`hidden sm:flex absolute inset-x-0 bottom-0 justify-center pb-4 transition-all duration-300 ${
                             isHovered ? "opacity-100 translate-y-0" : "opacity-0 translate-y-2"
@@ -129,39 +125,36 @@ export function ProductCard({ product, categorySlug, noBg, tag }: ProductCardPro
                     </div>
                 </div>
 
-                {/* INFO */}
-                <div className="mt-3 sm:mt-4 lg:flex lg:flex-col lg:flex-grow">
+                {/* TEXT CONTENT - grows to fill, pushes price to bottom */}
+                <div className="mt-3 sm:mt-4 flex flex-col flex-grow">
                     {/* TITLE */}
-                    <h3 className="text-lg font-bold leading-snug text-zinc-900 line-clamp-2">
+                    <h3 className="text-base sm:text-lg font-bold leading-snug text-zinc-900 line-clamp-2">
                         {product.name}
                     </h3>
 
                     {/* DESCRIPTION */}
-                    {product.short_description && (
-                        <p className="text-sm text-zinc-500 max-w-[150px] line-clamp-2 mt-1.5">
-                            {product.short_description}
-                        </p>
-                    )}
+                    <p className="mt-1 text-xs sm:text-sm text-zinc-500 line-clamp-2">
+                        {product.short_description || "\u00A0"}
+                    </p>
 
-                    {/* PRICE */}
-                    <div className="mt-2 lg:mt-auto lg:pt-3 flex flex-wrap items-center gap-2">
-                        <span className="text-xl font-extrabold text-zinc-900">
+                    {/* PRICE - pushed to bottom */}
+                    <div className="mt-auto pt-2 flex flex-wrap items-center gap-1.5 sm:gap-2">
+                        <span className="text-lg sm:text-xl font-extrabold text-zinc-900">
                             {formatPrice(product.price)}
                         </span>
 
                         {product.compare_at_price && (
-                            <span className="text-md text-zinc-600 line-through">
+                            <span className="text-sm text-zinc-600 line-through">
                                 {formatPrice(product.compare_at_price)}
                             </span>
                         )}
 
                         {discount > 0 && (
-                            <span className="rounded-md bg-emerald-500 px-2 py-0.5 text-[14px] font-semibold text-white">
+                            <span className="rounded-md bg-emerald-500 px-1.5 py-0.5 text-[11px] sm:text-[12px] font-semibold text-white">
                                 {discount}% OFF
                             </span>
                         )}
                     </div>
-
                 </div>
             </div>
         </Link>
