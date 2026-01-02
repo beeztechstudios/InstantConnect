@@ -1,9 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useRouter, useParams } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, Save } from 'lucide-react'
+import Image from 'next/image'
+import { ArrowLeft, Save, Upload, X, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -17,6 +18,8 @@ export default function CategoryFormPage() {
   const isNew = params.id === 'new'
   const [isLoading, setIsLoading] = useState(!isNew)
   const [isSaving, setIsSaving] = useState(false)
+  const [isUploading, setIsUploading] = useState(false)
+  const fileInputRef = useRef<HTMLInputElement>(null)
 
   const [formData, setFormData] = useState({
     name: '',
@@ -65,6 +68,47 @@ export default function CategoryFormPage() {
       name,
       slug: isNew ? slugify(name) : formData.slug,
     })
+  }
+
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setIsUploading(true)
+    const supabase = createClient()
+
+    try {
+      const fileExt = file.name.split('.').pop()
+      const fileName = `${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`
+      const filePath = `categories/${fileName}`
+
+      const { error: uploadError } = await supabase.storage
+        .from('product-images')
+        .upload(filePath, file)
+
+      if (uploadError) {
+        console.error('Upload error:', uploadError)
+        toast.error('Failed to upload image')
+        return
+      }
+
+      const { data: urlData } = supabase.storage
+        .from('product-images')
+        .getPublicUrl(filePath)
+
+      if (urlData?.publicUrl) {
+        setFormData({ ...formData, image_url: urlData.publicUrl })
+        toast.success('Image uploaded successfully')
+      }
+    } catch (error) {
+      console.error('Upload error:', error)
+      toast.error('Failed to upload image')
+    } finally {
+      setIsUploading(false)
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''
+      }
+    }
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -148,12 +192,51 @@ export default function CategoryFormPage() {
               className="min-h-[100px]"
             />
 
-            <Input
-              label="Image URL"
-              placeholder="https://example.com/image.jpg"
-              value={formData.image_url}
-              onChange={(e) => setFormData({ ...formData, image_url: e.target.value })}
-            />
+            {/* Image Upload */}
+            <div>
+              <label className="mb-1.5 block text-sm font-medium text-zinc-700">
+                Category Image
+              </label>
+              {formData.image_url ? (
+                <div className="relative inline-block">
+                  <Image
+                    src={formData.image_url}
+                    alt="Category"
+                    width={200}
+                    height={200}
+                    className="rounded-[10px] object-cover"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, image_url: '' })}
+                    className="absolute -right-2 -top-2 rounded-full bg-red-500 p-1 text-white hover:bg-red-600"
+                  >
+                    <X className="h-4 w-4" />
+                  </button>
+                </div>
+              ) : (
+                <div
+                  onClick={() => fileInputRef.current?.click()}
+                  className="flex h-40 w-40 cursor-pointer flex-col items-center justify-center rounded-[10px] border-2 border-dashed border-zinc-300 bg-zinc-50 hover:border-zinc-400 hover:bg-zinc-100"
+                >
+                  {isUploading ? (
+                    <Loader2 className="h-8 w-8 animate-spin text-zinc-400" />
+                  ) : (
+                    <>
+                      <Upload className="h-8 w-8 text-zinc-400" />
+                      <span className="mt-2 text-sm text-zinc-500">Upload Image</span>
+                    </>
+                  )}
+                </div>
+              )}
+              <input
+                ref={fileInputRef}
+                type="file"
+                accept="image/*"
+                onChange={handleFileUpload}
+                className="hidden"
+              />
+            </div>
 
             <Input
               label="Display Order"
