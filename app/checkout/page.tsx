@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Script from "next/script";
@@ -124,13 +124,13 @@ export default function CheckoutPage() {
         notes: "",
     });
 
-    // Card details form (optional)
+    // Card details form
     const [cardDetails, setCardDetails] = useState({
         name: "",
         designation: "",
         companyName: "",
-        cardPhone: "",
-        cardEmail: "",
+        phone: "",
+        email: "",
         website: "",
         socialLinks: "",
         additionalNotes: "",
@@ -1175,11 +1175,11 @@ export default function CheckoutPage() {
                                                                     <input
                                                                         type="tel"
                                                                         placeholder="+91 87646 31130"
-                                                                        value={cardDetails.cardPhone}
+                                                                        value={cardDetails.phone}
                                                                         onChange={(e) =>
                                                                             setCardDetails({
                                                                                 ...cardDetails,
-                                                                                cardPhone: e.target.value,
+                                                                                phone: e.target.value,
                                                                             })
                                                                         }
                                                                         required
@@ -1199,11 +1199,11 @@ export default function CheckoutPage() {
                                                                     <input
                                                                         type="email"
                                                                         placeholder="john@example.com"
-                                                                        value={cardDetails.cardEmail}
+                                                                        value={cardDetails.email}
                                                                         onChange={(e) =>
                                                                             setCardDetails({
                                                                                 ...cardDetails,
-                                                                                cardEmail: e.target.value,
+                                                                                email: e.target.value,
                                                                             })
                                                                         }
                                                                         className="w-full rounded-[10px] border border-zinc-200 py-2.5 sm:py-3 pl-10 pr-4 text-sm focus:border-zinc-400 focus:outline-none"
@@ -1278,7 +1278,7 @@ export default function CheckoutPage() {
                                                                     toast.error("Please enter name for the card");
                                                                     return;
                                                                 }
-                                                                if (!cardDetails.cardPhone.trim()) {
+                                                                if (!cardDetails.phone.trim()) {
                                                                     toast.error("Please enter phone number for the card");
                                                                     return;
                                                                 }
@@ -1293,7 +1293,7 @@ export default function CheckoutPage() {
                                                 </>
                                             ) : (
                                                 <p className="mt-2 text-xs sm:text-sm text-zinc-500">
-                                                    {cardDetails.name || "No name"} • {cardDetails.cardPhone || "No phone"}
+                                                    {cardDetails.name || "No name"} • {cardDetails.phone || "No phone"}
                                                     {cardDetails.companyName && ` • ${cardDetails.companyName}`}
                                                 </p>
                                             )}
