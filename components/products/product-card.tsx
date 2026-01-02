@@ -123,17 +123,19 @@ export function ProductCard({ product, categorySlug, noBg, tag }: ProductCardPro
                 {/* INFO */}
                 <div className="mt-4 flex flex-col flex-grow">
                     {/* TITLE */}
-                    <h3 className="text-lg font-bold leading-snug text-zinc-900 line-clamp-2 min-h-[3.5rem]">
+                    <h3 className="text-lg font-bold leading-snug text-zinc-900 line-clamp-2">
                         {product.name}
                     </h3>
 
                     {/* DESCRIPTION */}
-                    <p className="text-sm text-zinc-500 max-w-[150px] line-clamp-2 min-h-[2.5rem] mt-1.5">
-                        {product.short_description || ""}
-                    </p>
+                    {product.short_description && (
+                        <p className="text-sm text-zinc-500 max-w-[150px] line-clamp-2 mt-1.5">
+                            {product.short_description}
+                        </p>
+                    )}
 
                     {/* PRICE */}
-                    <div className="mt-auto pt-2 flex flex-wrap items-center gap-2">
+                    <div className="mt-auto pt-3 flex flex-wrap items-center gap-2">
                         <span className="text-xl font-extrabold text-zinc-900">
                             {formatPrice(product.price)}
                         </span>
