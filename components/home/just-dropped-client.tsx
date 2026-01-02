@@ -118,10 +118,10 @@ export function JustDroppedClient({ products }: JustDroppedClientProps) {
                     className="grid gap-4 sm:grid-cols-2 md:grid-cols-4"
                 >
                     {/* Large Product Card */}
-                    <motion.div variants={fadeInUp} transition={{ duration: 0.5 }} className="sm:col-span-2">
+                    <motion.div variants={fadeInUp} transition={{ duration: 0.5 }} className="sm:col-span-2 h-full">
                     <Link
                         href={`/product/${mainProduct.slug}`}
-                        className="group relative block h-[350px] overflow-hidden rounded-[10px] sm:h-[500px]"
+                        className="group relative block h-full min-h-[350px] overflow-hidden rounded-[10px] sm:min-h-[500px]"
                     >
                         <div
                             className="absolute inset-0 bg-cover bg-center transition-transform duration-500 group-hover:scale-105"
@@ -160,7 +160,7 @@ export function JustDroppedClient({ products }: JustDroppedClientProps) {
 
                     {/* Right Side - Smaller Cards using ProductCard */}
                     {sideProducts.map((product) => (
-                        <motion.div key={product.id} variants={fadeInUp} transition={{ duration: 0.5 }}>
+                        <motion.div key={product.id} variants={fadeInUp} transition={{ duration: 0.5 }} className="h-full">
                             <ProductCard product={product} tag="New" />
                         </motion.div>
                     ))}
