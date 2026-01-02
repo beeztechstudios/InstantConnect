@@ -298,7 +298,7 @@ export function AIReviewAnimatedContent({ products }: AIReviewAnimatedContentPro
                                 whileHover={{ y: -5 }}
                                 className="group relative bg-slate-50 rounded-[10px] p-6 hover:bg-black transition-colors duration-300"
                             >
-                                <span className="text-5xl sm:text-6xl font-black text-zinc-100 group-hover:text-zinc-800 transition-colors">
+                                <span className="text-5xl sm:text-6xl font-black text-black group-hover:text-zinc-800 transition-colors">
                                     {step.number}
                                 </span>
                                 <div className="mt-3">
