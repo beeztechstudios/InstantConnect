@@ -90,8 +90,8 @@ export default function PrivacyPolicyPage() {
             style={{ backgroundColor: "#F4F4F4" }}
         >
             {/* Hero */}
-            <section className="pt-[6px] px-[6px] pb-0">
-                <div className="relative h-[35vh] sm:h-[40vh] md:h-[45vh] overflow-hidden rounded-[10px]">
+            <section className="px-[6px] pb-0">
+                <div className="relative h-[35vh] sm:h-[40vh] md:h-[45vh] overflow-hidden rounded-b-[10px]">
                     {/* Background */}
                     <div
                         className="absolute inset-0 bg-cover bg-center"

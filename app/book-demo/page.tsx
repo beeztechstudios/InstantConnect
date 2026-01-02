@@ -146,8 +146,8 @@ export default function BookDemoPage() {
             style={{ backgroundColor: "#F4F4F4" }}
         >
             {/* Hero Section */}
-            <section className="pt-[6px] px-[6px] pb-0">
-                <div className="relative h-[45vh] sm:h-[50vh] md:h-[55vh] overflow-hidden rounded-[10px]">
+            <section className="px-[6px] pb-0">
+                <div className="relative h-[45vh] sm:h-[50vh] md:h-[55vh] overflow-hidden rounded-b-[10px]">
                     {/* Background */}
                     <div
                         className="absolute inset-0 bg-cover bg-center"
