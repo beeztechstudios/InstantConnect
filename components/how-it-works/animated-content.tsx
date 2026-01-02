@@ -200,9 +200,10 @@ export function HowItWorksAnimatedContent() {
                 </motion.div>
             </section>
 
-            {/* Steps Section with Images */}
-            <section className="py-12 sm:py-16 lg:py-20">
-                <div className="mx-auto w-[95%]">
+            {/* Steps Section with Images - Overlapping Hero (same as FeaturedProducts on homepage) */}
+            <div className="bg-white -mt-24 sm:-mt-24 relative z-10">
+                <div className="flex justify-center">
+                    <section className="w-[95%] rounded-t-[12px] bg-white px-4 py-6 sm:px-6 sm:py-8">
                     {/* Section Header */}
                     <motion.div
                         initial="hidden"
@@ -265,114 +266,11 @@ export function HowItWorksAnimatedContent() {
                             </motion.div>
                         ))}
                     </motion.div>
+                    </section>
                 </div>
-            </section>
+            </div>
 
-            {/* Features Section */}
-            <section className="py-12 sm:py-16 lg:py-20 bg-white">
-                <div className="mx-auto w-[95%]">
-                    {/* Section Header */}
-                    <motion.div
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true, margin: "-100px" }}
-                        variants={fadeInUp}
-                        transition={{ duration: 0.5 }}
-                        className="text-center mb-10 sm:mb-12"
-                    >
-                        <span className="text-xs sm:text-sm font-medium text-sky-400 uppercase tracking-wide">
-                            Features
-                        </span>
-                        <h2 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-black text-black tracking-tighter">
-                            Why choose <span className="text-zinc-400">us?</span>
-                        </h2>
-                    </motion.div>
-
-                    {/* Features Grid */}
-                    <motion.div
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: true, margin: "-50px" }}
-                        variants={staggerContainer}
-                        className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"
-                    >
-                        {features.map((feature, index) => (
-                            <motion.div
-                                key={index}
-                                variants={fadeInUp}
-                                transition={{ duration: 0.4 }}
-                                whileHover={{ scale: 1.02 }}
-                                className="flex items-start gap-4 p-5 sm:p-6 rounded-[10px] bg-slate-50"
-                            >
-                                <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[10px] bg-black">
-                                    <feature.icon className="h-5 w-5 text-sky-400" />
-                                </div>
-                                <div>
-                                    <h3 className="font-semibold text-zinc-900">
-                                        {feature.title}
-                                    </h3>
-                                    <p className="mt-1 text-sm text-zinc-500">
-                                        {feature.description}
-                                    </p>
-                                </div>
-                            </motion.div>
-                        ))}
-                    </motion.div>
-                </div>
-            </section>
-
-            {/* Visual Break - Full Width Image Section */}
-            <section className="py-6 sm:py-8">
-                <div className="mx-auto w-[95%]">
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.98 }}
-                        whileInView={{ opacity: 1, scale: 1 }}
-                        viewport={{ once: true }}
-                        transition={{ duration: 0.6 }}
-                        className="relative h-[200px] sm:h-[280px] lg:h-[350px] rounded-[10px] overflow-hidden"
-                    >
-                        <motion.div
-                            animate={{
-                                scale: [1, 1.03, 1],
-                            }}
-                            transition={{
-                                duration: 15,
-                                repeat: Infinity,
-                                repeatType: "reverse",
-                            }}
-                            className="absolute inset-0 bg-cover bg-center"
-                            style={{
-                                backgroundImage: `url('https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=2000&auto=format&fit=crop')`,
-                            }}
-                        />
-                        <div className="absolute inset-0 bg-black/60" />
-                        <div className="relative z-10 flex h-full items-center justify-center text-center p-6">
-                            <div>
-                                <motion.p
-                                    initial={{ opacity: 0, y: 20 }}
-                                    whileInView={{ opacity: 1, y: 0 }}
-                                    viewport={{ once: true }}
-                                    transition={{ delay: 0.2 }}
-                                    className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight"
-                                >
-                                    One card. <span className="text-sky-400">Infinite</span> connections.
-                                </motion.p>
-                                <motion.p
-                                    initial={{ opacity: 0 }}
-                                    whileInView={{ opacity: 1 }}
-                                    viewport={{ once: true }}
-                                    transition={{ delay: 0.4 }}
-                                    className="mt-3 text-sm sm:text-base text-zinc-400"
-                                >
-                                    Share your digital identity with anyone, anywhere
-                                </motion.p>
-                            </div>
-                        </div>
-                    </motion.div>
-                </div>
-            </section>
-
-            {/* Comparison Section */}
+            {/* Comparison Section - Old vs New */}
             <section className="py-12 sm:py-16 lg:py-20">
                 <div className="mx-auto w-[95%]">
                     {/* Section Header */}
@@ -459,6 +357,110 @@ export function HowItWorksAnimatedContent() {
                             </div>
                         </motion.div>
                     </div>
+                </div>
+            </section>
+
+            {/* Visual Break - Full Width Image Section */}
+            <section className="py-6 sm:py-8">
+                <div className="mx-auto w-[95%]">
+                    <motion.div
+                        initial={{ opacity: 0, scale: 0.98 }}
+                        whileInView={{ opacity: 1, scale: 1 }}
+                        viewport={{ once: true }}
+                        transition={{ duration: 0.6 }}
+                        className="relative h-[200px] sm:h-[280px] lg:h-[350px] rounded-[10px] overflow-hidden"
+                    >
+                        <motion.div
+                            animate={{
+                                scale: [1, 1.03, 1],
+                            }}
+                            transition={{
+                                duration: 15,
+                                repeat: Infinity,
+                                repeatType: "reverse",
+                            }}
+                            className="absolute inset-0 bg-cover bg-center"
+                            style={{
+                                backgroundImage: `url('https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=2000&auto=format&fit=crop')`,
+                            }}
+                        />
+                        <div className="absolute inset-0 bg-black/60" />
+                        <div className="relative z-10 flex h-full items-center justify-center text-center p-6">
+                            <div>
+                                <motion.p
+                                    initial={{ opacity: 0, y: 20 }}
+                                    whileInView={{ opacity: 1, y: 0 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: 0.2 }}
+                                    className="text-2xl sm:text-3xl lg:text-4xl font-black text-white tracking-tight"
+                                >
+                                    One card. <span className="text-sky-400">Infinite</span> connections.
+                                </motion.p>
+                                <motion.p
+                                    initial={{ opacity: 0 }}
+                                    whileInView={{ opacity: 1 }}
+                                    viewport={{ once: true }}
+                                    transition={{ delay: 0.4 }}
+                                    className="mt-3 text-sm sm:text-base text-zinc-400"
+                                >
+                                    Share your digital identity with anyone, anywhere
+                                </motion.p>
+                            </div>
+                        </div>
+                    </motion.div>
+                </div>
+            </section>
+
+            {/* Features Section - Why Choose Us */}
+            <section className="py-12 sm:py-16 lg:py-20 bg-white">
+                <div className="mx-auto w-[95%]">
+                    {/* Section Header */}
+                    <motion.div
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: "-100px" }}
+                        variants={fadeInUp}
+                        transition={{ duration: 0.5 }}
+                        className="text-center mb-10 sm:mb-12"
+                    >
+                        <span className="text-xs sm:text-sm font-medium text-sky-400 uppercase tracking-wide">
+                            Features
+                        </span>
+                        <h2 className="mt-3 text-3xl sm:text-4xl lg:text-5xl font-black text-black tracking-tighter">
+                            Why choose <span className="text-zinc-400">us?</span>
+                        </h2>
+                    </motion.div>
+
+                    {/* Features Grid */}
+                    <motion.div
+                        initial="hidden"
+                        whileInView="visible"
+                        viewport={{ once: true, margin: "-50px" }}
+                        variants={staggerContainer}
+                        className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4"
+                    >
+                        {features.map((feature, index) => (
+                            <motion.div
+                                key={index}
+                                variants={fadeInUp}
+                                transition={{ duration: 0.4 }}
+                                whileHover={{ scale: 1.02 }}
+                                className="flex items-start gap-4 p-5 sm:p-6 rounded-[10px] bg-slate-50"
+                            >
+                                <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-[10px] bg-black">
+                                    <feature.icon className="h-5 w-5 text-sky-400" />
+                                </div>
+                                <div>
+                                    <h3 className="font-semibold text-zinc-900">
+                                        {feature.title}
+                                    </h3>
+                                    <p className="mt-1 text-sm text-zinc-500">
+                                        {feature.description}
+                                    </p>
+                                </div>
+                            </motion.div>
+                        ))}
+                    </motion.div>
                 </div>
             </section>
 
