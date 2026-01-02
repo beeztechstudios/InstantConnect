@@ -191,7 +191,7 @@ export function FeaturedProductsClient({
 
 function PromoCard() {
     return (
-        <div className="relative w-full overflow-hidden rounded-[20px]" style={{ paddingBottom: '100%' }}>
+        <div className="relative w-full h-full overflow-hidden rounded-[20px]">
             {/* Background Image */}
             <div
                 className="absolute inset-0 bg-cover bg-center"
