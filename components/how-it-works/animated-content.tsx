@@ -141,12 +141,12 @@ export function HowItWorksAnimatedContent() {
     return (
         <div className="overflow-x-hidden bg-slate-100">
             {/* Hero - Same style as homepage and AI Review */}
-            <section className="pt-[6px] px-[6px] pb-0">
+            <section className="px-[6px] pb-0">
                 <motion.div
                     initial={{ opacity: 0, scale: 0.98 }}
                     animate={{ opacity: 1, scale: 1 }}
                     transition={{ duration: 0.6 }}
-                    className="relative h-[60vh] sm:h-[70vh] md:h-[80vh] lg:h-[90vh] overflow-hidden rounded-[10px]"
+                    className="relative h-[60vh] sm:h-[70vh] md:h-[80vh] lg:h-[90vh] overflow-hidden rounded-b-[10px]"
                 >
                     {/* Background Image */}
                     <div
