@@ -18,8 +18,9 @@ export function FeaturedProductsClient({
     const sliderRef = useRef<HTMLDivElement>(null);
     const mobileSliderRef = useRef<HTMLDivElement>(null);
 
-    const showArrows = products.length > 3;
-    const maxIndex = Math.max(0, products.length - 3);
+    const totalItems = products.length + 1; // +1 for promo card
+    const showArrows = totalItems > 3;
+    const maxIndex = Math.max(0, totalItems - 3);
 
     const scrollToIndex = (index: number) => {
         if (sliderRef.current) {
