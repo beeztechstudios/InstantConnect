@@ -14,7 +14,7 @@ export function HeroSection() {
           preload="metadata"
         >
           <source
-            src="https://cdn.prod.website-files.com/692fdf1af547dec7a0d29950%2F692fe974875d60f098fedeb7_Instax%20_%20hero_mp4.mp4"
+            src="https://res.cloudinary.com/dem0bqs8e/video/upload/v1767860757/copy_8DF5DC17-E994-4E9C-95EC-99E54FA834B7_pxcxtl.mov"
             type="video/mp4"
           />
           {/* Fallback image */}
@@ -22,9 +22,6 @@ export function HeroSection() {
 
         {/* Dark overlay for text readability */}
         <div className="absolute inset-0 bg-black/30" />
-
-        
-        
       </div>
     </section>
   );
