@@ -48,7 +48,7 @@ function ShopContent() {
   const [subCategories, setSubCategories] = useState<SubCategory[]>([])
   const [selectedCategorySlug, setSelectedCategorySlug] = useState<string | null>(initialCategory)
   const [selectedSubCategorySlug, setSelectedSubCategorySlug] = useState<string | null>(null)
-  const [sortBy, setSortBy] = useState<string>('newest')
+  const [sortBy, setSortBy] = useState<string>('price-low')
   const [showSortDropdown, setShowSortDropdown] = useState(false)
   const [loading, setLoading] = useState(true)
 
