@@ -33,8 +33,8 @@ const categories = [
     description: "View the collection",
   },
   {
-    name: "QR Cards",
-    href: "/shop?category=qr-cards",
+    name: "3D NFC",
+    href: "/shop?category=3d-nfc-products",
     image: "/card1.png",
     description: "View the collection",
   },

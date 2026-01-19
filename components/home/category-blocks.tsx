@@ -48,9 +48,9 @@ const categories = [
     },
     {
         id: 4,
-        name: "Keychains",
-        tagline: "Ultimate networking tool on your keys.",
-        href: "/shop?category=keychains",
+        name: "3D NFC Products",
+        tagline: "Next-gen networking in 3D.",
+        href: "/shop?category=3d-nfc-products",
         cta: "Shop Now",
         bgColor: "bg-[#01A48D]",
         image: "/card4.png",
@@ -162,7 +162,7 @@ export function CategoryBlocks() {
                         >
                             <div className="relative z-10 max-w-[55%] sm:max-w-[50%] lg:max-w-[300px]">
                                 <p className="text-white/90 font-black text-[9px] sm:text-[10px] lg:text-xs uppercase tracking-[0.15em] lg:tracking-[0.2em] mb-1 sm:mb-2 lg:mb-3">
-                                    Fast Networking
+                                    {categories[3].tagline}
                                 </p>
                                 <h3 className="text-2xl sm:text-3xl lg:text-5xl font-black text-white leading-[0.9] tracking-tighter">
                                     {categories[3].name}
