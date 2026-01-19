@@ -18,6 +18,7 @@ interface Product {
   is_popular: boolean
   is_active: boolean
   category_id: string
+  sub_category_id: string | null
   created_at: string
 }
 
@@ -29,13 +30,24 @@ interface Category {
   display_order: number
 }
 
+interface SubCategory {
+  id: string
+  name: string
+  slug: string
+  category_id: string
+  is_active: boolean
+  display_order: number
+}
+
 function ShopContent() {
   const searchParams = useSearchParams()
   const initialCategory = searchParams.get('category')
 
   const [products, setProducts] = useState<Product[]>([])
   const [categories, setCategories] = useState<Category[]>([])
+  const [subCategories, setSubCategories] = useState<SubCategory[]>([])
   const [selectedCategorySlug, setSelectedCategorySlug] = useState<string | null>(initialCategory)
+  const [selectedSubCategorySlug, setSelectedSubCategorySlug] = useState<string | null>(null)
   const [sortBy, setSortBy] = useState<string>('newest')
   const [showSortDropdown, setShowSortDropdown] = useState(false)
   const [loading, setLoading] = useState(true)
@@ -52,6 +64,16 @@ function ShopContent() {
 
       if (categoriesData) {
         setCategories(categoriesData)
+      }
+
+      const { data: subCategoriesData } = await supabase
+        .from('sub_categories')
+        .select('*')
+        .eq('is_active', true)
+        .order('display_order', { ascending: true })
+
+      if (subCategoriesData) {
+        setSubCategories(subCategoriesData)
       }
 
       const { data: productsData } = await supabase
@@ -71,9 +93,25 @@ function ShopContent() {
 
   // Get selected category from slug
   const selectedCategory = categories.find(c => c.slug === selectedCategorySlug)
+  const selectedSubCategory = subCategories.find(s => s.slug === selectedSubCategorySlug)
+
+  // Filter sub-categories for the selected category
+  const filteredSubCategories = selectedCategory
+    ? subCategories.filter(s => s.category_id === selectedCategory.id)
+    : []
 
   const filteredProducts = products
-    .filter(product => !selectedCategory || product.category_id === selectedCategory.id)
+    .filter(product => {
+      // Filter by category
+      if (selectedCategory && product.category_id !== selectedCategory.id) {
+        return false
+      }
+      // Filter by sub-category if selected
+      if (selectedSubCategory && product.sub_category_id !== selectedSubCategory.id) {
+        return false
+      }
+      return true
+    })
     .sort((a, b) => {
       switch (sortBy) {
         case 'price-low':
@@ -152,7 +190,10 @@ function ShopContent() {
             <div className="flex items-center gap-1 sm:gap-2 overflow-x-auto no-scrollbar">
               <button
                 type="button"
-                onClick={() => setSelectedCategorySlug(null)}
+                onClick={() => {
+                  setSelectedCategorySlug(null)
+                  setSelectedSubCategorySlug(null)
+                }}
                 className={`flex-shrink-0 rounded-[10px] px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium transition-colors cursor-pointer ${
                   !selectedCategorySlug
                     ? 'bg-zinc-900 text-white'
@@ -165,7 +206,10 @@ function ShopContent() {
                 <button
                   type="button"
                   key={cat.id}
-                  onClick={() => setSelectedCategorySlug(cat.slug)}
+                  onClick={() => {
+                    setSelectedCategorySlug(cat.slug)
+                    setSelectedSubCategorySlug(null)
+                  }}
                   className={`flex-shrink-0 rounded-[10px] px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm font-medium transition-colors cursor-pointer ${
                     selectedCategorySlug === cat.slug
                       ? 'bg-zinc-900 text-white'
@@ -216,6 +260,39 @@ function ShopContent() {
             </div>
           </div>
         </div>
+
+        {/* Sub-category Tabs - shown when a category is selected and has sub-categories */}
+        {filteredSubCategories.length > 0 && (
+          <div className="mx-auto w-[95%] mt-4">
+            <div className="flex items-center gap-1 sm:gap-2 overflow-x-auto no-scrollbar pb-2">
+              <button
+                type="button"
+                onClick={() => setSelectedSubCategorySlug(null)}
+                className={`flex-shrink-0 rounded-[10px] px-3 sm:px-4 py-1 sm:py-1.5 text-xs font-medium transition-colors cursor-pointer ${
+                  !selectedSubCategorySlug
+                    ? 'bg-zinc-200 text-zinc-900'
+                    : 'text-zinc-500 hover:bg-zinc-100'
+                }`}
+              >
+                All {selectedCategory?.name}
+              </button>
+              {filteredSubCategories.map((subCat) => (
+                <button
+                  type="button"
+                  key={subCat.id}
+                  onClick={() => setSelectedSubCategorySlug(subCat.slug)}
+                  className={`flex-shrink-0 rounded-[10px] px-3 sm:px-4 py-1 sm:py-1.5 text-xs font-medium transition-colors cursor-pointer ${
+                    selectedSubCategorySlug === subCat.slug
+                      ? 'bg-zinc-200 text-zinc-900'
+                      : 'text-zinc-500 hover:bg-zinc-100'
+                  }`}
+                >
+                  {subCat.name}
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
       </section>
 
       {/* Products Grid */}
@@ -248,6 +325,7 @@ function ShopContent() {
               <button
                 onClick={() => {
                   setSelectedCategorySlug(null)
+                  setSelectedSubCategorySlug(null)
                   setSortBy('newest')
                 }}
                 className="mt-3 text-sm font-medium text-zinc-900 underline underline-offset-4 hover:text-zinc-600"

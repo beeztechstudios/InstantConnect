@@ -22,11 +22,28 @@ CREATE TABLE IF NOT EXISTS categories (
 );
 
 -- ============================================
+-- 1b. SUB-CATEGORIES TABLE
+-- ============================================
+CREATE TABLE IF NOT EXISTS sub_categories (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    category_id UUID REFERENCES categories(id) ON DELETE CASCADE,
+    name TEXT NOT NULL,
+    slug TEXT UNIQUE NOT NULL,
+    description TEXT,
+    image_url TEXT,
+    display_order INTEGER DEFAULT 0,
+    is_active BOOLEAN DEFAULT true,
+    created_at TIMESTAMPTZ DEFAULT now(),
+    updated_at TIMESTAMPTZ DEFAULT now()
+);
+
+-- ============================================
 -- 2. PRODUCTS TABLE
 -- ============================================
 CREATE TABLE IF NOT EXISTS products (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     category_id UUID REFERENCES categories(id),
+    sub_category_id UUID REFERENCES sub_categories(id),
     name TEXT NOT NULL,
     slug TEXT UNIQUE NOT NULL,
     description TEXT,
@@ -203,6 +220,7 @@ CREATE TABLE IF NOT EXISTS wishlists (
 
 -- Enable RLS on all tables
 ALTER TABLE categories ENABLE ROW LEVEL SECURITY;
+ALTER TABLE sub_categories ENABLE ROW LEVEL SECURITY;
 ALTER TABLE products ENABLE ROW LEVEL SECURITY;
 ALTER TABLE customers ENABLE ROW LEVEL SECURITY;
 ALTER TABLE orders ENABLE ROW LEVEL SECURITY;
@@ -219,6 +237,12 @@ CREATE POLICY "Categories are viewable by everyone" ON categories FOR SELECT USI
 CREATE POLICY "Categories are insertable by authenticated users" ON categories FOR INSERT WITH CHECK (true);
 CREATE POLICY "Categories are updatable by authenticated users" ON categories FOR UPDATE USING (true);
 CREATE POLICY "Categories are deletable by authenticated users" ON categories FOR DELETE USING (true);
+
+-- Sub-Categories: Public read, authenticated write
+CREATE POLICY "Sub-categories are viewable by everyone" ON sub_categories FOR SELECT USING (true);
+CREATE POLICY "Sub-categories are insertable by authenticated users" ON sub_categories FOR INSERT WITH CHECK (true);
+CREATE POLICY "Sub-categories are updatable by authenticated users" ON sub_categories FOR UPDATE USING (true);
+CREATE POLICY "Sub-categories are deletable by authenticated users" ON sub_categories FOR DELETE USING (true);
 
 -- Products: Public read, authenticated write
 CREATE POLICY "Products are viewable by everyone" ON products FOR SELECT USING (true);

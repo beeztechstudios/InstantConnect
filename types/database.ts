@@ -44,10 +44,49 @@ export interface Database {
           updated_at?: string
         }
       }
+      sub_categories: {
+        Row: {
+          id: string
+          category_id: string | null
+          name: string
+          slug: string
+          description: string | null
+          image_url: string | null
+          display_order: number
+          is_active: boolean
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          category_id?: string | null
+          name: string
+          slug: string
+          description?: string | null
+          image_url?: string | null
+          display_order?: number
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          category_id?: string | null
+          name?: string
+          slug?: string
+          description?: string | null
+          image_url?: string | null
+          display_order?: number
+          is_active?: boolean
+          created_at?: string
+          updated_at?: string
+        }
+      }
       products: {
         Row: {
           id: string
           category_id: string | null
+          sub_category_id: string | null
           name: string
           slug: string
           description: string | null
@@ -70,6 +109,7 @@ export interface Database {
         Insert: {
           id?: string
           category_id?: string | null
+          sub_category_id?: string | null
           name: string
           slug: string
           description?: string | null
@@ -92,6 +132,7 @@ export interface Database {
         Update: {
           id?: string
           category_id?: string | null
+          sub_category_id?: string | null
           name?: string
           slug?: string
           description?: string | null
@@ -457,6 +498,7 @@ export interface Database {
 
 // Helper types
 export type Category = Database['public']['Tables']['categories']['Row']
+export type SubCategory = Database['public']['Tables']['sub_categories']['Row']
 export type Product = Database['public']['Tables']['products']['Row']
 export type Customer = Database['public']['Tables']['customers']['Row']
 export type Order = Database['public']['Tables']['orders']['Row']
@@ -470,5 +512,11 @@ export type Wishlist = Database['public']['Tables']['wishlists']['Row']
 
 // Product with category
 export type ProductWithCategory = Product & {
+  categories: Category | null
+  sub_categories: SubCategory | null
+}
+
+// Sub-category with parent category
+export type SubCategoryWithCategory = SubCategory & {
   categories: Category | null
 }

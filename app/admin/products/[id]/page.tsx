@@ -11,7 +11,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Select } from '@/components/ui/select'
 import { createClient } from '@/utils/supabase/client'
 import { slugify } from '@/lib/utils'
-import type { Category } from '@/types/database'
+import type { Category, SubCategory } from '@/types/database'
 import toast from 'react-hot-toast'
 
 export default function ProductFormPage() {
@@ -22,6 +22,8 @@ export default function ProductFormPage() {
   const [isSaving, setIsSaving] = useState(false)
   const [isUploading, setIsUploading] = useState(false)
   const [categories, setCategories] = useState<Category[]>([])
+  const [subCategories, setSubCategories] = useState<SubCategory[]>([])
+  const [filteredSubCategories, setFilteredSubCategories] = useState<SubCategory[]>([])
   const [newFeature, setNewFeature] = useState('')
   const [newImageUrl, setNewImageUrl] = useState('')
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -30,6 +32,7 @@ export default function ProductFormPage() {
     name: '',
     slug: '',
     category_id: '',
+    sub_category_id: '',
     description: '',
     short_description: '',
     price: 0,
@@ -60,6 +63,15 @@ export default function ProductFormPage() {
 
       setCategories(categoriesData || [])
 
+      // Fetch sub-categories
+      const { data: subCategoriesData } = await supabase
+        .from('sub_categories')
+        .select('*')
+        .eq('is_active', true)
+        .order('display_order')
+
+      setSubCategories(subCategoriesData || [])
+
       // Fetch product if editing
       if (!isNew) {
         const { data, error } = await supabase
@@ -78,6 +90,7 @@ export default function ProductFormPage() {
           name: data.name,
           slug: data.slug,
           category_id: data.category_id || '',
+          sub_category_id: data.sub_category_id || '',
           description: data.description || '',
           short_description: data.short_description || '',
           price: data.price,
@@ -99,6 +112,18 @@ export default function ProductFormPage() {
 
     fetchData()
   }, [isNew, params.id, router])
+
+  // Filter sub-categories when category changes
+  useEffect(() => {
+    if (formData.category_id) {
+      const filtered = subCategories.filter(
+        (sub) => sub.category_id === formData.category_id
+      )
+      setFilteredSubCategories(filtered)
+    } else {
+      setFilteredSubCategories([])
+    }
+  }, [formData.category_id, subCategories])
 
   const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const name = e.target.value
@@ -245,6 +270,7 @@ export default function ProductFormPage() {
       const dataToSave = {
         ...formData,
         category_id: formData.category_id || null,
+        sub_category_id: formData.sub_category_id || null,
         compare_at_price: formData.compare_at_price || null,
       }
 
@@ -321,13 +347,25 @@ export default function ProductFormPage() {
                 <Select
                   label="Category"
                   value={formData.category_id}
-                  onChange={(e) => setFormData({ ...formData, category_id: e.target.value })}
+                  onChange={(e) => setFormData({ ...formData, category_id: e.target.value, sub_category_id: '' })}
                   options={[
                     { value: '', label: 'Select category' },
                     ...categories.map((c) => ({ value: c.id, label: c.name })),
                   ]}
                 />
               </div>
+
+              {filteredSubCategories.length > 0 && (
+                <Select
+                  label="Sub-Category (Optional)"
+                  value={formData.sub_category_id}
+                  onChange={(e) => setFormData({ ...formData, sub_category_id: e.target.value })}
+                  options={[
+                    { value: '', label: 'Select sub-category' },
+                    ...filteredSubCategories.map((s) => ({ value: s.id, label: s.name })),
+                  ]}
+                />
+              )}
 
               <Textarea
                 label="Short Description"

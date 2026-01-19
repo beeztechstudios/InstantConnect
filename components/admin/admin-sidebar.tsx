@@ -6,6 +6,7 @@ import {
   LayoutDashboard,
   Package,
   FolderTree,
+  Layers,
   ShoppingCart,
   CreditCard,
   Users,
@@ -34,6 +35,7 @@ interface AdminSidebarProps {
 const navItems = [
   { href: '/admin', icon: LayoutDashboard, label: 'Dashboard' },
   { href: '/admin/categories', icon: FolderTree, label: 'Categories' },
+  { href: '/admin/sub-categories', icon: Layers, label: 'Sub-Categories' },
   { href: '/admin/products', icon: Package, label: 'Products' },
   { href: '/admin/orders', icon: ShoppingCart, label: 'Orders' },
   { href: '/admin/card-details', icon: IdCard, label: 'Card Details' },
