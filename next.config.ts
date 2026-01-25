@@ -9,7 +9,7 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: 'https',
-        hostname: 'fljqqozpshjxmtuzjqky.supabase.co',
+        hostname: 'souhaygiitgemoplvwnl.supabase.co',
       },
     ],
     dangerouslyAllowSVG: true,
