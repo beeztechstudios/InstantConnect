@@ -79,7 +79,7 @@ export function FeaturedProductsClient({
                             </div>
                             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-black text-black tracking-tighter leading-[0.9]">
                                 This week&apos;s{" "}
-                                <span className="text-zinc-400">steal deals.</span>
+                                <span className="text-zinc-400">hot deals.</span>
                             </h2>
                         </div>
 

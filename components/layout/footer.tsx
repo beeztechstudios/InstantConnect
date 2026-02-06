@@ -221,7 +221,7 @@ export function Footer() {
                             </div>
 
                             {/* Right Side: Content Container */}
-                            <div className="w-2/3 sm:w-3/4 px-3 sm:px-6 flex flex-col justify-center items-center text-center space-y-2 sm:space-y-3">
+                            <div className="w-1/3 sm:w-3/4 px-3 sm:px-6 flex flex-col justify-center items-center text-center space-y-2 sm:space-y-3">
                                 <h4 className="text-white font-black text-[11px] sm:text-sm md:text-base italic leading-tight tracking-tight uppercase">
                                     Looking for a <br className="sm:hidden" />
                                     <span className="text-black/90">

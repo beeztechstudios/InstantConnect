@@ -34,7 +34,7 @@ const categories = [
         href: "/ai-review-card",
         cta: "Boost Reviews",
         bgColor: "bg-[#FF8026]",
-        image: "/card2.png",
+        image: "https://res.cloudinary.com/dem0bqs8e/image/upload/v1770397014/Untitled_design_1_yl75yn.svg",
     },
     {
         id: 3,
@@ -43,8 +43,8 @@ const categories = [
         href: "/shop?category=standees",
         cta: "View Designs",
         bgColor: "bg-[#FFBD40]",
-        image: "/card3.png",
-        textDark: true,
+        image: "https://res.cloudinary.com/dem0bqs8e/image/upload/v1770397008/Untitled_design_kcs0mj.svg",
+        
     },
     {
         id: 4,
@@ -53,7 +53,7 @@ const categories = [
         href: "/shop?category=3d-nfc-products",
         cta: "Shop Now",
         bgColor: "bg-[#01A48D]",
-        image: "/card4.png",
+        image: "https://res.cloudinary.com/dem0bqs8e/image/upload/v1770397011/Untitled_design_4_uh4pmf.svg",
     },
 ];
 
@@ -82,15 +82,13 @@ export function CategoryBlocks() {
                                     {categories[0].name}
                                 </h3>
                                 <div className="mt-3 sm:mt-5 lg:mt-8 flex items-center gap-2 text-white font-black group-hover:gap-4 transition-all uppercase text-xs sm:text-sm tracking-widest">
-                                    {categories[0].cta}
-                                    <ArrowRight
-                                        size={16}
-                                        className="text-sky-400 sm:w-5 sm:h-5"
-                                    />
+                                    <span className="inline-block bg-white text-black px-4 sm:px-4 lg:px-6 py-2 sm:py-2 lg:py-3 rounded-[10px] lg:rounded-[10px] text-[9px] sm:text-[9px] lg:text-[10px] font-black uppercase tracking-widest shadow-lg transition-all hover:bg-black hover:text-white">
+                                        {categories[1].cta}
+                                    </span>
                                 </div>
                             </div>
                             <div
-                                className="absolute right-0 top-1/2 -translate-y-1/2 sm:top-auto sm:bottom-0 sm:translate-y-0 w-[45%] sm:w-[50%] lg:w-1/2 h-[80%] sm:h-[85%] lg:h-4/5 bg-contain bg-center sm:bg-right-bottom bg-no-repeat transition-transform duration-700 group-hover:scale-110 group-hover:-rotate-2"
+                                className="absolute right-0 top-1/2 -translate-y-1/2 sm:top-auto sm:bottom-0 sm:translate-y-0 w-[45%] sm:w-[50%] lg:w-1/2 h-[80%] sm:h-[85%] lg:h-4/5 bg-contain bg-center sm:bg-right-bottom bg-no-repeat transition-transform duration-700 hover:scale-110 hover:-rotate-2"
                                 style={{
                                     backgroundImage: `url('${categories[0].image}')`,
                                 }}
@@ -105,7 +103,7 @@ export function CategoryBlocks() {
                             className={`group relative flex flex-col justify-end overflow-hidden rounded-[10px] ${categories[1].bgColor} p-5 sm:p-5 lg:p-10 min-h-[180px] sm:min-h-[220px] lg:min-h-[400px] transition-all hover:shadow-2xl hover:shadow-orange-500/20`}
                         >
                             <div
-                                className="absolute right-2 top-1/2 -translate-y-1/2 md:top-2 md:translate-y-0 2xl:top-auto 2xl:bottom-16 w-[48%] sm:w-[42%] lg:w-[60%] 2xl:w-[90%] h-[72%] sm:h-[60%] lg:h-[66%] 2xl:h-[60%] bg-contain bg-center md:bg-right-top 2xl:bg-right bg-no-repeat transition-transform duration-700 group-hover:scale-110"
+                                className="absolute right-2 top-1/2 -translate-y-1/2 md:-top-8 md:translate-y-0 2xl:top-auto 2xl:bottom-16 w-[48%] sm:w-[42%] lg:w-[60%] 2xl:w-[90%] h-[72%] sm:h-[60%] lg:h-[66%] 2xl:h-[60%] bg-contain bg-center md:bg-right-top 2xl:bg-right bg-no-repeat transition-transform duration-700 group-hover:scale-110"
                                 style={{
                                     backgroundImage: `url('${categories[1].image}')`,
                                 }}
@@ -119,7 +117,7 @@ export function CategoryBlocks() {
                                 </h3>
                             </div>
                             <div className="relative z-10 mt-3 sm:mt-3 lg:mt-6">
-                                <span className="inline-block bg-white text-black px-4 sm:px-4 lg:px-6 py-2 sm:py-2 lg:py-3 rounded-[10px] lg:rounded-[10px] text-[9px] sm:text-[9px] lg:text-[10px] font-black uppercase tracking-widest shadow-lg transition-all group-hover:bg-black group-hover:text-white">
+                                <span className="inline-block bg-white text-black px-4 sm:px-4 lg:px-6 py-2 sm:py-2 lg:py-3 rounded-[10px] lg:rounded-[10px] text-[9px] sm:text-[9px] lg:text-[10px] font-black uppercase tracking-widest shadow-lg transition-all hover:bg-black hover:text-white">
                                     {categories[1].cta}
                                 </span>
                             </div>
@@ -133,21 +131,21 @@ export function CategoryBlocks() {
                             className={`group relative flex flex-col justify-end overflow-hidden rounded-[10px] ${categories[2].bgColor} p-5 sm:p-5 lg:p-10 min-h-[180px] sm:min-h-[220px] lg:min-h-[400px] transition-all hover:shadow-2xl hover:shadow-yellow-500/20`}
                         >
                             <div
-                                className="absolute right-2 top-1/2 -translate-y-1/2 md:top-2 md:translate-y-0 2xl:top-auto 2xl:bottom-12 w-[48%] sm:w-[36%] lg:w-[54%] 2xl:w-[80%] h-[72%] sm:h-[60%] lg:h-[66%] 2xl:h-[60%] bg-contain bg-center md:bg-right-top 2xl:bg-right bg-no-repeat transition-transform duration-700 group-hover:rotate-6 group-hover:scale-110"
+                                className="absolute right-2 top-1/2 -translate-y-1/2 md:-top-4 md:translate-y-0 2xl:top-auto 2xl:bottom-12 w-[48%] sm:w-[36%] lg:w-[54%] 2xl:w-[80%] h-[72%] sm:h-[60%] lg:h-[66%] 2xl:h-[60%] bg-contain bg-center md:bg-right-top 2xl:bg-right bg-no-repeat transition-transform duration-700 group-hover:scale-110"
                                 style={{
                                     backgroundImage: `url('${categories[2].image}')`,
                                 }}
                             />
                             <div className="relative z-10 max-w-[55%] sm:max-w-[65%] lg:max-w-none">
-                                <p className="text-black/60 font-black text-[9px] sm:text-[9px] lg:text-xs uppercase tracking-[0.15em] lg:tracking-[0.2em] mb-1 lg:mb-3">
+                                <p className="text-white font-black text-[9px] sm:text-[9px] lg:text-xs uppercase tracking-[0.15em] lg:tracking-[0.2em] mb-1 lg:mb-3">
                                     {categories[2].tagline}
                                 </p>
-                                <h3 className="text-2xl sm:text-xl lg:text-4xl font-black text-black leading-[0.9] tracking-tighter">
+                                <h3 className="text-2xl sm:text-xl lg:text-4xl font-black text-white leading-[0.9] tracking-tighter">
                                     {categories[2].name}
                                 </h3>
                             </div>
                             <div className="relative z-10 mt-3 sm:mt-3 lg:mt-6">
-                                <span className="inline-block bg-black text-white px-4 sm:px-4 lg:px-6 py-2 sm:py-2 lg:py-3 rounded-[10px] lg:rounded-[10px] text-[9px] sm:text-[9px] lg:text-[10px] font-black uppercase tracking-widest shadow-lg transition-all group-hover:bg-white group-hover:text-black">
+                                <span className="inline-block bg-white text-black px-4 sm:px-4 lg:px-6 py-2 sm:py-2 lg:py-3 rounded-[10px] lg:rounded-[10px] text-[9px] sm:text-[9px] lg:text-[10px] font-black uppercase tracking-widest shadow-lg transition-all hover:bg-black hover:text-white">
                                     {categories[2].cta}
                                 </span>
                             </div>
@@ -168,7 +166,7 @@ export function CategoryBlocks() {
                                     {categories[3].name}
                                 </h3>
                                 <div className="mt-3 sm:mt-5 lg:mt-8">
-                                    <span className="inline-block bg-white text-black px-5 sm:px-6 lg:px-8 py-2 sm:py-2.5 lg:py-3 rounded-[10px] lg:rounded-[10px] text-[9px] sm:text-[10px] font-black uppercase tracking-widest shadow-lg transition-all group-hover:bg-black group-hover:text-white">
+                                    <span className="inline-block bg-white text-black px-5 sm:px-6 lg:px-8 py-2 sm:py-2.5 lg:py-3 rounded-[10px] lg:rounded-[10px] text-[9px] sm:text-[10px] font-black uppercase tracking-widest shadow-lg transition-all hover:bg-black hover:text-white">
                                         {categories[3].cta}
                                     </span>
                                 </div>
