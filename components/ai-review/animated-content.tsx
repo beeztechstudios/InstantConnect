@@ -148,7 +148,7 @@ export function AIReviewAnimatedContent({ products }: AIReviewAnimatedContentPro
               preload="metadata"
             >
               <source
-                src="https://res.cloudinary.com/dem0bqs8e/video/upload/v1767860748/copy_2E63D710-593B-4DD1-9A1A-C8BB3E8880B3_fn54bl.mov"
+                src="https://res.cloudinary.com/dem0bqs8e/video/upload/v1770398448/copy_2E63D710-593B-4DD1-9A1A-C8BB3E8880B3_fn54bl_tm3iwh.mp4"
                 type="video/mp4"
               />
             </video>
