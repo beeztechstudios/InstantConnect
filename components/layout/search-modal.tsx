@@ -306,7 +306,7 @@ export function SearchModal({ isOpen, onClose }: SearchModalProps) {
                                     {categories.map((category) => (
                                         <Link
                                             key={category.id}
-                                            href={`/shop/${category.slug}`}
+                                            href={`/shop?category=${category.slug}`}
                                             onClick={onClose}
                                             className="flex items-center gap-3 rounded-[10px] bg-zinc-50 p-3 hover:bg-zinc-100 sm:p-4"
                                         >
