@@ -46,25 +46,52 @@ const values = [
 
 const team = [
     {
-        name: "Rahul Sharma",
+        name: "kartik",
         role: "Founder & CEO",
-        image: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400",
+        image: "https://res.cloudinary.com/dem0bqs8e/image/upload/v1770999075/1000072158_4_eywxic.png",
     },
     {
-        name: "Priya Patel",
+        name: " Nitin Patel",
         role: "Head of Design",
-        image: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=400",
+        image: "https://res.cloudinary.com/dem0bqs8e/image/upload/v1770999075/IMG_6560_sc0myb.jpg",
     },
     {
-        name: "Amit Kumar",
+        name: "Manthan Mehta",
         role: "Tech Lead",
-        image: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=400",
+        image: "https://res.cloudinary.com/dem0bqs8e/image/upload/v1770999075/IMG-20250805-WA0025_stasxq.jpg",
     },
     {
-        name: "Neha Singh",
+        name: "Vedika Bhardwaj",
         role: "Customer Success",
-        image: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=400",
+        image: "https://res.cloudinary.com/dem0bqs8e/image/upload/v1770999075/Screenshot_20251202_141511_Gallery_j31bug.jpg",
     },
+    {
+        name: "Mohit Paliwal",
+        role: "Customer Success",
+        image: "https://res.cloudinary.com/dem0bqs8e/image/upload/v1770999074/IMG_1437_udjto1.jpg",
+    },
+    {
+        name: "Dishant Singh Chauhan",
+        role: "Customer Success",
+        image: "https://res.cloudinary.com/dem0bqs8e/image/upload/v1770999498/IMG_6213_nsts0z.jpg",
+    },
+    {
+        name: "Ayush Ameta",
+        role: "Customer Success",
+        image: "https://res.cloudinary.com/dem0bqs8e/image/upload/v1770999497/IMG_8284_fwgpes.jpg",
+    },
+    {
+        name: "Jesika Gurjar",
+        role: "Customer Success",
+        image: "https://res.cloudinary.com/dem0bqs8e/image/upload/v1770999553/Screenshot_2026-02-13_at_9.49.05_PM_m1chun.png",
+    },
+    {
+        name: "Aagam Choudhary",
+        role: "Customer Success",
+        image: "https://res.cloudinary.com/dem0bqs8e/image/upload/v1770999074/IMG_3137_oyo4l5.jpg",
+    },
+
+    
 ];
 
 export default function AboutPage() {
@@ -276,9 +303,9 @@ export default function AboutPage() {
                                         <h3 className="text-sm sm:text-base font-bold text-white">
                                             {member.name}
                                         </h3>
-                                        <p className="text-xs sm:text-sm text-white/70">
+                                        {/* <p className="text-xs sm:text-sm text-white/70">
                                             {member.role}
-                                        </p>
+                                        </p> */}
                                     </div>
                                 </div>
                             ))}

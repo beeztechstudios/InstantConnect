@@ -39,9 +39,9 @@ const exploreLinks = [
 
 const socialLinks = [
     { name: "Instagram", icon: Instagram, href: "https://instagram.com" },
-    { name: "Facebook", icon: Facebook, href: "https://facebook.com" },
-    { name: "Linkedin", icon: Linkedin, href: "https://linkedin.com" },
-    { name: "Youtube", icon: Youtube, href: "https://youtube.com" },
+    // { name: "Facebook", icon: Facebook, href: "https://facebook.com" },
+    // { name: "Linkedin", icon: Linkedin, href: "https://linkedin.com" },
+    // { name: "Youtube", icon: Youtube, href: "https://youtube.com" },
 ];
 
 export function Footer() {
@@ -152,7 +152,7 @@ export function Footer() {
                                         FAQs
                                     </Link>
                                 </li>
-                                <li>
+                                {/* <li>
                                     <Link
                                         href="/privacy"
                                         className="text-sm font-bold text-zinc-600 hover:text-sky-600 transition-colors"
@@ -175,7 +175,7 @@ export function Footer() {
                                     >
                                         Terms & Conditions
                                     </Link>
-                                </li>
+                                </li> */}
                             </ul>
                         </div>
                     </div>
@@ -198,38 +198,38 @@ export function Footer() {
                 </div>
 
                 {/* ---  NEWSLETTER --- */}
-                <div className="flex flex-col lg:flex-row justify-between items-end gap-10 mb-8">
+                <div className="flex flex-col md:flex-row justify-between items-center md:items-end gap-6 md:gap-10 mb-8">
                     {/* Large Brand Logo */}
 
-                    <img src="/Logo_3.svg" className="w-sm" alt="" />
+                    <img src="/Logo_3.svg" className="w-[140px] sm:w-[160px] md:w-[300px]" alt="Instant Connect" />
 
                     {/* BeezTech Advertisement Card */}
                     <a
                         href="https://www.beeztech.studio/"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="block w-full lg:max-w-lg group"
+                        className="block w-full max-w-[240px] sm:max-w-md md:max-w-sm"
                     >
-                        <div className="relative w-full h-[110px] sm:h-[130px]  rounded-[10px] overflow-hidden bg-[#FF8026] flex items-center p-0 transition-transform duration-300 hover:shadow-xl hover:shadow-orange-500/20 active:scale-95">
+                        <div className="relative w-full h-[90px] sm:h-[110px] rounded-[10px] overflow-hidden bg-[#FF8026] flex items-center p-0 transition-transform duration-300 active:scale-95">
                             {/* Left Side: Icon/Logo Container */}
                             <div className="w-1/3 sm:w-1/4 flex items-center justify-center p-2">
                                 <img
                                     src="/Icon.svg"
                                     alt="BeezTech Icon"
-                                    className="w-16 sm:w-20 md:w-24 lg:w-28 h-auto transition-transform duration-500 group-hover:rotate-12"
+                                    className="w-12 sm:w-16 md:w-16 lg:w-16 h-auto transition-transform duration-500 group-hover:rotate-12"
                                 />
                             </div>
 
                             {/* Right Side: Content Container */}
-                            <div className="w-1/3 sm:w-3/4 px-3 sm:px-6 flex flex-col justify-center items-center text-center space-y-2 sm:space-y-3">
-                                <h4 className="text-white font-black text-[11px] sm:text-sm md:text-base italic leading-tight tracking-tight uppercase">
+                            <div className="w-2/3 sm:w-3/4  px-3 sm:px-2 flex flex-col justify-center items-center text-center space-y-1.5 sm:space-y-2">
+                                <h4 className="text-white font-black text-[10px] sm:text-xs md:text-sm italic leading-tight tracking-tight uppercase">
                                     Looking for a <br className="sm:hidden" />
                                     <span className="text-black/90">
                                         custom website?
                                     </span>
                                 </h4>
 
-                                <button className="bg-white w-full max-w-[140px] sm:max-w-[180px] text-black px-3 py-2 sm:py-2.5 rounded-[10px] text-[9px] sm:text-[11px] md:text-xs font-black uppercase tracking-widest shadow-md transition-all group-hover:bg-black group-hover:text-white">
+                                <button className="bg-white w-full cursor-pointer max-w-[120px] sm:max-w-[170px] text-black px-1 py-1.5 sm:py-2 rounded-[5px] text-[8px] sm:text-[10px] md:text-xs font-black uppercase tracking-widest shadow-md transition-all group-hover:bg-black group-hover:text-white">
                                     Contact Beeztech
                                 </button>
                             </div>

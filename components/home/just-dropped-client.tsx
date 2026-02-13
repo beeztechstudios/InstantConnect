@@ -151,10 +151,10 @@ export function JustDroppedClient({ heroProduct, products }: JustDroppedClientPr
                         {/* Product Info Overlay */}
                         <div className="absolute bottom-0 left-0 right-0 p-4 sm:p-6">
                             <div className="rounded-[10px] bg-black/50 backdrop-blur-md p-4">
-                                <h3 className="truncate font-semibold text-white text-lg">
+                                <h3 className="truncate font-semibold text-white text-md md:text-xl">
                                     {mainProduct.name}
                                 </h3>
-                                <p className="hidden text-sm text-white/70 sm:block mt-1">
+                                <p className="hidden  text-sm text-white/70 sm:block mt-1">
                                     {mainProduct.short_description}
                                 </p>
                                 <div className="mt-2 flex flex-wrap items-center gap-2">

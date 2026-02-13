@@ -146,7 +146,7 @@ function ShopContent() {
             </h1>
 
             {/* Sort Dropdown - Mobile */}
-            <div className="relative flex-shrink-0 sm:hidden">
+            <div className="relative flex-shrink-0 sm:hidden ">
               <button
                 onClick={() => setShowSortDropdown(!showSortDropdown)}
                 className="flex items-center gap-1.5 text-xs text-zinc-500 hover:text-zinc-900"
@@ -161,7 +161,7 @@ function ShopContent() {
                     className="fixed inset-0 z-10"
                     onClick={() => setShowSortDropdown(false)}
                   />
-                  <div className="absolute right-0 top-full mt-2 z-20 w-44 rounded-[10px] bg-white shadow-lg border border-zinc-200 py-1">
+                  <div className="absolute right-0  top-full mt-2 z-20 w-44 rounded-[10px] bg-white shadow-lg border border-zinc-200 py-1">
                     {sortOptions.map((option) => (
                       <button
                         key={option.value}
@@ -222,10 +222,10 @@ function ShopContent() {
             </div>
 
             {/* Sort Dropdown - Desktop */}
-            <div className="relative flex-shrink-0 hidden sm:block">
+            <div className="relative flex-shrink-0 cursor-pointer hidden sm:block">
               <button
                 onClick={() => setShowSortDropdown(!showSortDropdown)}
-                className="flex items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-900"
+                className="flex cursor-pointer items-center gap-1.5 text-sm text-zinc-500 hover:text-zinc-900"
               >
                 {currentSort}
                 <ChevronDown className={`h-4 w-4 transition-transform ${showSortDropdown ? 'rotate-180' : ''}`} />
@@ -234,7 +234,7 @@ function ShopContent() {
               {showSortDropdown && (
                 <>
                   <div
-                    className="fixed inset-0 z-10"
+                    className="fixed inset-0 z-10 cursor-pointer"
                     onClick={() => setShowSortDropdown(false)}
                   />
                   <div className="absolute right-0 top-full mt-2 z-20 w-44 rounded-[10px] bg-white shadow-lg border border-zinc-200 py-1">
@@ -245,7 +245,7 @@ function ShopContent() {
                           setSortBy(option.value)
                           setShowSortDropdown(false)
                         }}
-                        className={`w-full text-left px-4 py-2 text-sm ${
+                        className={`w-full cursor-pointer text-left px-4 py-2 text-sm ${
                           sortBy === option.value
                             ? 'bg-zinc-100 text-zinc-900 font-medium'
                             : 'text-zinc-600 hover:bg-zinc-50'

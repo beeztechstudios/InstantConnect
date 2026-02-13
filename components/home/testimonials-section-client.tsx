@@ -96,18 +96,23 @@ export function TestimonialsSectionClient({ testimonials }: TestimonialsSectionC
                                 </div>
 
                                 <div>
-                                    <p className="text-sm sm:text-lg lg:text-xl font-medium text-white leading-snug tracking-tight mb-3 sm:mb-4 line-clamp-5 sm:line-clamp-none">
+                                    {/* <p className="text-sm sm:text-lg lg:text-md font-medium text-white leading-snug tracking-tight mb-3 sm:mb-4 line-clamp-5 sm:line-clamp-none">
                                         &ldquo;{testimonial.content}&rdquo;
-                                    </p>
+                                    </p> */}
 
-                                    <div className="pt-3 sm:pt-4 border-t backdrop-blur-xl border-none rounded-[10px] pb-1 sm:pb-2 flex items-center gap-2 sm:gap-3">
+                                    <div className="pt-3 sm:pt-4 border-t pr-2 backdrop-blur-xl border-none rounded-[10px] pb-1 sm:pb-2 flex items-center gap-2 sm:gap-3">
                                         <div className="w-1 h-6 sm:h-8 bg-sky-400 rounded-[10px]" />
                                         <div>
+                                            <div className="flex justify-between items-center ">
                                             <p className="text-xs sm:text-sm font-bold text-white uppercase tracking-widest">
                                                 {testimonial.name}
                                             </p>
-                                            <p className="text-[10px] sm:text-xs text-zinc-400">
+                                            <p className="text-[10px] sm:text-xs text-zinc-200">
                                                 {testimonial.role || testimonial.company || "Customer"}
+                                            </p>
+                                        </div>
+                                            <p className="text-[10px] mt-1 sm:text-xs  font-semibold text-zinc-200">
+                                                {testimonial.content}
                                             </p>
                                         </div>
                                     </div>

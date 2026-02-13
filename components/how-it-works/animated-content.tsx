@@ -26,7 +26,7 @@ const steps = [
         title: "Choose Your Product",
         description:
             "Select from our range of NFC cards, QR codes, standees, keychains, or table tents.",
-        image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?q=80&w=800&auto=format&fit=crop",
+        image: "https://res.cloudinary.com/dem0bqs8e/image/upload/v1767860730/Photo_3_qu1nme.jpg",
     },
     {
         number: "02",
@@ -34,7 +34,7 @@ const steps = [
         title: "Set Up Your Profile",
         description:
             "Create your digital profile with contact details, social links, portfolio, and more.",
-        image: "https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?q=80&w=800&auto=format&fit=crop",
+        image: "https://res.cloudinary.com/dem0bqs8e/image/upload/v1770995245/IMG_0300_h6taeb.jpg",
     },
     {
         number: "03",
@@ -42,7 +42,7 @@ const steps = [
         title: "Share Instantly",
         description:
             "Tap your NFC product against any smartphone to instantly share your profile.",
-        image: "https://images.unsplash.com/photo-1556155092-490a1ba16284?q=80&w=800&auto=format&fit=crop",
+        image: "https://res.cloudinary.com/dem0bqs8e/image/upload/v1770995245/IMG_0303_e6l9fd.jpg",
     },
 ];
 
@@ -152,10 +152,10 @@ export function HowItWorksAnimatedContent() {
                     <div
                         className="absolute inset-0 bg-cover bg-center"
                         style={{
-                            backgroundImage: `url('https://images.unsplash.com/photo-1557804506-669a67965ba0?q=80&w=2000&auto=format&fit=crop')`,
+                            backgroundImage: `url('https://res.cloudinary.com/dem0bqs8e/image/upload/v1767860729/Photo_1_pglrg1.jpg')`,
                         }}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/40 to-black/20" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/70 to-black/40" />
 
                     {/* Content */}
                     <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 sm:px-6">
@@ -381,10 +381,10 @@ export function HowItWorksAnimatedContent() {
                             }}
                             className="absolute inset-0 bg-cover bg-center"
                             style={{
-                                backgroundImage: `url('https://images.unsplash.com/photo-1600880292203-757bb62b4baf?q=80&w=2000&auto=format&fit=crop')`,
+                                backgroundImage: `url('https://res.cloudinary.com/dem0bqs8e/image/upload/v1767860730/Photo_2_akc6vz.jpg')`,
                             }}
                         />
-                        <div className="absolute inset-0 bg-black/60" />
+                        <div className="absolute inset-0 bg-black/80" />
                         <div className="relative z-10 flex h-full items-center justify-center text-center p-6">
                             <div>
                                 <motion.p

@@ -127,10 +127,10 @@ export function Header() {
 
             {/* Actions */}
             <div className="flex items-center gap-2">
-              <button onClick={() => setSearchOpen(true)} className="icon-btn">
+              <button onClick={() => setSearchOpen(true)} className="icon-btn cursor-pointer">
                 <Search className="text-black" />
               </button>
-              <Link href="/cart" className="relative icon-btn">
+              <Link href="/cart" className="relative icon-btn cursor-pointer">
                 <ShoppingCart className="text-black" />
                 {itemCount > 0 && <span className="badge">{itemCount}</span>}
               </Link>
