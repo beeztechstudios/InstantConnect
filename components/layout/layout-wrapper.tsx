@@ -4,6 +4,7 @@ import { usePathname } from 'next/navigation'
 import { Header } from './header'
 import { Footer } from './footer'
 import { CartDrawer } from '@/components/cart/cart-drawer'
+import { Preloader } from './preloader'
 
 export function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
@@ -17,6 +18,7 @@ export function LayoutWrapper({ children }: { children: React.ReactNode }) {
   // Regular pages - with header/footer
   return (
     <div className="flex min-h-screen flex-col">
+      <Preloader />
       <Header />
       <main className="flex-1">{children}</main>
       <Footer />
