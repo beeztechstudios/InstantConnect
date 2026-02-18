@@ -4,6 +4,11 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+        pathname: "/**",
+      },
+      {
         protocol: 'https',
         hostname: 'images.unsplash.com',
       },
@@ -13,7 +18,7 @@ const nextConfig: NextConfig = {
       },
     ],
     dangerouslyAllowSVG: true,
-    unoptimized: process.env.NODE_ENV === 'development',
+    unoptimized: false,
   },
 };
 
