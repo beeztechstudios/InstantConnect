@@ -9,7 +9,6 @@ import {
     IndianRupee,
     Users,
     TrendingUp,
-    TrendingDown,
     ArrowRight,
     ArrowUpRight,
     Plus,
@@ -17,15 +16,12 @@ import {
     Clock,
     AlertTriangle,
     CheckCircle,
-    Truck,
-    Eye,
-    Bell,
     FolderTree,
     Tag,
     Star,
 } from "lucide-react";
 import { createClient } from "@/utils/supabase/client";
-import { formatPrice, formatDate } from "@/lib/utils";
+import { formatPrice } from "@/lib/utils";
 import { cn } from "@/lib/utils";
 
 interface DashboardStats {
@@ -112,7 +108,7 @@ export default function AdminDashboardPage() {
                 supabase
                     .from("products")
                     .select("id", { count: "exact", head: true }),
-                supabase.from("orders").select("id, total", { count: "exact" }),
+                supabase.from("orders").select("id, total, status", { count: "exact" }),
                 supabase
                     .from("customers")
                     .select("id", { count: "exact", head: true }),
@@ -149,15 +145,18 @@ export default function AdminDashboardPage() {
                     .eq("is_active", true),
             ]);
 
-            const totalRevenue =
-                ordersRes.data?.reduce(
-                    (sum, order) => sum + (order.total || 0),
-                    0,
-                ) || 0;
+            const nonCancelledOrders = (ordersRes.data || []).filter(
+                (order) => order.status !== "cancelled",
+            );
+
+            const totalRevenue = nonCancelledOrders.reduce(
+                (sum, order) => sum + (order.total || 0),
+                0,
+            );
 
             setStats({
                 totalProducts: productsRes.count || 0,
-                totalOrders: ordersRes.count || 0,
+                totalOrders: nonCancelledOrders.length,
                 totalRevenue,
                 totalCustomers: customersRes.count || 0,
                 pendingOrders: pendingOrdersRes.count || 0,

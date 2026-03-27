@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
 
@@ -35,12 +36,16 @@ const TimeUnit = ({ label, value }: { label: string; value: number }) => (
 );
 
 export function CountdownPopup() {
+  const pathname = usePathname();
+  const isAdminPage = pathname?.startsWith("/admin");
   const [isOpen, setIsOpen] = useState(false);
   const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(null);
   const [isClient, setIsClient] = useState(false);
   const [hasEnded, setHasEnded] = useState(false);
 
   useEffect(() => {
+    if (isAdminPage) return;
+
     const calculateTimeLeft = () => {
       const now = new Date().getTime();
       const difference = TARGET_DATE - now;
@@ -79,9 +84,11 @@ export function CountdownPopup() {
       clearTimeout(timerInit);
       clearInterval(timer);
     };
-  }, []);
+  }, [isAdminPage]);
 
   useEffect(() => {
+    if (isAdminPage) return;
+    
     if (hasEnded && isOpen) {
       // Fire confetti explosion
       const duration = 3000;
@@ -121,9 +128,9 @@ export function CountdownPopup() {
         clearTimeout(destroyTimer);
       };
     }
-  }, [hasEnded, isOpen]);
+  }, [hasEnded, isOpen, isAdminPage]);
 
-  if (!isClient) return null;
+  if (!isClient || isAdminPage) return null;
 
   return (
     <AnimatePresence>
