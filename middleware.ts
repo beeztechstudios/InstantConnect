@@ -64,18 +64,6 @@ setInterval(() => {
   }
 }, 5 * 60_000) // every 5 minutes
 
-// Launch date from env — NEXT_PUBLIC_LAUNCH_TIMESTAMP
-const LAUNCH_DATE = new Date(process.env.NEXT_PUBLIC_LAUNCH_TIMESTAMP!)
-
-// Routes blocked before launch (frontend pages)
-const PRE_LAUNCH_BLOCKED_PAGES = ['/shop', '/product', '/cart', '/checkout', '/order-success', '/track-order']
-// API routes blocked before launch
-const PRE_LAUNCH_BLOCKED_APIS = ['/api/razorpay', '/api/coupons']
-
-function isPreLaunch(): boolean {
-  return Date.now() < LAUNCH_DATE.getTime()
-}
-
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
   const ip = getClientIp(request)
@@ -96,38 +84,6 @@ export async function middleware(request: NextRequest) {
         },
       }
     )
-  }
-
-  // Block everything before launch
-  if (isPreLaunch()) {
-    // Block API routes — return 503
-    if (PRE_LAUNCH_BLOCKED_APIS.some((p) => pathname.startsWith(p))) {
-      return NextResponse.json(
-        { error: 'Store is not open yet. Launch is on March 28, 2026 at 7:00 PM.' },
-        { status: 503 }
-      )
-    }
-
-    // Block frontend pages — redirect to coming-soon
-    if (PRE_LAUNCH_BLOCKED_PAGES.some((p) => pathname.startsWith(p))) {
-      const url = request.nextUrl.clone()
-      url.pathname = '/coming-soon'
-      return NextResponse.redirect(url)
-    }
-
-    // Redirect homepage to coming-soon
-    if (pathname === '/') {
-      const url = request.nextUrl.clone()
-      url.pathname = '/coming-soon'
-      return NextResponse.redirect(url)
-    }
-  }
-
-  // After launch, redirect coming-soon back to homepage
-  if (!isPreLaunch() && pathname === '/coming-soon') {
-    const url = request.nextUrl.clone()
-    url.pathname = '/'
-    return NextResponse.redirect(url)
   }
 
   // Only run Supabase auth session check for admin routes
