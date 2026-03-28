@@ -61,7 +61,7 @@ export default function SubCategoryFormPage() {
 
       if (error || !data) {
         toast.error('Sub-category not found')
-        router.push('/admin/sub-categories')
+        router.push('/masterman/sub-categories')
         return
       }
 
@@ -161,7 +161,7 @@ export default function SubCategoryFormPage() {
         toast.success('Sub-category updated successfully')
       }
 
-      router.push('/admin/sub-categories')
+      router.push('/masterman/sub-categories')
     } catch (error) {
       console.error('Error saving sub-category:', error)
       toast.error('Failed to save sub-category')
@@ -183,7 +183,7 @@ export default function SubCategoryFormPage() {
       {/* Header */}
       <div>
         <Link
-          href="/admin/sub-categories"
+          href="/masterman/sub-categories"
           className="inline-flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900"
         >
           <ArrowLeft className="h-4 w-4" />

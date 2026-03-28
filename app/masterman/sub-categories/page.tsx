@@ -132,7 +132,7 @@ export default function AdminSubCategoriesPage() {
       render: (subCategory: SubCategoryWithCategory) => (
         <div className="flex items-center gap-2">
           <Link
-            href={`/admin/sub-categories/${subCategory.id}`}
+            href={`/masterman/sub-categories/${subCategory.id}`}
             className="rounded-[10px] p-2 hover:bg-zinc-100"
           >
             <Pencil className="h-4 w-4 text-zinc-600" />
@@ -165,7 +165,7 @@ export default function AdminSubCategoriesPage() {
           <p className="mt-1 text-zinc-500">Manage product sub-categories</p>
         </div>
         <Button asChild>
-          <Link href="/admin/sub-categories/new">
+          <Link href="/masterman/sub-categories/new">
             <Plus className="mr-2 h-4 w-4" />
             Add Sub-Category
           </Link>

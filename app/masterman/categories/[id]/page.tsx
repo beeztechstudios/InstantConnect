@@ -43,7 +43,7 @@ export default function CategoryFormPage() {
 
       if (error || !data) {
         toast.error('Category not found')
-        router.push('/admin/categories')
+        router.push('/masterman/categories')
         return
       }
 
@@ -131,7 +131,7 @@ export default function CategoryFormPage() {
         toast.success('Category updated successfully')
       }
 
-      router.push('/admin/categories')
+      router.push('/masterman/categories')
     } catch (error) {
       console.error('Error saving category:', error)
       toast.error('Failed to save category')
@@ -153,7 +153,7 @@ export default function CategoryFormPage() {
       {/* Header */}
       <div>
         <Link
-          href="/admin/categories"
+          href="/masterman/categories"
           className="inline-flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900"
         >
           <ArrowLeft className="h-4 w-4" />

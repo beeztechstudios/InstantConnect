@@ -36,13 +36,13 @@ export async function updateSession(request: NextRequest) {
   } = await supabase.auth.getUser()
 
   // Protect admin routes
-  if (request.nextUrl.pathname.startsWith('/admin')) {
+  if (request.nextUrl.pathname.startsWith('/masterman')) {
     // Allow access to login page
-    if (request.nextUrl.pathname === '/admin/login') {
+    if (request.nextUrl.pathname === '/masterman/login') {
       // If user is already logged in as admin, redirect to dashboard
       if (user && user.user_metadata?.role === 'admin') {
         const url = request.nextUrl.clone()
-        url.pathname = '/admin'
+        url.pathname = '/masterman'
         return NextResponse.redirect(url)
       }
       return supabaseResponse
@@ -51,7 +51,7 @@ export async function updateSession(request: NextRequest) {
     // Check if user is admin for other admin routes
     if (!user || user.user_metadata?.role !== 'admin') {
       const url = request.nextUrl.clone()
-      url.pathname = '/admin/login'
+      url.pathname = '/masterman/login'
       return NextResponse.redirect(url)
     }
   }

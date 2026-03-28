@@ -40,7 +40,7 @@ export default function CouponFormPage() {
 
       if (error || !data) {
         toast.error('Coupon not found')
-        router.push('/admin/coupons')
+        router.push('/masterman/coupons')
         return
       }
 
@@ -87,7 +87,7 @@ export default function CouponFormPage() {
         toast.success('Coupon updated successfully')
       }
 
-      router.push('/admin/coupons')
+      router.push('/masterman/coupons')
     } catch (error) {
       console.error('Error saving coupon:', error)
       toast.error('Failed to save coupon')
@@ -109,7 +109,7 @@ export default function CouponFormPage() {
       {/* Header */}
       <div>
         <Link
-          href="/admin/coupons"
+          href="/masterman/coupons"
           className="inline-flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900"
         >
           <ArrowLeft className="h-4 w-4" />

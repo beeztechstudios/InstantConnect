@@ -82,13 +82,13 @@ export default function OrderDetailPage() {
       if (error) {
         console.error('Order fetch error:', error)
         toast.error('Order not found')
-        router.push('/admin/orders')
+        router.push('/masterman/orders')
         return
       }
 
       if (!data) {
         toast.error('Order not found')
-        router.push('/admin/orders')
+        router.push('/masterman/orders')
         return
       }
 
@@ -151,7 +151,7 @@ export default function OrderDetailPage() {
       <div className="flex items-start justify-between">
         <div>
           <Link
-            href="/admin/orders"
+            href="/masterman/orders"
             className="inline-flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900"
           >
             <ArrowLeft className="h-4 w-4" />

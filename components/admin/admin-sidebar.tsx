@@ -33,18 +33,18 @@ interface AdminSidebarProps {
 }
 
 const navItems = [
-  { href: '/admin', icon: LayoutDashboard, label: 'Dashboard' },
-  { href: '/admin/categories', icon: FolderTree, label: 'Categories' },
-  { href: '/admin/sub-categories', icon: Layers, label: 'Sub-Categories' },
-  { href: '/admin/products', icon: Package, label: 'Products' },
-  { href: '/admin/orders', icon: ShoppingCart, label: 'Orders' },
-  { href: '/admin/card-details', icon: IdCard, label: 'Card Details' },
-  { href: '/admin/payments', icon: CreditCard, label: 'Payments' },
-  { href: '/admin/customers', icon: Users, label: 'Customers' },
-  { href: '/admin/demo-bookings', icon: Calendar, label: 'Demo Bookings' },
-  { href: '/admin/testimonials', icon: MessageSquare, label: 'Testimonials' },
-  { href: '/admin/coupons', icon: Ticket, label: 'Coupons' },
-  { href: '/admin/settings', icon: Settings, label: 'Settings' },
+  { href: '/masterman', icon: LayoutDashboard, label: 'Dashboard' },
+  { href: '/masterman/categories', icon: FolderTree, label: 'Categories' },
+  { href: '/masterman/sub-categories', icon: Layers, label: 'Sub-Categories' },
+  { href: '/masterman/products', icon: Package, label: 'Products' },
+  { href: '/masterman/orders', icon: ShoppingCart, label: 'Orders' },
+  { href: '/masterman/card-details', icon: IdCard, label: 'Card Details' },
+  { href: '/masterman/payments', icon: CreditCard, label: 'Payments' },
+  { href: '/masterman/customers', icon: Users, label: 'Customers' },
+  { href: '/masterman/demo-bookings', icon: Calendar, label: 'Demo Bookings' },
+  { href: '/masterman/testimonials', icon: MessageSquare, label: 'Testimonials' },
+  { href: '/masterman/coupons', icon: Ticket, label: 'Coupons' },
+  { href: '/masterman/settings', icon: Settings, label: 'Settings' },
 ]
 
 export function AdminSidebar({ isCollapsed, onToggle, isMobileOpen, onMobileClose }: AdminSidebarProps) {
@@ -55,7 +55,7 @@ export function AdminSidebar({ isCollapsed, onToggle, isMobileOpen, onMobileClos
     const supabase = createClient()
     await supabase.auth.signOut()
     toast.success('Logged out successfully')
-    router.push('/admin/login')
+    router.push('/masterman/login')
   }
 
   const handleNavClick = () => {
@@ -91,7 +91,7 @@ export function AdminSidebar({ isCollapsed, onToggle, isMobileOpen, onMobileClos
           isCollapsed ? 'justify-center' : 'justify-between'
         )}>
           {(!isCollapsed || isMobileOpen) && (
-            <Link href="/admin" className="flex items-center gap-2" onClick={handleNavClick}>
+            <Link href="/masterman" className="flex items-center gap-2" onClick={handleNavClick}>
               <div className="flex h-8 w-8 items-center justify-center rounded-[10px] bg-zinc-900 text-xs font-bold text-white">
                 IC
               </div>
@@ -125,7 +125,7 @@ export function AdminSidebar({ isCollapsed, onToggle, isMobileOpen, onMobileClos
           <ul className="space-y-1">
             {navItems.map((item) => {
               const isActive = pathname === item.href ||
-                (item.href !== '/admin' && pathname.startsWith(item.href))
+                (item.href !== '/masterman' && pathname.startsWith(item.href))
               const Icon = item.icon
 
               return (

@@ -42,7 +42,7 @@ export default function AdminLoginPage() {
       }
 
       toast.success('Login successful!')
-      router.push('/admin')
+      router.push('/masterman')
       router.refresh()
     } catch (error) {
       console.error('Login error:', error)

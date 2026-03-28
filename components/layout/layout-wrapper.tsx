@@ -8,7 +8,7 @@ import { Preloader } from './preloader'
 
 export function LayoutWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
-  const isAdmin = pathname?.startsWith('/admin')
+  const isAdmin = pathname?.startsWith('/masterman')
 
   if (isAdmin) {
     // Admin pages - no header/footer

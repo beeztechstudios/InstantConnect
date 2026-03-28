@@ -116,7 +116,7 @@ export default function AdminCouponsPage() {
       render: (coupon: Coupon) => (
         <div className="flex items-center gap-2">
           <Link
-            href={`/admin/coupons/${coupon.id}`}
+            href={`/masterman/coupons/${coupon.id}`}
             className="rounded-[10px] p-2 hover:bg-zinc-100"
           >
             <Pencil className="h-4 w-4 text-zinc-600" />
@@ -170,7 +170,7 @@ export default function AdminCouponsPage() {
             Export CSV
           </Button>
           <Button asChild>
-            <Link href="/admin/coupons/new">
+            <Link href="/masterman/coupons/new">
               <Plus className="mr-2 h-4 w-4" />
               Add Coupon
             </Link>

@@ -7,7 +7,7 @@ import { Badge } from '@/components/ui/badge'
 import { Select } from '@/components/ui/select'
 import { Button } from '@/components/ui/button'
 import { createClient } from '@/utils/supabase/client'
-import { formatPrice, formatDate, exportToCSV } from '@/lib/utils'
+import { formatPrice, formatDate, formatDateTime, exportToCSV } from '@/lib/utils'
 import toast from 'react-hot-toast'
 
 interface Order {
@@ -215,11 +215,11 @@ export default function AdminOrdersPage() {
                     </td>
                     <td className="px-4 py-3 font-medium">{formatPrice(order.total)}</td>
                     <td className="px-4 py-3 text-sm text-zinc-500">
-                      {formatDate(order.created_at)}
+                      {formatDateTime(order.created_at)}
                     </td>
                     <td className="px-4 py-3">
                       <Link
-                        href={`/admin/orders/${order.id}`}
+                        href={`/masterman/orders/${order.id}`}
                         className="inline-flex items-center gap-1 rounded-[10px] px-3 py-1.5 text-sm font-medium text-zinc-600 hover:bg-zinc-100"
                       >
                         <Eye className="h-4 w-4" />

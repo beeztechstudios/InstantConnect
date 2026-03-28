@@ -17,9 +17,9 @@ const RATE_LIMIT_RULES: Record<string, RateLimitRule> = {
   // Coupon validation
   '/api/coupons/validate': { windowMs: 60_000, maxRequests: 20 },
   // Admin setup - extremely strict (should only ever be called once)
-  '/api/admin/setup': { windowMs: 60_000, maxRequests: 3 },
+  '/api/masterman/setup': { windowMs: 60_000, maxRequests: 3 },
   // Admin login page (brute-force protection)
-  '/admin/login': { windowMs: 60_000, maxRequests: 15 },
+  '/masterman/login': { windowMs: 60_000, maxRequests: 15 },
   // General API fallback
   '/api/': { windowMs: 60_000, maxRequests: 60 },
 }

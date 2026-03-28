@@ -235,7 +235,7 @@ export default function AdminDashboardPage() {
                 <div className="flex flex-wrap gap-3">
                     {stats.pendingOrders > 0 && (
                         <Link
-                            href="/admin/orders"
+                            href="/masterman/orders"
                             className="flex items-center gap-2 rounded-[10px] bg-amber-50 px-4 py-2 text-sm font-medium text-amber-700 transition-colors hover:bg-amber-100"
                         >
                             <Clock className="h-4 w-4" />
@@ -245,7 +245,7 @@ export default function AdminDashboardPage() {
                     )}
                     {stats.pendingDemos > 0 && (
                         <Link
-                            href="/admin/demo-bookings"
+                            href="/masterman/demo-bookings"
                             className="flex items-center gap-2 rounded-[10px] bg-blue-50 px-4 py-2 text-sm font-medium text-blue-700 transition-colors hover:bg-blue-100"
                         >
                             <Calendar className="h-4 w-4" />
@@ -255,7 +255,7 @@ export default function AdminDashboardPage() {
                     )}
                     {stats.lowStockProducts > 0 && (
                         <Link
-                            href="/admin/products"
+                            href="/masterman/products"
                             className="flex items-center gap-2 rounded-[10px] bg-red-50 px-4 py-2 text-sm font-medium text-red-700 transition-colors hover:bg-red-100"
                         >
                             <AlertTriangle className="h-4 w-4" />
@@ -348,7 +348,7 @@ export default function AdminDashboardPage() {
             {/* Quick Actions */}
             <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 <Link
-                    href="/admin/products/new"
+                    href="/masterman/products/new"
                     className="group flex items-center gap-3 rounded-[10px] border border-zinc-200 bg-white p-4 transition-all hover:border-teal-200 hover:shadow-md"
                 >
                     <div className="flex h-10 w-10 items-center justify-center rounded-[10px] bg-teal-100 text-teal-600 transition-colors group-hover:bg-teal-500 group-hover:text-white">
@@ -365,7 +365,7 @@ export default function AdminDashboardPage() {
                 </Link>
 
                 <Link
-                    href="/admin/categories/new"
+                    href="/masterman/categories/new"
                     className="group flex items-center gap-3 rounded-[10px] border border-zinc-200 bg-white p-4 transition-all hover:border-blue-200 hover:shadow-md"
                 >
                     <div className="flex h-10 w-10 items-center justify-center rounded-[10px] bg-blue-100 text-blue-600 transition-colors group-hover:bg-blue-500 group-hover:text-white">
@@ -382,7 +382,7 @@ export default function AdminDashboardPage() {
                 </Link>
 
                 <Link
-                    href="/admin/coupons/new"
+                    href="/masterman/coupons/new"
                     className="group flex items-center gap-3 rounded-[10px] border border-zinc-200 bg-white p-4 transition-all hover:border-orange-200 hover:shadow-md"
                 >
                     <div className="flex h-10 w-10 items-center justify-center rounded-[10px] bg-orange-100 text-orange-600 transition-colors group-hover:bg-orange-500 group-hover:text-white">
@@ -399,7 +399,7 @@ export default function AdminDashboardPage() {
                 </Link>
 
                 <Link
-                    href="/admin/testimonials/new"
+                    href="/masterman/testimonials/new"
                     className="group flex items-center gap-3 rounded-[10px] border border-zinc-200 bg-white p-4 transition-all hover:border-amber-200 hover:shadow-md"
                 >
                     <div className="flex h-10 w-10 items-center justify-center rounded-[10px] bg-amber-100 text-amber-600 transition-colors group-hover:bg-amber-500 group-hover:text-white">
@@ -428,7 +428,7 @@ export default function AdminDashboardPage() {
                             </h2>
                         </div>
                         <Link
-                            href="/admin/orders"
+                            href="/masterman/orders"
                             className="flex items-center gap-1 text-sm font-medium text-teal-600 hover:text-teal-700"
                         >
                             View all
@@ -497,7 +497,7 @@ export default function AdminDashboardPage() {
                                 </h2>
                             </div>
                             <Link
-                                href="/admin/demo-bookings"
+                                href="/masterman/demo-bookings"
                                 className="text-sm font-medium text-teal-600 hover:text-teal-700"
                             >
                                 View all
@@ -551,7 +551,7 @@ export default function AdminDashboardPage() {
                                 lowStockProducts.map((product) => (
                                     <Link
                                         key={product.id}
-                                        href={`/admin/products/${product.id}`}
+                                        href={`/masterman/products/${product.id}`}
                                         className="flex items-center gap-3 px-5 py-3 hover:bg-zinc-50"
                                     >
                                         <div className="relative h-10 w-10 overflow-hidden rounded-[10px] bg-zinc-100">

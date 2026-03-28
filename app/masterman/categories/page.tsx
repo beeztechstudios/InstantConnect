@@ -123,7 +123,7 @@ export default function AdminCategoriesPage() {
       render: (category: Category) => (
         <div className="flex items-center gap-2">
           <Link
-            href={`/admin/categories/${category.id}`}
+            href={`/masterman/categories/${category.id}`}
             className="rounded-[10px] p-2 hover:bg-zinc-100"
           >
             <Pencil className="h-4 w-4 text-zinc-600" />
@@ -156,7 +156,7 @@ export default function AdminCategoriesPage() {
           <p className="mt-1 text-zinc-500">Manage product categories</p>
         </div>
         <Button asChild>
-          <Link href="/admin/categories/new">
+          <Link href="/masterman/categories/new">
             <Plus className="mr-2 h-4 w-4" />
             Add Category
           </Link>

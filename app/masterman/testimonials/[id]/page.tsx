@@ -43,7 +43,7 @@ export default function TestimonialFormPage() {
 
       if (error || !data) {
         toast.error('Testimonial not found')
-        router.push('/admin/testimonials')
+        router.push('/masterman/testimonials')
         return
       }
 
@@ -122,7 +122,7 @@ export default function TestimonialFormPage() {
         toast.success('Testimonial updated successfully')
       }
 
-      router.push('/admin/testimonials')
+      router.push('/masterman/testimonials')
     } catch (error) {
       console.error('Error saving testimonial:', error)
       toast.error('Failed to save testimonial')
@@ -144,7 +144,7 @@ export default function TestimonialFormPage() {
       {/* Header */}
       <div>
         <Link
-          href="/admin/testimonials"
+          href="/masterman/testimonials"
           className="inline-flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900"
         >
           <ArrowLeft className="h-4 w-4" />

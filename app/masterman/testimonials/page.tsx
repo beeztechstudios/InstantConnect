@@ -132,7 +132,7 @@ export default function AdminTestimonialsPage() {
       render: (testimonial: Testimonial) => (
         <div className="flex items-center gap-2">
           <Link
-            href={`/admin/testimonials/${testimonial.id}`}
+            href={`/masterman/testimonials/${testimonial.id}`}
             className="rounded-[10px] p-2 hover:bg-zinc-100"
           >
             <Pencil className="h-4 w-4 text-zinc-600" />
@@ -165,7 +165,7 @@ export default function AdminTestimonialsPage() {
           <p className="mt-1 text-zinc-500">Manage customer testimonials</p>
         </div>
         <Button asChild>
-          <Link href="/admin/testimonials/new">
+          <Link href="/masterman/testimonials/new">
             <Plus className="mr-2 h-4 w-4" />
             Add Testimonial
           </Link>

@@ -49,7 +49,7 @@ const TimeUnit = ({ label, value }: { label: string; value: number }) => (
 export function CountdownPopup() {
   const pathname = usePathname();
   const router = useRouter();
-  const isAdminPage = pathname?.startsWith("/admin");
+  const isAdminPage = pathname?.startsWith("/masterman");
 
   const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(null);
   const [launched, setLaunched] = useState(false);

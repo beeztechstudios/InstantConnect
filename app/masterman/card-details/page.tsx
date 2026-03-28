@@ -248,7 +248,7 @@ export default function AdminCardDetailsPage() {
                   <tr key={detail.id} className="hover:bg-zinc-50">
                     <td className="px-4 py-3">
                       <Link
-                        href={`/admin/orders/${detail.order_id}`}
+                        href={`/masterman/orders/${detail.order_id}`}
                         className="font-medium text-zinc-900 hover:text-teal-600"
                       >
                         {detail.orders?.order_number || 'N/A'}
@@ -348,7 +348,7 @@ export default function AdminCardDetailsPage() {
                 </p>
               </div>
               <Link
-                href={`/admin/orders/${viewModal.detail.order_id}`}
+                href={`/masterman/orders/${viewModal.detail.order_id}`}
                 className="inline-flex items-center gap-1 text-sm font-medium text-teal-600 hover:text-teal-700"
               >
                 View Order

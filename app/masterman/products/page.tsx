@@ -144,7 +144,7 @@ export default function AdminProductsPage() {
       render: (product: ProductWithCategory) => (
         <div className="flex items-center gap-2">
           <Link
-            href={`/admin/products/${product.id}`}
+            href={`/masterman/products/${product.id}`}
             className="rounded-[10px] p-2 text-zinc-600 hover:bg-zinc-100"
           >
             <Pencil className="h-4 w-4" />
@@ -198,7 +198,7 @@ export default function AdminProductsPage() {
             Export CSV
           </Button>
           <Button asChild>
-            <Link href="/admin/products/new">
+            <Link href="/masterman/products/new">
               <Plus className="mr-2 h-4 w-4" />
               Add Product
             </Link>

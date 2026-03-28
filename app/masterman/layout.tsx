@@ -17,7 +17,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
   const authCheckedRef = useRef(false)
 
   // Skip auth check for login page
-  const isLoginPage = pathname === '/admin/login'
+  const isLoginPage = pathname === '/masterman/login'
 
   // Close mobile menu on route change
   useEffect(() => {
@@ -39,7 +39,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       if (error || !user) {
         setIsAuthenticated(false)
         setIsLoading(false)
-        router.push('/admin/login')
+        router.push('/masterman/login')
         return
       }
 
@@ -49,7 +49,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
         await supabase.auth.signOut()
         setIsAuthenticated(false)
         setIsLoading(false)
-        router.push('/admin/login')
+        router.push('/masterman/login')
         return
       }
 
@@ -70,7 +70,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
       if (event === 'SIGNED_OUT' || !session) {
         setIsAuthenticated(false)
         authCheckedRef.current = false
-        router.push('/admin/login')
+        router.push('/masterman/login')
       } else if (event === 'SIGNED_IN' && session) {
         const isAdmin = session.user?.user_metadata?.role === 'admin'
         if (isAdmin) {

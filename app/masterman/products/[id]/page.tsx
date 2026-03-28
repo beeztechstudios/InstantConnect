@@ -82,7 +82,7 @@ export default function ProductFormPage() {
 
         if (error || !data) {
           toast.error('Product not found')
-          router.push('/admin/products')
+          router.push('/masterman/products')
           return
         }
 
@@ -287,7 +287,7 @@ export default function ProductFormPage() {
         toast.success('Product updated successfully')
       }
 
-      router.push('/admin/products')
+      router.push('/masterman/products')
     } catch (error) {
       console.error('Error saving product:', error)
       toast.error('Failed to save product')
@@ -309,7 +309,7 @@ export default function ProductFormPage() {
       {/* Header */}
       <div>
         <Link
-          href="/admin/products"
+          href="/masterman/products"
           className="inline-flex items-center gap-2 text-sm text-zinc-600 hover:text-zinc-900"
         >
           <ArrowLeft className="h-4 w-4" />
