@@ -204,7 +204,7 @@ export function Footer() {
                     <img src="/Logo_3.svg" className="w-[140px] sm:w-[160px] md:w-[300px]" alt="Instant Connect" />
 
                     {/* BeezTech Advertisement Card */}
-                   
+            
                 </div>
 
                 {/* --- LEGAL --- */}
