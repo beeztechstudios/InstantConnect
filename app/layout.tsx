@@ -6,6 +6,7 @@ import { LayoutWrapper } from "@/components/layout/layout-wrapper";
 import { CountdownPopup } from "@/components/ui/countdown-popup";
 import "./globals.css";
 import { Roboto } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -52,6 +53,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
       >
         <CartProvider>
+          <Analytics />
           <CountdownPopup />
           <LayoutWrapper>{children}</LayoutWrapper>
           <Toaster
