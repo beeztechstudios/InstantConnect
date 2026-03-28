@@ -79,6 +79,10 @@ function isPreLaunch(): boolean {
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
   const ip = getClientIp(request)
+  const method = request.method
+
+  // Log every request with IP — visible in Vercel Functions logs
+  console.log(`[${new Date().toISOString()}] ${method} ${pathname} — ip=${ip} ua="${request.headers.get('user-agent') ?? '-'}"`)
 
   // Apply rate limiting before any other logic
   if (!checkRateLimit(ip, pathname)) {
@@ -112,7 +116,13 @@ export async function middleware(request: NextRequest) {
     }
   }
 
-  return await updateSession(request)
+  // Only run Supabase auth session check for admin routes
+  // Running it on every request causes ~5-6 auth API calls per visitor
+  if (pathname.startsWith('/masterman')) {
+    return await updateSession(request)
+  }
+
+  return NextResponse.next()
 }
 
 export const config = {
