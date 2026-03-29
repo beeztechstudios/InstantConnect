@@ -86,6 +86,13 @@ export async function middleware(request: NextRequest) {
     )
   }
 
+  // Redirect any stale /coming-soon links to home
+  if (pathname === '/coming-soon') {
+    const url = request.nextUrl.clone()
+    url.pathname = '/'
+    return NextResponse.redirect(url)
+  }
+
   // Only run Supabase auth session check for admin routes
   // Running it on every request causes ~5-6 auth API calls per visitor
   if (pathname.startsWith('/masterman')) {

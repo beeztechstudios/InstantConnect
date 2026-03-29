@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { Eye, Search, Download } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
@@ -29,8 +29,12 @@ export default function AdminOrdersPage() {
   const [isLoading, setIsLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('')
+  const [currentPage, setCurrentPage] = useState(1)
+  const scrollRef = useRef<HTMLDivElement>(null)
+  const PAGE_SIZE = 10
 
-  const fetchOrders = async () => {
+  const fetchOrders = async (silent = false) => {
+    if (!silent) setIsLoading(true)
     const supabase = createClient()
     const { data } = await supabase
       .from('orders')
@@ -47,7 +51,19 @@ export default function AdminOrdersPage() {
   }
 
   useEffect(() => {
+    // Restore page before fetching so table renders on correct page
+    const savedPage = sessionStorage.getItem('orders-page')
+    if (savedPage) {
+      setCurrentPage(parseInt(savedPage))
+      sessionStorage.removeItem('orders-page')
+    }
     fetchOrders()
+    // Restore scroll position when navigating back
+    const saved = sessionStorage.getItem('orders-scroll')
+    if (saved) {
+      setTimeout(() => window.scrollTo(0, parseInt(saved)), 50)
+      sessionStorage.removeItem('orders-scroll')
+    }
   }, [])
 
   const updateOrderStatus = async (orderId: string, status: string) => {
@@ -61,7 +77,7 @@ export default function AdminOrdersPage() {
       toast.error('Failed to update order status')
     } else {
       toast.success('Order status updated')
-      fetchOrders()
+      fetchOrders(true)
     }
   }
 
@@ -88,6 +104,9 @@ export default function AdminOrdersPage() {
 
     return matchesSearch && matchesStatus
   })
+
+  const totalPages = Math.ceil(filteredOrders.length / PAGE_SIZE)
+  const paginatedOrders = filteredOrders.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE)
 
   const handleExportCSV = () => {
     exportToCSV(filteredOrders, 'orders', [
@@ -133,13 +152,13 @@ export default function AdminOrdersPage() {
             type="text"
             placeholder="Search orders..."
             value={search}
-            onChange={(e) => setSearch(e.target.value)}
+            onChange={(e) => { setSearch(e.target.value); setCurrentPage(1) }}
             className="w-full rounded-[10px] border border-zinc-300 bg-white py-2 pl-9 pr-4 text-sm focus:border-zinc-500 focus:outline-none focus:ring-1 focus:ring-zinc-500"
           />
         </div>
         <Select
           value={statusFilter}
-          onChange={(e) => setStatusFilter(e.target.value)}
+          onChange={(e) => { setStatusFilter(e.target.value); setCurrentPage(1) }}
           options={[
             { value: '', label: 'All Status' },
             { value: 'confirmed', label: 'Confirmed' },
@@ -158,6 +177,9 @@ export default function AdminOrdersPage() {
           <table className="w-full">
             <thead className="border-b border-zinc-200 bg-zinc-50">
               <tr>
+                <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-zinc-500">
+                  #
+                </th>
                 <th className="px-4 py-3 text-left text-xs font-medium uppercase tracking-wider text-zinc-500">
                   Order
                 </th>
@@ -179,9 +201,12 @@ export default function AdminOrdersPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-200">
-              {filteredOrders.length > 0 ? (
-                filteredOrders.map((order) => (
+              {paginatedOrders.length > 0 ? (
+                paginatedOrders.map((order, index) => (
                   <tr key={order.id} className="hover:bg-zinc-50">
+                    <td className="px-4 py-3 text-sm text-zinc-500 w-10">
+                      {(currentPage - 1) * PAGE_SIZE + index + 1}
+                    </td>
                     <td className="px-4 py-3">
                       <p className="font-medium text-zinc-900">
                         {order.order_number}
@@ -220,6 +245,10 @@ export default function AdminOrdersPage() {
                     <td className="px-4 py-3">
                       <Link
                         href={`/masterman/orders/${order.id}`}
+                        onClick={() => {
+                          sessionStorage.setItem('orders-scroll', String(window.scrollY))
+                          sessionStorage.setItem('orders-page', String(currentPage))
+                        }}
                         className="inline-flex items-center gap-1 rounded-[10px] px-3 py-1.5 text-sm font-medium text-zinc-600 hover:bg-zinc-100"
                       >
                         <Eye className="h-4 w-4" />
@@ -230,7 +259,7 @@ export default function AdminOrdersPage() {
                 ))
               ) : (
                 <tr>
-                  <td colSpan={6} className="px-4 py-8 text-center text-sm text-zinc-500">
+                  <td colSpan={7} className="px-4 py-8 text-center text-sm text-zinc-500">
                     No orders found
                   </td>
                 </tr>
@@ -239,6 +268,44 @@ export default function AdminOrdersPage() {
           </table>
         </div>
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-between text-sm text-zinc-500">
+          <span>
+            Showing {(currentPage - 1) * PAGE_SIZE + 1}–{Math.min(currentPage * PAGE_SIZE, filteredOrders.length)} of {filteredOrders.length} orders
+          </span>
+          <div className="flex items-center gap-1">
+            <button
+              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="rounded-[10px] px-3 py-1.5 font-medium hover:bg-zinc-100 disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              Previous
+            </button>
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                onClick={() => setCurrentPage(page)}
+                className={`rounded-[10px] px-3 py-1.5 font-medium ${
+                  page === currentPage
+                    ? 'bg-zinc-900 text-white'
+                    : 'hover:bg-zinc-100'
+                }`}
+              >
+                {page}
+              </button>
+            ))}
+            <button
+              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+              className="rounded-[10px] px-3 py-1.5 font-medium hover:bg-zinc-100 disabled:opacity-40 disabled:cursor-not-allowed"
+            >
+              Next
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
